@@ -1,0 +1,20 @@
+ 
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="50000">Steam</string>
+
+	<!-- Settings -->
+	<string id="50050">General</string>
+	<string id="50060">Linux</string>
+	<string id="50061">XBMC location</string>
+	<string id="50062">Steam location</string>
+	<string id="50070">Windows</string>
+	<string id="50071">XBMC location</string>
+	<string id="50072">Steam location</string>
+
+	<!-- Settings -->
+	<string id="50100">Advanced</string>	
+	<string id="50110">Delete and update scripts in addon_data on next run</string>	
+	<string id="50111">Make steam-launch.sh executable on next run</string>	
+	
+</strings>

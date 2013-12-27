@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="50050">
+      <setting label="50060" type="lsep"/>
+        <setting label="50061" id="XbmcLinux" type="executable" default="/usr/bin/xbmc" />    
+	<setting label="50062" id="SteamLinux" type="executable" default="/usr/bin/steam" />    
+      <setting label="50070" type="lsep"/>
+        <setting label="50071" id="XbmcWin" type="executable" default="C:\Program Files (x86)\XBMC\XBMC.exe" />    
+	<setting label="50072" id="SteamWin" type="executable" default="C:\Program Files (x86)\Steam\steam.exe" />    
+    </category>
+    <category label="50100">
+        <setting label="50110" id="DelUserScript" type="bool" default="false" />    
+      <setting label="50060" type="lsep"/>
+        <setting label="50111" id="MakeShExec" type="bool" default="false" />  
+    </category>
+</settings>
+ 

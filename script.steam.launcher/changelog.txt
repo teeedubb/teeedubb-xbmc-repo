@@ -1,0 +1,92 @@
+0.0.1
+
+First version,
+
+0.1.0
+
+Reworked the windows side, now xbmc restarts once steam is exited.
+Thanks to malte for Rom Collection Browser. http://forum.xbmc.org/showthread.php?tid=70115
+Thanks to JohnnyD2 for VB scripts http://forum.xbmc.org/showthread.php?tid=70115&pid=960394#pid960394
+I used their work to improve the addon.
+
+0.1.1
+
+Reworked linux side, now xbmc restarts after steam is closed.
+Thanks to malte for Rom Collection Browser. http://forum.xbmc.org/showthread.php?tid=70115
+Thanks to Resandro for Arcade Browser. http://forum.xbmc.org/showthread.php?tid=48983
+I used their work to improve the addon
+
+0.1.2
+
+Minor change to allow install on osx. Other small changes.
+
+0.1.3
+
+Additions to Windows scripting: Xbmc will stay closed if Steam updates itself, it will wait for up to 5 seconds for Steam to restart. If steam is already open Xbmc will exit and Steam will switch to big picture mode.
+
+0.1.4
+Moved scripts into new directory.
+
+0.1.5
+Windows command windows now hidden.
+
+0.1.6
+Reworked Linux scripting - If steam is already open Xbmc will exit and Steam will switch to big picture mode.
+Reorganised files.
+
+0.1.7
+Small fix
+
+0.1.8
+Linux now uses a lockfile to prevent multiple instances of xbmc reopening if Steam has been exited to desktop and xbmc re-opened.
+
+0.1.9 
+New windows scripting
+
+0.2.0 
+Windows checks whether its 32 or 64 bit.
+New icon.
+
+0.2.2
+Changes to steam-launch.bat and default.py
+
+0.3.4
+AutoHotKey .exe used instead of batch file, now when exiting to desktop xbmc relaunches in windows. ahk script is included in case you want to make changes to the default timeouts, eg: start steam, wait X seconds then kill xbmc. The ahk script will force focus on either xbmc/steam when they are run. Script usage is SteamLaunch-AHK.exe "d:\games\steam\steam.exe" "d:\xbmc\xbmc.exe"
+Fanart added.
+
+0.3.6
+Changes to AHK script - disable #persistence and force #singleinstance
+
+0.4.0
+Added back code to autodetect if windows is 32 or 64 bit.
+New steam-launch.sh and now xbmc will restart if steam is exited or returned to desktop mode. The linux version now requires the program 'wmctrl' to work.
+
+0.4.4
+Small fixes.
+
+0.5.0
+Changes to windows side of default.py - now cmd window completely hidden and will not steal focus away from xbmc when in a true full screen.
+Somewhere along the line the <provides> tag in addon.xml was changed to 'game'. If a xbmc build with a Games main menu is used (eg garbear's retroplayer builds), the addon will appear under games, if not it will appear under Programs.
+
+0.5.1
+Recompiled AHK script using 32bit AHK, fixes script not working on win32
+Linux version now makes the steam-launch.sh script executable when run, no need to manually do it (it annoyed the hell out of me!). 
+
+0.8.4
+Test version.
+Steam/XBMC paths now changed via addon settings gui.
+Scripts are now launched from the addon_data directory, if the script does not exist it will be copied over from the addon install directory. Custom scripts will now not be deleted on addon update.
+Removed unnecessary scripts plus changes to remaining scripts.
+Plus other changes.
+Big thanks to malte, I used code and ideas from Rom Collection Browser. Cheers!
+
+0.8.6
+Added 2 advanced settings:
+1. Delete scripts and update on next run will delete the scripts out of the addon_data dir and copy them from the addon install dir the next time the addon is run. This is handy if you want to go back to the default scripts or if thebundled scripts have been updated. Only the script file will be deleted and the setting is turned off (to default) when run once.
+2. Linux only: Make steam-launch.sh executable on next run - This changed the executable bit on the file 'steam-launch.sh' which is necessary for this addon to run. This setting defaults to off after being run once.
+Addon now only copies/deletes os specific scripts.
+Small changes
+
+0.9.0
+Re-added and made changes to launchhidden.vbs, it's needed to prevent 'unable to launch application' error messages from xbmc restarting too fast.
+Changes to default.py

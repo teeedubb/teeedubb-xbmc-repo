@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.steam.launcher" name="Steam" version="0.9.0" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py"> 
+     <provides>game executable</provides> 
+  </extension> 
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Launches Steam in Big Picture mode from within XBMC.</summary>
+    <description lang="en">Launches Steam from within XBMC - It will close XBMC, launch Steam in Big Picture mode and when Steam is exited XBMC will restart. Steam also comes with a full featured web browser than can be controlled with a game pad or remote and plays back flash content. It works with Windows, Linux and quite possibly OSX, but this hasn't been tested. See  for more info</description>
+    <platform>linux windx osx</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</website>
+    <source>ttp://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</source>
+    <email></email>
+    </extension>
+</addon>
