@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="script.steam.launcher" name="Steam" version="0.9.0" provider-name="teeedubb">
+<addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.0" provider-name="teeedubb">
+	<extension point="xbmc.addon.repository" name="teeedubb's repo">
+		<info compressed="false">https://github.com/teeedubb/teeedubb-xbmc-repo/raw/master/addons.xml</info>
+		<checksum>https://github.com/teeedubb/teeedubb-xbmc-repo/raw/master/addons.xml.md5</checksum>
+		<datadir zip="true">https://github.com/teeedubb/teeedubb-xbmc-repo/raw/master</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>teeedubb's repo</summary>
+		<description>Addons by teeedubb.</description>
+		<disclaimer></disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>
+
+<addon id="script.steam.launcher" name="Steam" version="0.9.2" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>

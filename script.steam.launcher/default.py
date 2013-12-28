@@ -16,7 +16,7 @@ steamLinux = addon.getSetting("SteamLinux")
 xbmcLinux = addon.getSetting("XbmcLinux")
 steamWin = addon.getSetting("SteamWin")
 xbmcWin = addon.getSetting("XbmcWin")
-delUserScript = addon.getSetting("DelUserScript")
+delUserScriptSett = addon.getSetting("DelUserScript")
 makeShExec = addon.getSetting("MakeShExec")
 
 
@@ -50,7 +50,6 @@ def copyLauncherScriptsToUserdata():
 	newBasePath = os.path.join(util.getAddonDataPath(), 'scripts')
 	
 	if os.name == 'nt':
-		pass # Windows
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
 		newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')
 		copyScriptsFolder(newPath)
@@ -64,7 +63,6 @@ def copyLauncherScriptsToUserdata():
 		newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
 		copyFile(oldPath, newPath)
 	else:	
-		pass
 		oldPath = os.path.join(oldBasePath, 'steam-launch.sh')
 		newPath = os.path.join(newBasePath, 'steam-launch.sh')
 		copyScriptsFolder(newPath)
@@ -75,8 +73,7 @@ def copyFile(oldPath, newPath):
 	if not os.path.isdir(newDir):
 		try:
 			os.mkdir(newDir)
-			return
-		except Exception, (exc):
+		except:
 			return
 	
 	if not os.path.isfile(newPath):
@@ -93,36 +90,40 @@ def copyScriptsFolder(newPath):
 		except:
 			return
 
-basePath = os.path.join(util.getAddonDataPath(), 'scripts')			
-
-if delUserScript == 'true':
-	pass
+def delUserScript():
+	basePath = os.path.join(util.getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
-		pass
-		os.remove(os.path.join(basePath, 'SteamLauncher-AHK.ahk'))
-		os.remove(os.path.join(basePath, 'SteamLauncher-AHK.exe'))
-		os.remove(os.path.join(basePath, 'LaunchHidden.vbs'))
+		if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
+			os.remove(os.path.join(basePath, 'SteamLauncher-AHK.ahk'))
+		if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.exe')):
+			os.remove(os.path.join(basePath, 'SteamLauncher-AHK.exe'))
+		if os.path.isfile(os.path.join(basePath, 'LaunchHidden.vbs')):
+			os.remove(os.path.join(basePath, 'LaunchHidden.vbs'))
 		addon.setSetting(id="DelUserScript", value="false")
 	else:	
-		pass
-		os.remove(os.path.join(basePath, 'steam-launch.sh'))
+		if os.path.isfile(os.path.join(basePath, 'steam-launch.sh')):
+			os.remove(os.path.join(basePath, 'steam-launch.sh'))
 		addon.setSetting(id="DelUserScript", value="false")
+
+def launchSteam():
+	basePath = os.path.join(util.getAddonDataPath(), 'scripts')
+	if os.name == 'nt':
+		precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
+		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
+		if makeShExec == 'true':
+			addon.setSetting(id="MakeShExec", value="false")
+		subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\"", shell=True)
+	else:
+		cmd = os.path.join(basePath, 'steam-launch.sh')
+		if makeShExec == 'true':
+			os.chmod(cmd, stat.S_IRWXU)
+			addon.setSetting(id="MakeShExec", value="false")
+		subprocess.Popen(cmd+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\"", shell=True)
+
 	
+if delUserScriptSett == 'true':
+	delUserScript()
+
 copyLauncherScriptsToUserdata()
 
-if os.name == 'nt':
-	pass # Windows
-	precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
-	cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-	if makeShExec == 'true':
-		pass
-		addon.setSetting(id="MakeShExec", value="false")
-	subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\"", shell=True)
-else:
-	pass # other (unix)
-	cmd = os.path.join(basePath, 'steam-launch.sh')
-	if makeShExec == 'true':
-		pass
-		os.chmod(cmd, stat.S_IRWXU)
-		addon.setSetting(id="MakeShExec", value="false")
-	subprocess.Popen(cmd+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\"", shell=True)
+launchSteam()
