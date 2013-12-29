@@ -1,26 +1,21 @@
-XBMC Steam Launcher.
+Steam Launcher - Start Steam Big Picture Mode from within XBMC
 
-A XBMC addon to launch Steam from within XBMC - It will close XBMC, launch Steam in Big Picture mode and when Steam is exited XBMC will restart. Steam also comes with a full featured web browser than can be controlled with a game pad or remote and plays back flash content. It works with Windows, Linux and quite possibly OSX, but this hasn't been tested.
+This add-on will close XBMC, launch Steam in Big Picture mode and when Steam is exited XBMC will restart. It works with Windows and Linux (quite possibly OSX, but this hasnt been tested). XBMCbuntu users read here first. A nice bonus is Steam also comes with a full featured web browser that can be controlled with a game pad or remote and plays back flash content.
 
-Linux users need to make the script that launches Steam executable:
+Settings:
+General:
+Here you can change the paths for both XBMC and Steam.
 
-Code:
-chmod +x ~/.xbmc/addons/script.steam.launcher/resources/scripts/steam-launch.sh
+Advanced:
+Delete scripts and update on next run - delete the OS specific scripts out of the profile://addon_data directory and copy them from the addon install directory the next time the addon is run. This is handy if you want to go back to the default scripts or if the bundled scripts have been updated. Only the script file will be deleted and the setting is turned off (to default) when run once.
 
-The settings within the addon should work provided Steam and XBMC are installed in their default directories. 
-For non standard install locations etc you can edit the files used to launch:
-
-Windows
-Code:
-%appdata%\XBMC\addons\script.steam.launcher\resources\scripts\steam-launch.bat
-
-Windows version uses a AutoHotKey .exe to launch steam. AHK script is included in case you want to make changes to the default timeouts, eg: start steam, wait X seconds then kill xbmc. The ahk script will force focus on either xbmc/steam when they are run. Script usage is SteamLaunch-AHK.exe "d:\games\steam\steam.exe" "d:\xbmc\xbmc.exe"
+Linux only: Make steam-launch.sh executable on next run - This changes the executable bit on the file 'steam-launch.sh' which is necessary for this addon to run, Linux users need to do this on the first run and after deleting the profile://addon_data scripts. This setting defaults to off after being run once. Linux users also need the program 'wmctrl' installed - theres a good chance it already is on a desktop install.
 
 
-Linux
-Code:
-~/.xbmc/addons/script.steam.launcher/resources/scripts/steam-launch.sh
+Customisation:
+The scripts used by this addon can be customised to suit your needs, they reside in profile://addon_data/scripts folder. They are copied into that directory from the addon install directory on first run and they will not be over written with updates, only via the advanced addon settings.
 
+https://github.com/teeedubb
 http://forum.xbmc.org/showthread.php?tid=157499
 http://store.steampowered.com/bigpicture
 http://xbmc.org/
