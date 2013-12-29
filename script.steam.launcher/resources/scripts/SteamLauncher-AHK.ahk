@@ -28,6 +28,7 @@ SteamLoop:
 
 WinWait, ahk_group SteamBPM
 Run, %comspec% /c taskkill /f /im XBMC.exe,,Hide
+WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
 WinWaitClose, Steam ahk_class CUIEngineWin32
 

@@ -113,12 +113,14 @@ def launchSteam():
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
 		subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\"", shell=True)
+		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 	else:
 		cmd = os.path.join(basePath, 'steam-launch.sh')
 		if makeShExec == 'true':
 			os.chmod(cmd, stat.S_IRWXU)
 			addon.setSetting(id="MakeShExec", value="false")
 		subprocess.Popen(cmd+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\"", shell=True)
+		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 
 	
 if delUserScriptSett == 'true':
