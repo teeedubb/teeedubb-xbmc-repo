@@ -14,7 +14,7 @@
 	</extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="0.9.2" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="0.9.3" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -27,9 +27,9 @@
     <platform>linux windx osx</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</website>
-    <source>ttp://forum.xbmc.org/showthread.php?tid=157499http://forum.xbmc.org/showthread.php?tid=157499</source>
+    <forum>http://forum.xbmc.org/showthread.php?tid=157499</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=157499</website>
+    <source>https://github.com/teeedubb</source>
     <email></email>
     </extension>
 </addon>
