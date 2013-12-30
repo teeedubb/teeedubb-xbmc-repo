@@ -1,0 +1,7 @@
+Version 0.0.1
+
+First version,
+
+0.1.0
+
+Added auto full screen and hide music info. New icon.
