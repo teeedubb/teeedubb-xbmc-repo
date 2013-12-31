@@ -9,3 +9,6 @@ Added auto full screen and hide music info. New icon.
 0.1.2
 New icon.
 Added addon settings where timeouts can be configured + option to disable toggling of the fullscreen info.
+
+0.1.3
+Fixed typos.
