@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+        <setting label="50560" id="visTimeout" type="number" default="5" />    
+	<setting label="50561" id="visInfoHide" type="bool" default="false" />    
+	<setting label="50562" id="visInfoTimeout" type="number" default="5" enable="eq(-1,true)" />    
+</settings>
+ 
