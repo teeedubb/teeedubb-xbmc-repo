@@ -7,8 +7,8 @@
      <provides>audio</provides> 
   </extension> 
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Launches music Party Mode.</summary>
-    <description lang="en">Launches Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
+    <summary lang="en">Launches Music Party Mode.</summary>
+    <description lang="en">Launches Music Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
     <platform>all</platform>
     <language>en</language>
     <forum>http://forum.xbmc.org/showthread.php?tid=166842</forum>
