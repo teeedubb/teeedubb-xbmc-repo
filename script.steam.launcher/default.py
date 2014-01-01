@@ -122,7 +122,7 @@ def makeShExec():
 	if os.path.isfile(filePath):
 		if os.name == 'nt':
 			addon.setSetting(id="MakeShExec", value="false")
-		else
+		else:
 			os.chmod(filePath, stat.S_IRWXU)
 			addon.setSetting(id="MakeShExec", value="false")
 
