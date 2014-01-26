@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.mythtv.launcher" name="MythTV" version="0.0.1" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py"> 
+     <provides>executable</provides> 
+  </extension> 
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Launches MythTV</summary>
+    <platform>linux</platform>
+    <language>en</language>
+  </extension>
+</addon>
