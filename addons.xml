@@ -67,7 +67,7 @@
     </extension>
 </addon>
 
-<addon id="script.audio.triple.j" name="Triple J" version="0.0.2" provider-name="teeedubb">
+<addon id="script.audio.triple.j" name="Triple J" version="0.0.3" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -76,8 +76,14 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Triple J online radio stream.</summary>
+    <description lang="en">Stream Triple J radio online. The addon uses the 96kbps AAC itunes stream. See: http://www.abc.net.au/triplej/media/listen.htm?show=listen#</description>
     <platform>all</platform>
     <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
   </extension>
 </addon>
 </addons>
