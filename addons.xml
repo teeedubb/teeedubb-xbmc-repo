@@ -14,6 +14,39 @@
 	</extension>
 </addon>
 
+<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.3" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Starts Music Party Mode.</summary>
+    <description lang="en">Starts Music Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <forum>http://forum.xbmc.org/showthread.php?tid=166842</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
+  </extension>
+</addon>
+
+<addon id="script.mythtv.launcher" name="MythTV" version="0.0.1" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+     <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Launches MythTV</summary>
+    <platform>linux</platform>
+    <language>en</language>
+  </extension>
+</addon>
+
 <addon id="script.steam.launcher" name="Steam" version="0.9.3" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -34,7 +67,7 @@
     </extension>
 </addon>
 
-<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.3" provider-name="teeedubb">
+<addon id="script.audio.triple.j" name="Triple J" version="0.0.1" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -42,14 +75,9 @@
      <provides>audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Starts Music Party Mode.</summary>
-    <description lang="en">Starts Music Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
+    <summary lang="en">Triple J onine stream</summary>
     <platform>all</platform>
     <language>en</language>
-    <forum>http://forum.xbmc.org/showthread.php?tid=166842</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
-    <source>https://github.com/teeedubb</source>
-    <email></email>
   </extension>
 </addon>
 </addons>
