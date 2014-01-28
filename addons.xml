@@ -33,6 +33,26 @@
   </extension>
 </addon>
 
+<addon id="script.audio.fbi" name="fbi" version="0.0.1" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">fbi online radio stream.</summary>
+    <description lang="en">Stream fbi radio online. See: http://fbiradio.com/on-air-now/</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
+  </extension>
+</addon>
+
 <addon id="script.mythtv.launcher" name="MythTV" version="0.0.1" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
