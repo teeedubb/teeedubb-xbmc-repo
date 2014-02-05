@@ -1,19 +1,14 @@
 #steam launcher by teeedubb. 
-import os, sys, re
-import xbmcaddon
-import subprocess
-import xbmc, xbmcgui
+import os, sys, re, subprocess, time
+import xbmcaddon,  xbmc, xbmcgui
 import shutil, stat
 
-# Shared resources
 addonPath = ''
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
 dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
-
-BASE_RESOURCE_PATH = os.path.join(addonPath, "resources" )
-sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
+SCRIPTID = 'script.steam.launcher'
 
 steamLinux = addon.getSetting("SteamLinux")
 xbmcLinux = addon.getSetting("XbmcLinux")
@@ -21,12 +16,17 @@ steamWin = addon.getSetting("SteamWin")
 xbmcWin = addon.getSetting("XbmcWin")
 delUserScriptSett = addon.getSetting("DelUserScript")
 makeShExec = addon.getSetting("MakeShExec")
+makeShExecSett = addon.getSetting("MakeShExec")
 quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 
-from util import *
-import util
-
+def getAddonInstallPath():
+	path = ''
+				
+	path = addon.getAddonInfo('path')
+	
+	return path
+	
 def getAddonDataPath():
 	path = ''
 			
@@ -41,8 +41,8 @@ def getAddonDataPath():
 
 def copyLauncherScriptsToUserdata():
 	
-	oldBasePath = os.path.join(util.getAddonInstallPath(), 'resources', 'scripts')
-	newBasePath = os.path.join(util.getAddonDataPath(), 'scripts')
+	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
 	
 	if os.name == 'nt':
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
@@ -86,7 +86,7 @@ def copyScriptsFolder(newPath):
 			return
 
 def delUserScript():
-	basePath = os.path.join(util.getAddonDataPath(), 'scripts')
+	basePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
 		if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
 			os.remove(os.path.join(basePath, 'SteamLauncher-AHK.ahk'))
@@ -110,7 +110,7 @@ def quitXbmcDialog():
 				quitXbmcSetting = '1'
 			
 def launchSteam():
-	basePath = os.path.join(util.getAddonDataPath(), 'scripts')
+	basePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
 		precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
 		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
