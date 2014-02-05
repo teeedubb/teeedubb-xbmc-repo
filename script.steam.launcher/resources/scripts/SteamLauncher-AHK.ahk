@@ -27,12 +27,26 @@ GroupAdd, SteamBPM, ahk_class Steam
 SteamLoop:
 
 WinWait, ahk_group SteamBPM
-Run, %comspec% /c taskkill /f /im XBMC.exe,,Hide
+if %3%
+{
+	WinMinimize, XBMC
+}
+else
+{
+	Run, %comspec% /c taskkill /f /im XBMC.exe,,Hide
+}
 WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
 WinWaitClose, Steam ahk_class CUIEngineWin32
 
-run, %2%
+if %3%
+{
+	WinMaximize, XBMC
+}
+else
+{
+	run, %2%
+}
 WinWait, XBMC ahk_class XBMC
 WinActivate, XBMC ahk_class XBMC
 
