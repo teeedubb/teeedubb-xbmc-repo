@@ -13,9 +13,16 @@
 	<string id="50072">Steam location</string>
 	<string id="50073">Quit XBMC?</string>
 
-	<!-- Settings -->
+	<!-- Advanced Settings -->
 	<string id="50100">Advanced</string>	
 	<string id="50110">Delete and update scripts in addon_data on next run</string>	
 	<string id="50111">Make steam-launch.sh executable on next run</string>	
 	<string id="50112">'Busy dialog' timeout in seconds</string>
+
+	<!-- Error Messages -->
+	<string id="50120">File does not exist.</string>
+	<string id="50121">Do you want to go to the addon settings?</string>	
+	<string id="50122">File is not executable.</string>	
+	<string id="50123">ERROR!</string>	
+
 </strings>
