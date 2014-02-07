@@ -1,4 +1,5 @@
-#steam launcher by teeedubb. 
+#steam launcher by teeedubb. http://forum.xbmc.org/showthread.php?tid=157499
+#I used Rom Collection Browser as a guide when making this addon, plus borrowed ideas and code from it too. Big thanks to malte for RCB!
 import os, sys, re, subprocess, time
 import xbmcaddon,  xbmc, xbmcgui
 import shutil, stat
@@ -19,6 +20,7 @@ makeShExec = addon.getSetting("MakeShExec")
 makeShExecSett = addon.getSetting("MakeShExec")
 quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
+scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 
 def getAddonInstallPath():
 	path = ''
@@ -40,7 +42,6 @@ def getAddonDataPath():
 	return path
 
 def copyLauncherScriptsToUserdata():
-	
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
 	
@@ -131,6 +132,51 @@ def delUserScript():
 			os.remove(os.path.join(basePath, 'steam-launch.sh'))
 		addon.setSetting(id="DelUserScript", value="false")
 		
+def scriptVersionCheck():
+	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
+	if os.name == 'nt':
+		if os.path.isfile(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')):	
+			for line in open(os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk'), "r"):
+				if "steam.launcher.script.revision=" in line:
+					scriptAhkSys = line[32:]
+			for line in open(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk'), "r"):
+				if not "steam.launcher.script.revision=" in line:
+					scriptAhkUsr = '000'
+			for line in open(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk'), "r"):
+				if "steam.launcher.script.revision=" in line:
+					scriptAhkUsr = line[32:]
+			if scriptAhkSys > scriptAhkUsr:
+				if dialog.yesno("Steam Launcher", ""+language(50124)+"", ""+language(50121)+"", ""+language(50125)+""): 
+					addon.openSettings()
+					delUserScriptSett = addon.getSetting("DelUserScript")
+					if delUserScriptSett == 'true':
+						delUserScript()
+				else:
+					addon.setSetting(id="ScriptUpdateCheck", value="1")
+					exit
+
+	else:
+		if os.path.isfile(os.path.join(newBasePath, 'steam-launch.sh')):	
+			for line in open(os.path.join(oldBasePath, 'steam-launch.sh'), "r"):
+				if "steam.launcher.script.revision=" in line:
+					scriptAhkSys = line[32:]
+			for line in open(os.path.join(newBasePath, 'steam-launch.sh'), "r"):
+				if not "steam.launcher.script.revision=" in line:
+					scriptAhkUsr = '000'
+			for line in open(os.path.join(newBasePath, 'steam-launch.sh'), "r"):
+				if "steam.launcher.script.revision=" in line:
+					scriptAhkUsr = line[32:]
+			if scriptAhkSys > scriptAhkUsr:
+				if dialog.yesno("Steam Launcher", ""+language(50124)+"", ""+language(50121)+"", ""+language(50125)+""): 
+					addon.openSettings()
+					delUserScriptSett = addon.getSetting("DelUserScript")
+					if delUserScriptSett == 'true':
+						delUserScript()
+				else:
+					addon.setSetting(id="ScriptUpdateCheck", value="1")
+					exit
+
 def quitXbmcDialog():
 	global quitXbmcSetting
 	if quitXbmcSetting == '2':
@@ -161,6 +207,10 @@ def launchSteam():
 		time.sleep(busyDialogTime)
 		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 	
+
+if scriptUpdateCheck == '0':
+	scriptVersionCheck()
+
 if delUserScriptSett == 'true':
 	delUserScript()
 

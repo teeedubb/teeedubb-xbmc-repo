@@ -1,5 +1,7 @@
 #!/bin/bash
 #Script to launch Steam BPM from Xbmc, by teeedubb
+#steam.launcher.script.revision=001
+
 export DISPLAY=:0
 
 case "$(uname -s)" in

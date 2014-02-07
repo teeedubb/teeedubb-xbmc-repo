@@ -12,7 +12,8 @@
     <category label="50100">
 		<setting label="50110" id="DelUserScript" type="bool" default="false" />
 		<setting label="50112" id="BusyDialogTime" type="number" default="5" />
-      <setting label="50060" type="lsep"/>
+       	<setting label="50113" type="enum" id="ScriptUpdateCheck" values="Enabled|Disabled" default="Enabled"/>
+	  <setting label="50060" type="lsep"/>
 		<setting label="50111" id="MakeShExec" type="bool" default="false" />  
     </category>
 </settings>

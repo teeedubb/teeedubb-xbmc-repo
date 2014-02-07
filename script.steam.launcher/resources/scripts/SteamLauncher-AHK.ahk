@@ -1,5 +1,6 @@
 ;xbmc steam launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
+;steam.launcher.script.revision=001
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%

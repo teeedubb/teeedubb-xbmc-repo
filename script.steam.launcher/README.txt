@@ -4,12 +4,14 @@ This add-on will close XBMC, launch Steam in Big Picture mode and when Steam is 
 
 Settings:
 General:
-Here you can change the paths for both XBMC and Steam.
+-Select whether to quit XBMC: Options are Yes, No and Ask. 
+-Here you can change the paths for both XBMC and Steam.
 
 Advanced:
-Delete scripts and update on next run - delete the OS specific scripts out of the profile://addon_data directory and copy them from the addon install directory the next time the addon is run. This is handy if you want to go back to the default scripts or if the bundled scripts have been updated. Only the script file will be deleted and the setting is turned off (to default) when run once.
-
-Linux only: Make steam-launch.sh executable on next run - This changes the executable bit on the file 'steam-launch.sh' which is necessary for this addon to run, Linux users need to do this on the first run and after deleting the profile://addon_data scripts. This setting defaults to off after being run once. Linux users also need the program 'wmctrl' installed - theres a good chance it already is on a desktop install.
+-Delete scripts and update on next run - delete the OS specific scripts out of the profile://addon_data directory and copy them from the addon install directory the next time the addon is run. This is handy if you want to go back to the default scripts or if the bundled scripts have been updated. Only the script file will be deleted and the setting is turned off (to default) when run once.
+-Configurable timeout for 'Busy Dialog" after running addon.
+-Script update notification.
+-Linux only: Make steam-launch.sh executable on next run - This changes the executable bit on the file 'steam-launch.sh' which is necessary for this addon to run, Linux users need to do this on the first run and after deleting the profile://addon_data scripts. This setting defaults to off after being run once. Linux users also need the program 'wmctrl' installed - theres a good chance it already is on a desktop install.
 
 
 Customisation:

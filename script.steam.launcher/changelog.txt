@@ -107,3 +107,6 @@ Readded macosx code.
 Option to minimize xbmc instead of exiting it, this is set via addon settings. Yes, no and ask are available.
 Checks if files steam/xbmc locations exist and/or steam-launch.sh is execuatable, If not a yes/no dialog appears which can take you to the settings.
 Configurable timeout for 'Busy Dialog".
+
+0.9.7
+Checks for script updates and notifies user.
