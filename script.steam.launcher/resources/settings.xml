@@ -6,14 +6,18 @@
         <setting label="50061" id="XbmcLinux" type="executable" default="/usr/bin/xbmc" />    
 	<setting label="50062" id="SteamLinux" type="executable" default="/usr/bin/steam" />    
       <setting label="50070" type="lsep"/>
-		<setting label="50071" id="XbmcWin" type="executable" default="C:\Program Files (x86)\XBMC\XBMC.exe" />    
-		<setting label="50072" id="SteamWin" type="executable" default="C:\Program Files (x86)\Steam\steam.exe" />    
+		<setting label="50061" id="XbmcWin" type="executable" default="C:\Program Files (x86)\XBMC\XBMC.exe" />    
+		<setting label="50062" id="SteamWin" type="executable" default="C:\Program Files (x86)\Steam\steam.exe" />
+      <setting label="50080" type="lsep"/>
+		<setting label="50061" id="XbmcOsx" type="folder" default="/Applications/XBMC.app/" />    
+		<setting label="50062" id="SteamOsx" type="folder" default="/Applications/Steam.app/" />
     </category>
     <category label="50100">
 		<setting label="50110" id="DelUserScript" type="bool" default="false" />
 		<setting label="50112" id="BusyDialogTime" type="number" default="5" />
        	<setting label="50113" type="enum" id="ScriptUpdateCheck" values="Enabled|Disabled" default="Enabled"/>
-	  <setting label="50060" type="lsep"/>
+       	<setting label="50114" type="enum" id="FilePathCheck" values="Enabled|Disabled" default="Enabled"/>
+	  <setting label="50090" type="lsep"/>
 		<setting label="50111" id="MakeShExec" type="bool" default="false" />  
     </category>
 </settings>

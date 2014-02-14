@@ -1,3 +1,4 @@
+ 
 #steam launcher by teeedubb. http://forum.xbmc.org/showthread.php?tid=157499
 #I used Rom Collection Browser as a guide when making this addon, plus borrowed ideas and code from it too. Big thanks to malte for RCB!
 import os, sys, re, subprocess, time
@@ -15,12 +16,15 @@ steamLinux = addon.getSetting("SteamLinux")
 xbmcLinux = addon.getSetting("XbmcLinux")
 steamWin = addon.getSetting("SteamWin")
 xbmcWin = addon.getSetting("XbmcWin")
+steamOsx = addon.getSetting("SteamOsx")
+xbmcOsx = addon.getSetting("XbmcOsx")
 delUserScriptSett = addon.getSetting("DelUserScript")
 makeShExec = addon.getSetting("MakeShExec")
 makeShExecSett = addon.getSetting("MakeShExec")
 quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
+filePathCheck = addon.getSetting("FilePathCheck")
 
 def getAddonInstallPath():
 	path = ''
@@ -189,11 +193,10 @@ def launchSteam():
 	makeShExec = addon.getSetting("MakeShExec")
 	basePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
-		precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
-		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
+		cmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs', basePath, 'SteamLauncher-AHK.exe')
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
-		subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+		subprocess.Popen("\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
 		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 		time.sleep(busyDialogTime)
 		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
@@ -202,7 +205,10 @@ def launchSteam():
 		if makeShExec == 'true':
 			os.chmod(cmd, stat.S_IRWXU)
 			addon.setSetting(id="MakeShExec", value="false")
-		subprocess.Popen(cmd+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+		if sys.platform == "darwin":
+			subprocess.Popen("\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+		else:
+			subprocess.Popen("\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
 		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 		time.sleep(busyDialogTime)
 		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
@@ -216,7 +222,8 @@ if delUserScriptSett == 'true':
 
 copyLauncherScriptsToUserdata()
 
-programFileCheck()
+if filePathCheck == 'true':
+	programFileCheck()
 
 quitXbmcDialog()
 

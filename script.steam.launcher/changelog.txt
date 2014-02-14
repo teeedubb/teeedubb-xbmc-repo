@@ -105,8 +105,13 @@ Updated docs.
 Cleaned up addon + updated script files for linux + windows. 
 Readded macosx code.
 Option to minimize xbmc instead of exiting it, this is set via addon settings. Yes, no and ask are available.
-Checks if files steam/xbmc locations exist and/or steam-launch.sh is execuatable, If not a yes/no dialog appears which can take you to the settings.
+Checks if files steam/xbmc locations exist and/or steam-launch.sh is executable, If not a yes/no dialog appears which can take you to the settings.
 Configurable timeout for 'Busy Dialog".
 
 0.9.7
 Checks for script updates and notifies user.
+
+0.9.8
+OSX now working, although xbmc will only restart after quitting steam completely.
+Option to disable program file checks
+Small changes.

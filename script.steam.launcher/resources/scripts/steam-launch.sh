@@ -1,30 +1,38 @@
 #!/bin/bash
 #Script to launch Steam BPM from Xbmc, by teeedubb
-#steam.launcher.script.revision=001
+#steam.launcher.script.revision=002
 
 export DISPLAY=:0
 
 case "$(uname -s)" in
     Darwin)
-        XBMC_PID=$(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}')
-        XBMC_BIN=$(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $5}')
-        STEAM_PID=$(ps -A | grep STEAM.app | grep -v Helper | grep -v grep | awk '{print $1}')
-        STEAM_BIN=$(ps -A | grep STEAM.app | grep -v Helper | grep -v grep | awk '{print $5}')
-        # Is Steam running?
-	if [[ $STEAM_PID ]]; then
-	  $STEAM_BIN steam://open/bigpicture #steam is brought to focus better this way
-	  echo "Steam already running"
-	else
-	   $STEAM_BIN -bigpicture #steam opens better like this if not already open
-	    echo "Steam not running, launching"
-	fi
-	# Wait for Steam to exit
-	while [ $(ps -A | grep STEAM.app | grep -v Helper | grep -v grep | awk '{print $1}') ]; do #STEAM_PID variable doesnt work here, needs work
-	  echo "Steam running"
-	  sleep 1
-	done
-	#Restart XBMC
-	$XBMC_BIN &
+
+open "$1" steam://open/bigpicture
+
+for i in {1..30} ; do
+    if [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]]; then
+        if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
+          if [[ $3 = 0 ]]; then
+            killall -9 XBMC
+          fi
+        fi
+    fi
+    sleep 0.1
+done
+
+if [[ $3 = 0 ]]; then
+   if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
+	killall -9 XBMC
+   fi
+fi
+
+echo loop
+while [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]]; do
+     sleep 1
+done
+
+open "$2"
+
         ;;
     Linux)
 

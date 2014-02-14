@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="script.steam.launcher" name="Steam" version="0.9.7" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="0.9.8" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -36,20 +36,6 @@
     <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
     <source>https://github.com/teeedubb</source>
     <email></email>
-  </extension>
-</addon>
-
-<addon id="script.mythtv.launcher" name="MythTV" version="0.0.1" provider-name="teeedubb">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-  </requires>
-  <extension point="xbmc.python.script" library="default.py">
-     <provides>executable</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">Launches MythTV</summary>
-    <platform>linux</platform>
-    <language>en</language>
   </extension>
 </addon>
 
