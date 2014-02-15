@@ -1,4 +1,3 @@
- 
 #steam launcher by teeedubb. http://forum.xbmc.org/showthread.php?tid=157499
 #I used Rom Collection Browser as a guide when making this addon, plus borrowed ideas and code from it too. Big thanks to malte for RCB!
 import os, sys, re, subprocess, time
@@ -193,10 +192,11 @@ def launchSteam():
 	makeShExec = addon.getSetting("MakeShExec")
 	basePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
-		cmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs', basePath, 'SteamLauncher-AHK.exe')
+		precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
+		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
-		subprocess.Popen("\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+		subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
 		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 		time.sleep(busyDialogTime)
 		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
