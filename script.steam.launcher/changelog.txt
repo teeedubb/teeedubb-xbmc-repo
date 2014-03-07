@@ -118,3 +118,9 @@ Small changes.
 
 0.9.9
 Reverted windows changes in 0.9.8
+
+0.9.10
+French translation thanks to Kre|S.
+OSX checks for XBMC + Steam paths.
+A advanced option to use a Batch file to launch scripts - uses a batch file as in previous version which should hopefully solve the 'nothing happening' issue some people have been having. GUI settings for XBMC + Steam paths and whether to quit XBMC have no effect with this setting enabled, the options are configured via steam-launch.bat, located in userdata/addon_data/script.steam.launcher/scripts/ , with instructions located in file itself. steam-launch.bat is not deleted by the addon or updates and if it does not exist it will be copied to the userdata directory on first run with the option enabled, along with launchhidden-bat.vbs
+Deleting scripts via addon settings now deletes scripts from other O/S's if they exist.

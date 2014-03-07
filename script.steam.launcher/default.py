@@ -24,6 +24,7 @@ quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
+batchFileLauncher = addon.getSetting("BatchFileLauncher")
 
 def getAddonInstallPath():
 	path = ''
@@ -47,20 +48,30 @@ def getAddonDataPath():
 def copyLauncherScriptsToUserdata():
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
-	
+	copyScriptsFolder(newBasePath)
+
 	if os.name == 'nt':
+		if batchFileLauncher == 'true':
+			oldPath = os.path.join(oldBasePath, 'steam-launch.bat')
+			newPath = os.path.join(newBasePath, 'steam-launch.bat')
+			copyFile(oldPath, newPath)
+			
+			oldPath = os.path.join(oldBasePath, 'LaunchHidden-bat.vbs')
+			newPath = os.path.join(newBasePath, 'LaunchHidden-bat.vbs')
+			copyFile(oldPath, newPath)
+		else:
+			oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
+			newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
+			copyFile(oldPath, newPath)
+		
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
 		newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')
-		copyScriptsFolder(newPath)
 		copyFile(oldPath, newPath)
-	
+
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.exe')
 		newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.exe')
 		copyFile(oldPath, newPath)
-	
-		oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
-		newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
-		copyFile(oldPath, newPath)
+
 	else:	
 		oldPath = os.path.join(oldBasePath, 'steam-launch.sh')
 		newPath = os.path.join(newBasePath, 'steam-launch.sh')
@@ -103,37 +114,47 @@ def programFileCheck():
 			else:
 				sys.exit()
 	else:
-		if not os.path.isfile(os.path.join(steamLinux)):
-			if dialog.yesno(""+language(50123)+"", ""+steamLinux+"", ""+language(50120)+"", ""+language(50121)+""): 
-				addon.openSettings()
-			else:
-				sys.exit()
-		if not os.path.isfile(os.path.join(xbmcLinux)):
-			if dialog.yesno(""+language(50123)+"", ""+xbmcLinux+"", ""+language(50122)+"", ""+language(50121)+""): 
-				addon.openSettings()
-			else:
-				sys.exit()
-			
-		if not stat.S_IXUSR & os.stat(os.path.join(basePath, 'steam-launch.sh'))[stat.ST_MODE]:
-			if dialog.yesno(""+language(50123)+"", ""+os.path.join(basePath, 'steam-launch.sh')+"", ""+language(50122)+"", ""+language(50121)+""): 
-				addon.openSettings()
-			else:
-				sys.exit()
+		if sys.platform == "darwin":
+			if not os.path.isdir(os.path.join(steamOsx)):
+				if dialog.yesno(""+language(50123)+"", ""+steamOsx+"", ""+language(50120)+"", ""+language(50121)+""): 
+					addon.openSettings()
+				else:
+					sys.exit()
+			if not os.path.isdir(os.path.join(xbmcOsx)):
+				if dialog.yesno(""+language(50123)+"", ""+xbmcOsx+"", ""+language(50120)+"", ""+language(50121)+""): 
+					addon.openSettings()
+				else:
+					sys.exit()
+		else:
+			if not os.path.isfile(os.path.join(steamLinux)):
+				if dialog.yesno(""+language(50123)+"", ""+steamLinux+"", ""+language(50120)+"", ""+language(50121)+""): 
+					addon.openSettings()
+				else:
+					sys.exit()
+			if not os.path.isfile(os.path.join(xbmcLinux)):
+				if dialog.yesno(""+language(50123)+"", ""+xbmcLinux+"", ""+language(50122)+"", ""+language(50121)+""): 
+					addon.openSettings()
+				else:
+					sys.exit()
+			if not stat.S_IXUSR & os.stat(os.path.join(basePath, 'steam-launch.sh'))[stat.ST_MODE]:
+				if dialog.yesno(""+language(50123)+"", ""+os.path.join(basePath, 'steam-launch.sh')+"", ""+language(50122)+"", ""+language(50121)+""): 
+					addon.openSettings()
+				else:
+					sys.exit()
 
 def delUserScript():
 	basePath = os.path.join(getAddonDataPath(), 'scripts')
-	if os.name == 'nt':
-		if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
-			os.remove(os.path.join(basePath, 'SteamLauncher-AHK.ahk'))
-		if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.exe')):
-			os.remove(os.path.join(basePath, 'SteamLauncher-AHK.exe'))
-		if os.path.isfile(os.path.join(basePath, 'LaunchHidden.vbs')):
-			os.remove(os.path.join(basePath, 'LaunchHidden.vbs'))
-		addon.setSetting(id="DelUserScript", value="false")
-	else:
-		if os.path.isfile(os.path.join(basePath, 'steam-launch.sh')):
-			os.remove(os.path.join(basePath, 'steam-launch.sh'))
-		addon.setSetting(id="DelUserScript", value="false")
+	if os.path.isfile(os.path.join(basePath, 'LaunchHidden-bat.vbs')):
+		os.remove(os.path.join(basePath, 'LaunchHidden-bat.vbs'))
+	if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
+		os.remove(os.path.join(basePath, 'SteamLauncher-AHK.ahk'))
+	if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.exe')):
+		os.remove(os.path.join(basePath, 'SteamLauncher-AHK.exe'))
+	if os.path.isfile(os.path.join(basePath, 'LaunchHidden.vbs')):
+		os.remove(os.path.join(basePath, 'LaunchHidden.vbs'))
+	if os.path.isfile(os.path.join(basePath, 'steam-launch.sh')):
+		os.remove(os.path.join(basePath, 'steam-launch.sh'))
+	addon.setSetting(id="DelUserScript", value="false")
 		
 def scriptVersionCheck():
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
@@ -182,11 +203,12 @@ def scriptVersionCheck():
 
 def quitXbmcDialog():
 	global quitXbmcSetting
-	if quitXbmcSetting == '2':
-		if dialog.yesno("Steam Launcher", ""+language(50073)+""): 
-			quitXbmcSetting = '0'
-		else:
-			quitXbmcSetting = '1'
+	if batchFileLauncher == 'false':
+		if quitXbmcSetting == '2':
+			if dialog.yesno("Steam Launcher", ""+language(50073)+""): 
+				quitXbmcSetting = '0'
+			else:
+				quitXbmcSetting = '1'
 			
 def launchSteam():
 	makeShExec = addon.getSetting("MakeShExec")
@@ -196,7 +218,10 @@ def launchSteam():
 		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
-		subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+		if batchFileLauncher == 'true':
+			subprocess.Popen('cscript //B //Nologo "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/launchhidden-bat.vbs" "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/steam-launch.bat"', shell=True)
+		else:
+			subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
 		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 		time.sleep(busyDialogTime)
 		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
