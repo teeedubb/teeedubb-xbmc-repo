@@ -12,6 +12,7 @@ Advanced:
 -Configurable timeout for 'Busy Dialog" after running addon.
 -Script update notification.
 -Linux only: Make steam-launch.sh executable on next run - This changes the executable bit on the file 'steam-launch.sh' which is necessary for this addon to run, Linux users need to do this on the first run and after deleting the profile://addon_data scripts. This setting defaults to off after being run once. Linux users also need the program 'wmctrl' installed - theres a good chance it already is on a desktop install.
+-Windows only: Use a Batch file to launch scripts - Use a batch file as in previous version which should hopefully solve the 'nothing happening' issue some people have been having. GUI settings for XBMC + Steam paths and whether to quit XBMC have no effect with this setting enabled, the options are configured via steam-launch.bat, located in userdata/addon_data/script.steam.launcher/scripts/ , with instructions located in file itself. steam-launch.bat is not deleted by the addon or updates and if it does not exist it will be copied to the userdata directory on first run with the option enabled, along with launchhidden-bat.vbs
 
 
 Customisation:

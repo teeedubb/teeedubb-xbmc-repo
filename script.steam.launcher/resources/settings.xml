@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="50050">
-   	<setting label="50073" type="enum" id="QuitXbmc" values="Yes|No|Ask" default="Yes"/>
+   	<setting label="50073" type="enum" id="QuitXbmc" values="Yes|No|Ask" default="0"/>
       <setting label="50060" type="lsep"/>
         <setting label="50061" id="XbmcLinux" type="executable" default="/usr/bin/xbmc" />    
 	<setting label="50062" id="SteamLinux" type="executable" default="/usr/bin/steam" />    
@@ -15,8 +15,8 @@
     <category label="50100">
 		<setting label="50110" id="DelUserScript" type="bool" default="false" />
 		<setting label="50112" id="BusyDialogTime" type="number" default="5" />
-       	<setting label="50113" type="enum" id="ScriptUpdateCheck" values="Enabled|Disabled" default="Enabled"/>
-       	<setting label="50114" type="enum" id="FilePathCheck" values="Enabled|Disabled" default="Enabled"/>
+       	<setting label="50113" type="enum" id="ScriptUpdateCheck" values="Enabled|Disabled" default="0"/>
+       	<setting label="50114" type="enum" id="FilePathCheck" values="Enabled|Disabled" default="0"/>
 	  <setting label="50090" type="lsep"/>
 		<setting label="50111" id="MakeShExec" type="bool" default="false" />
   	  <setting label="50070" type="lsep"/>
