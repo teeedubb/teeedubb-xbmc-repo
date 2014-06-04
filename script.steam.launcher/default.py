@@ -4,9 +4,9 @@ import os, sys, re, subprocess, time
 import xbmcaddon, xbmc, xbmcgui
 import shutil, stat
 
-addonPath = ''
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
+addonIcon = addon.getAddonInfo('icon')
 dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 SCRIPTID = 'script.steam.launcher'
@@ -19,12 +19,11 @@ steamOsx = addon.getSetting("SteamOsx")
 xbmcOsx = addon.getSetting("XbmcOsx")
 delUserScriptSett = addon.getSetting("DelUserScript")
 makeShExec = addon.getSetting("MakeShExec")
-makeShExecSett = addon.getSetting("MakeShExec")
 quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
-batchFileLauncher = addon.getSetting("BatchFileLauncher")
+
 
 def log(msg):
     xbmc.log(u'%s: %s' % (SCRIPTID, msg))
@@ -54,18 +53,9 @@ def copyLauncherScriptsToUserdata():
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
-		if batchFileLauncher == 'true':
-			oldPath = os.path.join(oldBasePath, 'steam-launch.bat')
-			newPath = os.path.join(newBasePath, 'steam-launch.bat')
-			copyFile(oldPath, newPath)
-			
-			oldPath = os.path.join(oldBasePath, 'LaunchHidden-bat.vbs')
-			newPath = os.path.join(newBasePath, 'LaunchHidden-bat.vbs')
-			copyFile(oldPath, newPath)
-		else:
-			oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
-			newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
-			copyFile(oldPath, newPath)
+		oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
+		newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
+		copyFile(oldPath, newPath)
 		
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
 		newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')
@@ -204,13 +194,6 @@ def MakeShExecCheck():
 def delUserScript():
 	log('deleting user_data scripts')
 	basePath = os.path.join(getAddonDataPath(), 'scripts')
-	if os.path.isfile(os.path.join(basePath, 'LaunchHidden-bat.vbs')):
-		filePath = os.path.join(basePath, 'LaunchHidden-bat.vbs')
-		try:
-			os.remove(filePath)
-			log('found and deleting: %s' % filePath)
-		except:
-			log('deleting failed: %s' % filePath)
 	if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
 		filePath = os.path.join(basePath, 'SteamLauncher-AHK.ahk')
 		try:
@@ -294,12 +277,11 @@ def scriptVersionCheck():
 
 def quitXbmcDialog():
 	global quitXbmcSetting
-	if batchFileLauncher == 'false':
-		if quitXbmcSetting == '2':
-			if dialog.yesno("Steam Launcher", ""+language(50073)+""): 
-				quitXbmcSetting = '0'
-			else:
-				quitXbmcSetting = '1'
+	if quitXbmcSetting == '2':
+		if dialog.yesno("Steam Launcher", ""+language(50073)+""): 
+			quitXbmcSetting = '0'
+		else:
+			quitXbmcSetting = '1'
 			
 def launchSteam():
 	makeShExec = addon.getSetting("MakeShExec")
@@ -310,21 +292,15 @@ def launchSteam():
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
 			log('steam-launch.sh doesnt exist in windows, option disabled')
-		if batchFileLauncher == 'true':
-			try:
-				log('attempting to launch: %s' % 'cscript //B //Nologo "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/launchhidden-bat.vbs" "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/steam-launch.bat"')
-				subprocess.Popen('cscript //B //Nologo "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/launchhidden-bat.vbs" "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/steam-launch.bat"', shell=True)
-			except:
-				log('failed to launch : %s' % 'cscript //B //Nologo "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/launchhidden-bat.vbs" "%appdata%/XBMC/userdata/addon_data/script.steam.launcher/scripts/steam-launch.bat"')
-		else:
-			try:
-				log('attempting to launch: %s' % precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
-				subprocess.Popen(precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
-			except:
-				log('failed to run: %s' % precmd+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
-		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
-		time.sleep(busyDialogTime)
-		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+		try:
+			log('attempting to launch: %s' % "\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
+			subprocess.Popen("\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+			xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+			time.sleep(busyDialogTime)
+			xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+		except:
+			log('failed to run: %s' % "\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
+			xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
 	else:
 		cmd = os.path.join(basePath, 'steam-launch.sh')
 		if makeShExec == 'true':
@@ -338,18 +314,23 @@ def launchSteam():
 			try:
 				log('attempting to launch: %s' % "\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"")
 				subprocess.Popen("\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+				xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+				time.sleep(busyDialogTime)
+				xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 			except:
 				log('failed to launch: %s' % "\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"")
+				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
 		else:
 			try:
 				log('attempting to launch: %s' % "\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"")
 				subprocess.Popen("\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+				xbmc.executebuiltin( "ActivateWindow(busydialog)" )
+				time.sleep(busyDialogTime)
+				xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 			except:
 				log('failed to launch: %s' % "\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"")
+				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
 
-		xbmc.executebuiltin( "ActivateWindow(busydialog)" )
-		time.sleep(busyDialogTime)
-		xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 	
 if scriptUpdateCheck == '0':
 	scriptVersionCheck()
@@ -377,19 +358,21 @@ else:
 quitXbmcDialog()
 
 log('running steam...')
-log('steamLinux: %s' % steamLinux)
-log('xbmcLinux: %s' % xbmcLinux)
-log('steamWin: %s' % steamWin)
-log('xbmcWin: %s' % xbmcWin)
-log('steamOsx: %s' % steamOsx)
-log('xbmcOsx: %s' % xbmcOsx)
+if os.name == 'nt':
+	log('steamWin: %s' % steamWin)
+	log('xbmcWin: %s' % xbmcWin)
+else:
+	if sys.platform == "darwin":
+		log('steamOsx: %s' % steamOsx)
+		log('xbmcOsx: %s' % xbmcOsx)
+	else:
+		log('steamLinux: %s' % steamLinux)
+		log('xbmcLinux: %s' % xbmcLinux)
 log('delUserScriptSett: %s' % delUserScriptSett)
 log('makeShExec: %s' % makeShExec)
-log('makeShExecSett: %s' % makeShExecSett)
 log('quitXbmcSetting: %s' % quitXbmcSetting)
 log('busyDialogTime: %s' % busyDialogTime)
 log('scriptUpdateCheck: %s' % scriptUpdateCheck)
 log('filePathCheck: %s' % filePathCheck)
-log('batchFileLauncher: %s' % batchFileLauncher)
 
 launchSteam()

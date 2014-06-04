@@ -1,9 +1,21 @@
 ;xbmc steam launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-;steam.launcher.script.revision=001
+;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\xbmc.exe" "0/1"
+;0 = Quit Steam. 1 = Minimize xbmc while steam is running.
+;Edit this script to launch external programs before Steam or XBMC. See the three marked locations below.
+;Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
+;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
+;
+;steam.launcher.script.revision=002
+
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Steam starts here, insert code below:
+;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Process, Exist, Steam.exe
 if ErrorLevel
@@ -40,6 +52,11 @@ WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
 WinWaitClose, Steam ahk_class CUIEngineWin32
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;XBMC restarts here, insert code below:
+;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 if %3%
 {
 	WinMaximize, XBMC
@@ -59,6 +76,11 @@ if ErrorLevel
 else
 {
     Goto, SteamLoop
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;Steam can restart here due to Steam client updates, insert code below:
+    ;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 }
 
 ExitApp

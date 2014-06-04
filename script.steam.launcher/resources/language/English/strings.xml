@@ -20,7 +20,6 @@
 	<string id="50112">'Busy dialog' timeout in seconds</string>
 	<string id="50113">Script update notification</string>
 	<string id="50114">File path check</string>
-	<string id="50115">Use a Batch file to launch script</string>
 
 	<!-- Error Messages -->
 	<string id="50120">File does not exist</string>
@@ -29,6 +28,7 @@
 	<string id="50123">ERROR!</string>	
 	<string id="50124">System scripts have been updated:</string>
 	<string id="50125">Select 'No' to disable to disable the Script Update Check</string>
+	<string id="50126">Check xbmc.log file for details</string>
 
 
 </strings>

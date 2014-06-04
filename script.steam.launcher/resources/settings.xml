@@ -19,8 +19,6 @@
        	<setting label="50114" type="enum" id="FilePathCheck" values="Enabled|Disabled" default="0"/>
 	  <setting label="50090" type="lsep"/>
 		<setting label="50111" id="MakeShExec" type="bool" default="false" />
-  	  <setting label="50070" type="lsep"/>
-		<setting label="50115" id="BatchFileLauncher" type="bool" default="false" />
 	</category>
 </settings>
  

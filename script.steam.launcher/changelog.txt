@@ -129,3 +129,10 @@ Deleting scripts via addon settings now deletes scripts from other O/S's if they
 Addon now logs to xbmc.log.
 A few fixes + changes.
 Linux script uses a temp lockfile to prevent multiple instances of XBMC reopening.
+
+0.9.90
+Fixed the 'nothing happening' issue on windows that some people were having.
+Removed 'Use a batch file to launch script' as it is no longer necessary.
+Updated script files with more info and markers for where to add external scripts to start before steam or xbmc.
+Notification on script failure.
+Few small changes.
