@@ -1,8 +1,7 @@
 #steam launcher by teeedubb. http://forum.xbmc.org/showthread.php?tid=157499
 #I used Rom Collection Browser as a guide when making this addon, plus borrowed ideas and code from it too. Big thanks to malte for RCB!
 import os, sys, re, subprocess, time
-import xbmcaddon, xbmc, xbmcgui
-import shutil, stat
+import xbmcaddon, xbmc, xbmcgui, shutil, stat
 
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
@@ -287,22 +286,24 @@ def launchSteam():
 	makeShExec = addon.getSetting("MakeShExec")
 	basePath = os.path.join(getAddonDataPath(), 'scripts')
 	if os.name == 'nt':
-		precmd = os.path.join('cscript //B //Nologo', basePath, 'LaunchHidden.vbs')
-		cmd = os.path.join(basePath, 'SteamLauncher-AHK.exe')
+		launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
+		steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
+		cmd =  "call"+" "+"\""+launchhidden+"\""+" "+"\""+steamlauncher+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\""
 		if makeShExec == 'true':
 			addon.setSetting(id="MakeShExec", value="false")
 			log('steam-launch.sh doesnt exist in windows, option disabled')
 		try:
-			log('attempting to launch: %s' % "\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
-			subprocess.Popen("\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+			log('attempting to launch: %s' % cmd)
+			subprocess.Popen(cmd, shell=True)
+			#os.system(cmd)
 			xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 			time.sleep(busyDialogTime)
 			xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 		except:
-			log('failed to run: %s' % "\""+precmd+"\""+" "+"\""+cmd+"\""+" "+"\""+steamWin+"\""+" "+"\""+xbmcWin+"\""+" "+"\""+quitXbmcSetting+"\"")
-			xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
+			log('failed to run: %s' % cmd)
+			xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+")")
 	else:
-		cmd = os.path.join(basePath, 'steam-launch.sh')
+		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
 		if makeShExec == 'true':
 			os.chmod(cmd, stat.S_IRWXU)
 			addon.setSetting(id="MakeShExec", value="false")
@@ -312,24 +313,26 @@ def launchSteam():
 			sys.exit()
 		if sys.platform == "darwin":
 			try:
-				log('attempting to launch: %s' % "\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"")
-				subprocess.Popen("\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+				cmd = "\""+steamlauncher+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\""
+				log('attempting to launch: %s' % cmd)
+				subprocess.Popen(cmd, shell=True)
 				xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 				time.sleep(busyDialogTime)
 				xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 			except:
-				log('failed to launch: %s' % "\""+cmd+"\""+" "+"\""+steamOsx+"\""+" "+"\""+xbmcOsx+"\""+" "+"\""+quitXbmcSetting+"\"")
-				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
+				log('failed to launch: %s' % cmd)
+				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+")")
 		else:
 			try:
-				log('attempting to launch: %s' % "\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"")
-				subprocess.Popen("\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"", shell=True)
+				cmd = "\""+steamlauncher+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\""
+				log('attempting to launch: %s' % cmd)
+				subprocess.Popen(cmd, shell=True)
 				xbmc.executebuiltin( "ActivateWindow(busydialog)" )
 				time.sleep(busyDialogTime)
 				xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 			except:
-				log('failed to launch: %s' % "\""+cmd+"\""+" "+"\""+steamLinux+"\""+" "+"\""+xbmcLinux+"\""+" "+"\""+quitXbmcSetting+"\"")
-				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+" )")
+				log('failed to launch: %s' % cmd)
+				xbmc.executebuiltin("Notification("+language(50123)+","+language(50126)+",10000,"+addonIcon+")")
 
 	
 if scriptUpdateCheck == '0':
