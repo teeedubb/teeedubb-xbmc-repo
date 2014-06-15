@@ -136,3 +136,11 @@ Removed 'Use a batch file to launch script' as it is no longer necessary.
 Updated script files with more info and markers for where to add external scripts to start before steam or xbmc.
 Notification on script failure.
 Few small changes.
+
+1.0.4
+Scripts need to be updated for this version!
+Reverted 'call' command in windows. 
+Added addon setting for pre/post steam scripts. The addon will wait for the script to finish before continuing. 
+Added portable mode option.
+Increased default busy dialog to 10 seconds.
+Heap of small changes.

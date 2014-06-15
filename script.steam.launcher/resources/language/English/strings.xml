@@ -20,6 +20,11 @@
 	<string id="50112">'Busy dialog' timeout in seconds</string>
 	<string id="50113">Script update notification</string>
 	<string id="50114">File path check</string>
+	<string id="50115">XBMC is running in portable mode?</string>
+	<string id="50116">Run a script before Steam?</string>
+	<string id="50117">Pre Steam script location</string>
+	<string id="50119">Run a script after Steam?</string>
+	<string id="50118">Post Steam script location</string>
 
 	<!-- Error Messages -->
 	<string id="50120">File does not exist</string>

@@ -1,1 +1,1 @@
-CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """" & """" & WScript.Arguments(1) & """" & " " & """" & WScript.Arguments(2) & """" & " " & """" & WScript.Arguments(3) & """", 0, False 
+CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """" & """" & WScript.Arguments(1) & """" & " " & """" & WScript.Arguments(2) & """" & " " & """" & WScript.Arguments(3) & """" & " " & """" & WScript.Arguments(4) & """" & " " & """" & WScript.Arguments(5) & """" & " " & """" & WScript.Arguments(6) & """", 0, False 

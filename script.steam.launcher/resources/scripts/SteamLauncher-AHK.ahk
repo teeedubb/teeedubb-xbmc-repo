@@ -6,7 +6,7 @@
 ;Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=002
+;steam.launcher.script.revision=003
 
 #NoEnv  
 #SingleInstance force
@@ -16,6 +16,11 @@ SetWorkingDir %A_ScriptDir%
 ;Steam starts here, insert code below:
 ;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+IfNotEqual, 5, false
+{
+	RunWait, %5%,,Hide
+}
 
 Process, Exist, Steam.exe
 if ErrorLevel
@@ -57,13 +62,25 @@ WinWaitClose, Steam ahk_class CUIEngineWin32
 ;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+IfNotEqual, 6, false
+{
+	RunWait, %6%,,Hide
+}
+
 if %3%
 {
 	WinMaximize, XBMC
 }
 else
 {
-	run, %2%
+	IfEqual, 4, true
+    {
+        run, %2% -p
+    }
+    else
+    {
+	    run, %2%
+	}
 }
 WinWait, XBMC ahk_class XBMC
 WinActivate, XBMC ahk_class XBMC
@@ -75,6 +92,10 @@ if ErrorLevel
 }
 else
 {
+    IfNotEqual, 5, false
+    {
+	    RunWait, %5%,,Hide
+    }
     Goto, SteamLoop
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;Steam can restart here due to Steam client updates, insert code below:
