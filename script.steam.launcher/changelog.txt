@@ -144,3 +144,6 @@ Added addon setting for pre/post steam scripts. The addon will wait for the scri
 Added portable mode option.
 Increased default busy dialog to 10 seconds.
 Heap of small changes.
+
+1.0.5
+Small fix for xbmc not restarting if steam exited quickly after opening.
