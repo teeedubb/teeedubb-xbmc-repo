@@ -330,14 +330,14 @@ def launchSteam():
         launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
         steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
         cmd = "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
-        #cmd = "call" + " " + "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+        # cmd = "call" + " " + "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
         if makeShExec == 'true':
             addon.setSetting(id="MakeShExec", value="false")
             log('steam-launch.sh doesnt exist in windows, option disabled')
         try:
             log('attempting to launch: %s' % cmd)
             subprocess.Popen(cmd, shell=True)
-            #os.system(cmd)
+            # os.system(cmd)
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             time.sleep(busyDialogTime)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -393,8 +393,9 @@ copyLauncherScriptsToUserdata()
 log('checking for and copying userdata scripts')
 
 if not os.name == 'nt':
-    MakeShExecCheck()
-    log('checking if steam-launch.sh is executable')
+    if makeShExec == 'false':
+        MakeShExecCheck()
+        log('checking if steam-launch.sh is executable')
 
 if filePathCheck == '0':
     log('running program file check')
