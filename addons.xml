@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="script.steam.launcher" name="Steam" version="1.0.0" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="1.0.4" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
