@@ -1,21 +1,17 @@
 #!/bin/bash
 #Script to launch Steam BPM from Xbmc, by teeedubb
 #See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-#Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/xbmc" "0/1" "true/false"
-#0 = Quit Steam. 1 = Minimize xbmc while steam is running.
-#Edit this script to launch external programs before Steam or XBMC. See the two marked locations below (First two are for MAC, Bottom two are for Linux).
+#Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/xbmc" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
+#$3 = 0 Quit XBMC 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
 #Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 
-#steam.launcher.script.revision=004
+#steam.launcher.script.revision=005
 
 export DISPLAY=:0
 
 case "$(uname -s)" in
     Darwin)
 
-#MAC ONLY#############################
-#Steam starts here, insert code below:
-######################################
 if [[ $5 != false ]] ; then
     "$5"
 fi
@@ -44,10 +40,6 @@ while [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $
      sleep 1
 done
 
-#MAC ONLY##############################
-#XBMC restarts here, insert code below:
-#######################################
-
 if [[ $6 != false ]] ; then
     "$6"
 fi
@@ -62,9 +54,6 @@ fi
         ;;
     Linux)
 
-#LINUX ONLY###########################	
-#Steam starts here, insert code below:
-######################################
 if [[ $5 != false ]] ; then
     "$5"
 fi
@@ -88,8 +77,9 @@ for i in {1..6} ; do
 	    wmctrl -r "XBMC Media Center" -b remove,fullscreen
 	  fi
 	fi
+    else
+    	sleep 1
     fi
-    sleep 1
 done
 
 if [[ $(pidof xbmc.bin) ]]; then
@@ -100,11 +90,9 @@ if [[ $(pidof xbmc.bin) ]]; then
 	  fi
 fi
 
-for i in {1..15} ; do
 until [[ $(wmctrl -l | grep "Steam$") ]]; do
 	echo "Waiting for Steam BPM to start..."
 	sleep 1
-done
 done
 
 sleep 1
@@ -119,10 +107,6 @@ if [[ -f /tmp/xbmc-steam-launcher.running ]]; then
   exit
 fi
 touch /tmp/xbmc-steam-launcher.running
-
-#LINUX ONLY############################	
-#XBMC restarts here, insert code below:
-#######################################
 
 if [[ $6 != false ]] ; then
     "$6"
@@ -143,7 +127,7 @@ fi
 
 rm -rf /tmp/xbmc-steam-launcher.running
 
-        ;;    
+        ;;
     *)
         echo "I don't support this OS!"
         exit 1
