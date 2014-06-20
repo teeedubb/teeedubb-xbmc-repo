@@ -19,24 +19,25 @@ fi
 open "$1" steam://open/bigpicture
 
 for i in {1..6} ; do
-    if [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]]; then
+    if [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
         if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
-          if [[ $3 = 0 ]]; then
+          if [[ $3 = 0 ]] ; then
             killall -9 XBMC
           fi
         fi
+    else
+        sleep 1
     fi
-    sleep 1
 done
 
-if [[ $3 = 0 ]]; then
+if [[ $3 = 0 ]] ; then
    if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
 	killall -9 XBMC
    fi
 fi
 
 echo loop
-while [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]]; do
+while [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; do
      sleep 1
 done
 
@@ -44,7 +45,7 @@ if [[ $6 != false ]] ; then
     "$6"
 fi
 
-if [[ $4 = true ]]; then
+if [[ $4 = true ]] ; then
     open "$2" --args -p
 else
     open "$2"
@@ -55,11 +56,19 @@ fi
     Linux)
 
 if [[ $5 != false ]] ; then
-    "$5"
+    "$5" "$3"
 fi
 
-if [[ $(pidof steam) ]]; then
-    if [[ $(wmctrl -l | grep "Steam$") ]]; then
+if [[ $(uname -a |grep "steamos") ]] ; then
+   	if [[ $3 = 0 ]] ; then
+	    kill -9 $(pidof xbmc.bin)
+    fi
+    /usr/bin/returntosteam.sh
+    exit
+fi
+
+if [[ $(pidof steam) ]] ; then
+    if [[ $(wmctrl -l | grep "Steam$") ]] ; then
       wmctrl -i -a $(wmctrl -l | grep "Steam$" | cut -c1-10) &
     else
       "$1" steam://open/bigpicture &
@@ -69,9 +78,9 @@ else
 fi
 
 for i in {1..6} ; do
-    if [[ $(wmctrl -l | grep "Steam$") ]]; then
+    if [[ $(wmctrl -l | grep "Steam$") ]] ; then
 	if [[ $(pidof xbmc.bin) ]] ; then
-	  if [[ $3 = 0 ]]; then
+	  if [[ $3 = 0 ]] ; then
 	    kill -9 $(pidof xbmc.bin)
 	  else
 	    wmctrl -r "XBMC Media Center" -b remove,fullscreen
@@ -82,15 +91,15 @@ for i in {1..6} ; do
     fi
 done
 
-if [[ $(pidof xbmc.bin) ]]; then
-	  if [[ $3 = 0 ]]; then
+if [[ $(pidof xbmc.bin) ]] ; then
+	  if [[ $3 = 0 ]] ; then
 	    kill -9 $(pidof xbmc.bin)
 	  else
 	    wmctrl -r "XBMC Media Center" -b remove,fullscreen
 	  fi
 fi
 
-until [[ $(wmctrl -l | grep "Steam$") ]]; do
+until [[ $(wmctrl -l | grep "Steam$") ]] ; do
 	echo "Waiting for Steam BPM to start..."
 	sleep 1
 done
@@ -99,11 +108,11 @@ sleep 1
 
 STEAM_WIN_ID=$(wmctrl -l | grep "Steam$" | cut -c1-10)
 
-while [[ $(wmctrl -l | grep "$STEAM_WIN_ID") ]]; do
+while [[ $(wmctrl -l | grep "$STEAM_WIN_ID") ]] ; do
 	sleep 1
 done
 
-if [[ -f /tmp/xbmc-steam-launcher.running ]]; then
+if [[ -f /tmp/xbmc-steam-launcher.running ]] ; then
   exit
 fi
 touch /tmp/xbmc-steam-launcher.running
@@ -114,11 +123,11 @@ fi
 
 if [[ $(pidof xbmc.bin) ]] ; then
     wmctrl -a "XBMC Media Center"
-    if [[ $3 != 0 ]]; then
+    if [[ $3 != 0 ]] ; then
       wmctrl -r "XBMC Media Center" -b add,fullscreen
     fi
 else
-    if [[ $4 = true ]]; then
+    if [[ $4 = true ]] ; then
         "$2" -p &
     else
         "$2" &
