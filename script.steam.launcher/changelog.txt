@@ -151,7 +151,7 @@ Small fix for xbmc not restarting if steam exited quickly after opening.
 1.0.6
 Fix unnecessary 'script not executable' dialog when deleting scripts.
 
-1.1.0
+1.1.1
 Added fix from 1.0.5 to OSX portion of steam-launch.sh
 In linux section of steam-launch.sh the 3rd argument is passed to the pre-steam script. This is for my linux system.
 Preliminary SteamOS support. The addon assumes you are running xbmc in the desktop session and when run switches to the steam session (same as the desktop icon). Only option available with SteamOS is 'Quit XBMC'.
