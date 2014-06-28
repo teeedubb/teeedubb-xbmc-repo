@@ -5,7 +5,7 @@
 #$3 = 0 Quit XBMC 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
 #Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 
-#steam.launcher.script.revision=005
+#steam.launcher.script.revision=006
 
 export DISPLAY=:0
 
