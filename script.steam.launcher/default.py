@@ -251,6 +251,8 @@ def delUserScript():
 
 def scriptVersionCheck():
     global delUserScriptSett
+    global scriptAhkSys
+    global scriptAhkUsr
     oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
     newBasePath = os.path.join(getAddonDataPath(), 'scripts')
     if delUserScriptSett == 'false':
@@ -379,6 +381,19 @@ def launchSteam():
                     "Notification(" + language(50123) + "," + language(50126) + ",10000," + addonIcon + ")")
 
 
+def launchSteamAndroid():
+    if not os.name == 'nt':
+        if not sys.platform == "darwin":
+            if os.path.isfile('/system/build.prop'):
+                log('/system/build.prop found on a linux system, must be running android, attempting to launch: "com.valvesoftware.android.steam.community"')
+                xbmc.executebuiltin('XBMC.StartAndroidActivity("com.valvesoftware.android.steam.community")')
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                time.sleep(busyDialogTime)
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                sys.exit()
+
+launchSteamAndroid()
+
 if scriptUpdateCheck == '0':
     scriptVersionCheck()
     log('running script version check')
@@ -390,7 +405,7 @@ if delUserScriptSett == 'true':
     delUserScript()
 
 copyLauncherScriptsToUserdata()
-log('checking for and copying userdata scripts')
+log('checking if userdata scripts exist')
 
 if not os.name == 'nt':
     if makeShExec == 'false':
@@ -416,6 +431,8 @@ else:
     else:
         log('steamLinux: %s' % steamLinux)
         log('xbmcLinux: %s' % xbmcLinux)
+log('System script revision: %s' % scriptAhkSys)
+log('Userdata script revision: %s' % scriptAhkUsr)
 log('delUserScriptSett: %s' % delUserScriptSett)
 log('makeShExec: %s' % makeShExec)
 log('quitXbmcSetting: %s' % quitXbmcSetting)

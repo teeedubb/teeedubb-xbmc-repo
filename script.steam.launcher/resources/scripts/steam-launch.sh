@@ -58,16 +58,9 @@ else
   open "$2"
 fi
 
-
         ;;
     Linux)
 
-if [[ -f /system/build.prop ]] ; then
-  am start -n com.valvesoftware.android.steam.community/.activity.CommunityActivity
-  exit
-fi
-    
-    
 if [[ $5 != false ]] ; then
   "$5" "$3"
 fi
