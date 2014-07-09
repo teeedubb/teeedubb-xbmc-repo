@@ -6,16 +6,11 @@
 ;Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=003
+;steam.launcher.script.revision=004
 
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;Steam starts here, insert code below:
-;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 IfNotEqual, 5, false
 {
@@ -51,16 +46,12 @@ if %3%
 }
 else
 {
-	Run, %comspec% /c taskkill /f /im XBMC.exe,,Hide
+	Run, %comspec% /c taskkill /im XBMC.exe,,Hide
+	Run, %comspec% /c timeout /t 1 && tasklist /nh /fi "imagename eq XBMC.exe" | find /i "XBMC.exe" >nul && (taskkill /f /im XBMC.exe),,Hide
 }
 WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
 WinWaitClose, Steam ahk_class CUIEngineWin32
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;XBMC restarts here, insert code below:
-;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 IfNotEqual, 6, false
 {
@@ -97,11 +88,6 @@ else
 	    RunWait, %5%,,Hide
     }
     Goto, SteamLoop
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;Steam can restart here due to Steam client updates, insert code below:
-    ;eg: Run, %comspec% /c Z:\YOUR\COMMAND\HERE.EXE,,Hide
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 }
 
 ExitApp

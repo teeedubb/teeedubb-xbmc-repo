@@ -158,4 +158,4 @@ Preliminary SteamOS support. The addon assumes you are running xbmc in the deskt
 
 1.2.2
 Basic support for Android added. This simply launches the Steam app. Only options that work are 'busy dialog timeouts'. Closing XBMC requires root rights (at least using 'kill' via adb), and anyway, is there any point to closing XBMC on Android?
-steam-launch.sh attempts to close xbmc gracefully, then in the background waits 1 second and if xbmc still exists it will be closed forcefully.
+Script files attempt to close xbmc gracefully, then in the background waits 1 second and if xbmc still exists it will be closed forcefully.
