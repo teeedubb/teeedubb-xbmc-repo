@@ -7,8 +7,9 @@ import time
 import shutil
 import stat
 
-import xbmcaddon
 import xbmc
+
+import xbmcaddon
 import xbmcgui
 
 
@@ -36,7 +37,13 @@ preScriptEnabled = addon.getSetting("PreScriptEnabled")
 preScript = addon.getSetting("PreScript")
 postScriptEnabled = addon.getSetting("PostScriptEnabled")
 postScript = addon.getSetting("PostScript")
+scriptErrorNotification = "dialog.notification(language(50123), language(50126), addonIcon, 5000)"
 
+
+osWin = xbmc.getCondVisibility('system.platform.windows')
+osOsx = xbmc.getCondVisibility('system.platform.osx')
+osLinux = xbmc.getCondVisibility('system.platform.linux')
+osAndroid = xbmc.getCondVisibility('system.platform.android')
 
 def log(msg):
     xbmc.log(u'%s: %s' % (scriptid, msg))
@@ -48,34 +55,32 @@ def getAddonInstallPath():
 
 
 def getAddonDataPath():
-    path = xbmc.translatePath('special://profile/addon_data/%s' % (scriptid))
+    path = xbmc.translatePath('special://profile/addon_data/%s' % scriptid)
     if not os.path.exists(path):
         log('addon userdata folder does not exist, creating: %s' % path)
         try:
             os.makedirs(path)
+            log('created directory: %s' % path)
         except:
-            path = ''
-            log('failed to create: %s' % path)
+            log('ERROR: failed to create directory: %s' % path)
+            scriptErrorNotification
     return path
 
 
 def copyLauncherScriptsToUserdata():
     oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
     newBasePath = os.path.join(getAddonDataPath(), 'scripts')
-    if os.name == 'nt':
+    if osWin:
         oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
         newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
         copyFile(oldPath, newPath)
-
         oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
         newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')
         copyFile(oldPath, newPath)
-
         oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.exe')
         newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.exe')
         copyFile(oldPath, newPath)
-
-    else:
+    elif osLinux + osOsx:
         oldPath = os.path.join(oldBasePath, 'steam-launch.sh')
         newPath = os.path.join(newBasePath, 'steam-launch.sh')
         copyFile(oldPath, newPath)
@@ -87,361 +92,253 @@ def copyFile(oldPath, newPath):
         log('userdata scripts folder does not exist, creating: %s' % newDir)
         try:
             os.mkdir(newDir)
+            log('sucsessfully created userdata scripts folder: %s' % newDir)
         except:
-            log('failed to create: %s' % newDir)
-            return
-
+            log('ERROR: failed to create userdata scripts folder: %s' % newDir)
+            scriptErrorNotification
+            sys.exit()
     if not os.path.isfile(newPath):
-        log('file does not exist, copying to userdata: %s' % newPath)
+        log('script file does not exist, copying to userdata: %s' % newPath)
         try:
             shutil.copy2(oldPath, newPath)
+            log('sucsessfully copied userdata script: %s' % newPath)
         except:
-            log('failed to create: %s' % newPath)
-            return
-
-
-def programFileCheck():
-    if os.name == 'nt':
-        global steamWin
-        global xbmcWin
-        steamWin = addon.getSetting("SteamWin")
-        if not os.path.isfile(os.path.join(steamWin)):
-            log('file does not exist: %s' % steamWin)
-            if dialog.yesno("" + language(50123) + "", "" + steamWin + "", "" + language(50120) + "",
-                            "" + language(50121) + ""):
-                log('opening addon settings')
-                addon.openSettings()
-                steamWin = addon.getSetting("SteamWin")
-                if not os.path.isfile(os.path.join(steamWin)):
-                    log('still not found, exiting: %s' % steamWin)
-                    sys.exit()
-            else:
-                log('exiting')
-                sys.exit()
-        xbmcWin = addon.getSetting("XbmcWin")
-        if not os.path.isfile(os.path.join(xbmcWin)):
-            log('file does not exist: %s' % xbmcWin)
-            if dialog.yesno("" + language(50123) + "", "" + xbmcWin + "", "" + language(50120) + "",
-                            "" + language(50121) + ""):
-                log('opening addon settings')
-                addon.openSettings()
-                xbmcWin = addon.getSetting("XbmcWin")
-                if not os.path.isfile(os.path.join(xbmcWin)):
-                    log('still not found, exiting: %s' % xbmcWin)
-                    sys.exit()
-            else:
-                log('exiting')
-                sys.exit()
+            log('ERROR: failed to copy script file to userdata: %s' % newPath)
+            scriptErrorNotification
+            sys.exit()
     else:
-        if sys.platform == "darwin":
-            global steamOsx
-            global xbmcOsx
+        log('script file already exists, skipping copy to userdata: %s' % newPath)
+
+
+def makeScriptExec():
+    scriptPath = os.path.join(getAddonDataPath(), 'scripts', 'steam-launch.sh')
+    if os.path.isfile(scriptPath):
+        if not stat.S_IXUSR & os.stat(scriptPath)[stat.ST_MODE]:
+            log('steam-launch.sh not executable: %s' % scriptPath)
+            try:
+                os.chmod(scriptPath, stat.S_IRWXU)
+                log('steam-launch.sh now executable: %s' % scriptPath)
+            except:
+                log('ERROR: unable to make steam-launch.sh executable, exiting: %s' % scriptPath)
+                scriptErrorNotification
+                sys.exit()
+            log('steam-launch.sh executable: %s' % scriptPath)
+
+
+def usrScriptDelete():
+    if delUserScriptSett == 'true':
+        log('deleting userdata scripts, option enabled: delUserScriptSett = %s' % delUserScriptSett)
+        scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'SteamLauncher-AHK.ahk')
+        delUserScript(scriptFile)
+        scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'SteamLauncher-AHK.exe')
+        delUserScript(scriptFile)
+        scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'LaunchHidden.vbs')
+        delUserScript(scriptFile)
+        scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'steam-launch.sh')
+        delUserScript(scriptFile)
+    elif delUserScriptSett == 'false':
+        log('skipping deleting userdata scripts, option disabled: delUserScriptSett = %s' % delUserScriptSett)
+
+
+def delUserScript(scriptFile):
+    if os.path.isfile(scriptFile):
+        try:
+            os.remove(scriptFile)
+            log('found and deleting: %s' % scriptFile)
+        except:
+            log('ERROR: deleting failed: %s' % scriptFile)
+            scriptErrorNotification
+        addon.setSetting(id="DelUserScript", value="false")
+
+
+def fileChecker():
+    if filePathCheck == 'true':
+        log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
+        if osWin:
+            steamWin = addon.getSetting("SteamWin")
+            xbmcWin = addon.getSetting("XbmcWin")
+            steamExe = os.path.join(steamWin)
+            xbmcExe = os.path.join(xbmcWin)
+            programFileCheck(steamExe, xbmcExe)
+        elif osOsx:
             steamOsx = addon.getSetting("SteamOsx")
-            if not os.path.isdir(os.path.join(steamOsx)):
-                log('folder does not exist: %s' % steamOsx)
-                if dialog.yesno("" + language(50123) + "", "" + steamOsx + "", "" + language(50120) + "",
-                                "" + language(50121) + ""):
-                    log('opening addon settings')
-                    addon.openSettings()
-                    steamOsx = addon.getSetting("SteamOsx")
-                    if not os.path.isfile(os.path.join(steamOsx)):
-                        log('still not found, exiting: %s' % steamOsx)
-                        sys.exit()
-                else:
-                    log('exiting')
-                    sys.exit()
             xbmcOsx = addon.getSetting("XbmcOsx")
-            if not os.path.isdir(os.path.join(xbmcOsx)):
-                log('folder does not exist: %s' % xbmcOsx)
-                if dialog.yesno("" + language(50123) + "", "" + xbmcOsx + "", "" + language(50120) + "",
-                                "" + language(50121) + ""):
-                    log('opening addon settings')
-                    addon.openSettings()
-                    xbmcOsx = addon.getSetting("XbmcOsx")
-                if not os.path.isfile(os.path.join(xbmcOsx)):
-                    log('still not found, exiting: %s' % xbmcOsx)
-                    sys.exit()
-                else:
-                    log('exiting')
-                    sys.exit()
-        else:
-            global steamLinux
-            global xbmcLinux
-            if not os.path.isfile(os.path.join(steamLinux)):
-                log('file does not exist: %s' % steamLinux)
-                steamLinux = addon.getSetting("SteamLinux")
-                if dialog.yesno("" + language(50123) + "", "" + steamLinux + "", "" + language(50120) + "",
-                                "" + language(50121) + ""):
-                    log('opening addon settings')
-                    addon.openSettings()
-                    steamLinux = addon.getSetting("SteamLinux")
-                    if not os.path.isfile(os.path.join(steamLinux)):
-                        log('still not found, exiting: %s' % steamLinux)
-                        sys.exit()
-                else:
-                    log('exiting')
-                    sys.exit()
-            if not os.path.isfile(os.path.join(xbmcLinux)):
-                log('file does not exist: %s' % xbmcLinux)
-                xbmcLinux = addon.getSetting("XbmcLinux")
-                if dialog.yesno("" + language(50123) + "", "" + xbmcLinux + "", "" + language(50122) + "",
-                                "" + language(50121) + ""):
-                    log('opening addon settings')
-                    addon.openSettings()
-                    xbmcLinux = addon.getSetting("XbmcLinux")
-                    if not os.path.isfile(os.path.join(xbmcLinux)):
-                        log('still not found, exiting: %s' % xbmcLinux)
-                        sys.exit()
-                else:
-                    log('exiting')
-                    sys.exit()
+            steamExe = os.path.join(steamOsx)
+            xbmcExe = os.path.join(xbmcOsx)
+            programFileCheck(steamExe, xbmcExe)
+        elif osLinux:
+            steamLinux = addon.getSetting("SteamLinux")
+            xbmcLinux = addon.getSetting("XbmcLinux")
+            steamExe = os.path.join(steamLinux)
+            xbmcExe = os.path.join(xbmcLinux)
+            programFileCheck(steamExe, xbmcExe)
+    else:
+        log('skipping program file check, option disabled: filePathCheck = %s' % filePathCheck)
 
 
-def MakeShExecCheck():
-    global makeShExec
-    basePath = os.path.join(getAddonDataPath(), 'scripts')
-    if not os.name == 'nt':
-        if not stat.S_IXUSR & os.stat(os.path.join(basePath, 'steam-launch.sh'))[stat.ST_MODE]:
-            log('steam-launch.sh is not executable')
-            if makeShExec == 'false':
-                if dialog.yesno("" + language(50123) + "", "" + os.path.join(basePath, 'steam-launch.sh') + "",
-                                "" + language(50122) + "", "" + language(50121) + ""):
-                    log('opening addon settings')
-                    addon.openSettings()
-                else:
-                    log('exiting')
-                    sys.exit()
-            else:
-                log('steam-launch.sh is not executable but is set be be made so')
+def fileCheckDialog(programExe):
+    log('ERROR: dialog to go to addon settings because executable does not exist: %s' % programExe)
+    if dialog.yesno(""+ language(50123) +"", ""+ programExe +"", ""+ language(50120) +"", ""+ language(50121) +""):
+        log('yes selected, opening addon settings')
+        addon.openSettings()
+        fileChecker()
+    else:
+        log('ERROR: no selected with invalid executable, exiting: %s' % programExe)
+        sys.exit()
 
 
-def delUserScript():
-    log('deleting user_data scripts')
-    basePath = os.path.join(getAddonDataPath(), 'scripts')
-    if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.ahk')):
-        filePath = os.path.join(basePath, 'SteamLauncher-AHK.ahk')
-        try:
-            os.remove(filePath)
-            log('found and deleting: %s' % filePath)
-        except:
-            log('deleting failed: %s' % filePath)
-    if os.path.isfile(os.path.join(basePath, 'SteamLauncher-AHK.exe')):
-        filePath = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-        try:
-            os.remove(filePath)
-            log('found and deleting: %s' % filePath)
-        except:
-            log('deleting failed: %s' % filePath)
-    if os.path.isfile(os.path.join(basePath, 'LaunchHidden.vbs')):
-        filePath = os.path.join(basePath, 'LaunchHidden.vbs')
-        try:
-            os.remove(filePath)
-            log('found and deleting: %s' % filePath)
-        except:
-            log('deleting failed: %s' % filePath)
-    if os.path.isfile(os.path.join(basePath, 'steam-launch.sh')):
-        filePath = os.path.join(basePath, 'steam-launch.sh')
-        try:
-            os.remove(filePath)
-            log('found and deleting: %s' % filePath)
-        except:
-            log('deleting failed: %s' % filePath)
-    addon.setSetting(id="DelUserScript", value="false")
+def programFileCheck(steamExe, xbmcExe):
+    if osWin + osLinux:
+        if not os.path.isfile(os.path.join(steamExe)):
+            fileCheckDialog(programExe)
+        if not os.path.isfile(os.path.join(xbmcExe)):
+            fileCheckDialog(programExe)
+    if osOsx:
+        if not os.path.isdir(os.path.join(steamExe)):
+            fileCheckDialog(programExe)
+        if not os.path.isdir(os.path.join(xbmcExe)):
+            fileCheckDialog(programExe)
 
 
 def scriptVersionCheck():
-    global delUserScriptSett
-    global scriptAhkSys
-    global scriptAhkUsr
-    oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
-    newBasePath = os.path.join(getAddonDataPath(), 'scripts')
-    if delUserScriptSett == 'false':
-        if os.name == 'nt':
-            if os.path.isfile(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')):
-                for line in open(os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk'), "r"):
-                    if "steam.launcher.script.revision=" in line:
-                        scriptAhkSys = line[32:]
-                for line in open(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk'), "r"):
-                    if not "steam.launcher.script.revision=" in line:
-                        scriptAhkUsr = '000'
-                for line in open(os.path.join(newBasePath, 'SteamLauncher-AHK.ahk'), "r"):
-                    if "steam.launcher.script.revision=" in line:
-                        scriptAhkUsr = line[32:]
-                if scriptAhkSys > scriptAhkUsr:
-                    log('addon scripts have been updated: %s' % scriptAhkSys > scriptAhkUsr)
-                    if dialog.yesno("Steam Launcher", "" + language(50124) + "", "" + language(50121) + "",
-                                    "" + language(50125) + ""):
-                        addon.openSettings()
-                        delUserScriptSett = addon.getSetting("DelUserScript")
-                        if delUserScriptSett == 'true':
-                            log('deleting old userdata scripts')
-                            delUserScript()
-                    else:
-                        log('no selected, script update check disabled')
-                        addon.setSetting(id="ScriptUpdateCheck", value="1")
-
+    if scriptUpdateCheck == 'true':
+        log('usr scripts are set to be checked for updates...')
+        if delUserScriptSett == 'false':
+            log('usr scripts are not set to be deleted, running version check')
+            sysScriptDir = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
+            usrScriptDir = os.path.join(getAddonDataPath(), 'scripts')
+            if osWin:
+                sysScriptPath = os.path.join(sysScriptDir, 'SteamLauncher-AHK.ahk')
+                usrScriptPath = os.path.join(usrScriptDir, 'SteamLauncher-AHK.ahk')
+                if os.path.isfile(os.path.join(usrScriptPath)):
+                    compareFile(sysScriptPath, usrScriptPath)
+                else:
+                    log('usr script does not exist, skipping version check')
+            elif osLinux + osOsx:
+                sysScriptPath = os.path.join(sysScriptDir, 'steam-launch.sh')
+                usrScriptPath = os.path.join(usrScriptDir, 'steam-launch.sh')
+                if os.path.isfile(os.path.join(usrScriptPath)):
+                    compareFile(sysScriptPath, usrScriptPath)
+                else:
+                    log('usr script does not exist, skipping version check')
         else:
-            if os.path.isfile(os.path.join(newBasePath, 'steam-launch.sh')):
-                for line in open(os.path.join(oldBasePath, 'steam-launch.sh'), "r"):
-                    if "steam.launcher.script.revision=" in line:
-                        scriptAhkSys = line[32:]
-                for line in open(os.path.join(newBasePath, 'steam-launch.sh'), "r"):
-                    if not "steam.launcher.script.revision=" in line:
-                        scriptAhkUsr = '000'
-                for line in open(os.path.join(newBasePath, 'steam-launch.sh'), "r"):
-                    if "steam.launcher.script.revision=" in line:
-                        scriptAhkUsr = line[32:]
-                if scriptAhkSys > scriptAhkUsr:
-                    log('addon scripts have been updated: %s' % scriptAhkSys > scriptAhkUsr)
-                    if dialog.yesno("Steam Launcher", "" + language(50124) + "", "" + language(50121) + "",
-                                    "" + language(50125) + ""):
-                        addon.openSettings()
-                        delUserScriptSett = addon.getSetting("DelUserScript")
-                        if delUserScriptSett == 'true':
-                            log('deleting old userdata scripts')
-                            delUserScript()
-                    else:
-                        log('no selected, script update check disabled')
-                        addon.setSetting(id="ScriptUpdateCheck", value="1")
+            log('usr scripts are set to be deleted, no version check needed')
     else:
-        log('scripts are set to be deleted, no update check needed')
+        log('usr scripts are set to not be checked for updates, skipping version check')
+
+
+def compareFile(sysScriptPath, usrScriptPath):
+    global delUserScriptSett
+    if os.path.isfile(sysScriptPath):
+        with open(sysScriptPath) as f:
+            for line in f.readlines():
+                if "steam.launcher.script.revision=" in line:
+                    scriptSysVer = line[32:]
+                    if scriptSysVer == '':
+                        scriptSysVer = '000'
+                        log('"steam.launcher.script.revision=" number not found in script: %s' % sysScriptPath)
+                    log('sys "steam.launcher.script.revision=": %s' % scriptSysVer)
+    if os.path.isfile(usrScriptPath):
+        with open(usrScriptPath, 'r') as f:
+            for line in f.readlines():
+                if "steam.launcher.script.revision=" in line:
+                    scriptUsrVer = line[32:]
+                    if scriptUsrVer == '':
+                        scriptUsrVer = '000'
+                        log('"steam.launcher.script.revision=" number not found in script: %s' % usrScriptPath)
+                    log('usr "steam.launcher.script.revision=": %s' % scriptUsrVer)
+    if scriptSysVer > scriptUsrVer:
+        log('system scripts have been updated: %s > %s' % (scriptSysVer, scriptUsrVer))
+        if dialog.yesno("Steam Launcher", "" + language(50124) + "", "" + language(50121) + "",
+                        "" + language(50125) + ""):
+            log('script updated dialog')
+            addon.openSettings()
+            delUserScriptSett = addon.getSetting("DelUserScript")
+            if delUserScriptSett == 'true':
+                log('option delUserScriptSett enabled: %s' % delUserScriptSett)
+            elif delUserScriptSett == 'false':
+                log('option delUserScriptSett disabled: %s' % delUserScriptSett)
+        else:
+            addon.setSetting(id="ScriptUpdateCheck", value="false")
+            log('no selected, script update check disabled: ScriptUpdateCheck = %s' % scriptUpdateCheck)
+    else:
+        log('userdata script are up to date')
 
 
 def quitXbmcDialog():
     global quitXbmcSetting
     if quitXbmcSetting == '2':
+        log('quit setting: %s selected, asking user to pick' % quitXbmcSetting)
         if dialog.yesno("Steam Launcher", "" + language(50073) + ""):
             quitXbmcSetting = '0'
         else:
             quitXbmcSetting = '1'
+    log('quit setting: %s selected' % quitXbmcSetting)
+
+
+def xbmcBusyDialog():
+    xbmc.executebuiltin("ActivateWindow(busydialog)")
+    log('busy dialog started')
+    time.sleep(busyDialogTime)
+    xbmc.executebuiltin("Dialog.Close(busydialog)")
+    log('busy dialog stopped after: %s seconds' % busyDialogTime)
+
+
+def steamPrePost():
+    global postScript
+    global preScript
+    if preScriptEnabled == 'false':
+        preScript = 'false'
+    elif preScript == '':
+        preScript = 'false'
+    log('pre steam script: %s' % preScript)
+    if postScriptEnabled == 'false':
+        postScript = 'false'
+    elif postScript == '':
+        postScript = 'false'
+    log('post steam script: %s' % postScript)
 
 
 def launchSteam():
-    global postScript
-    global preScript
     basePath = os.path.join(getAddonDataPath(), 'scripts')
-    if preScriptEnabled == 'false':
-        preScript = 'false'
-    if postScriptEnabled == 'false':
-        postScript = 'false'
-    if preScript == '':
-        preScript = 'false'
-    if postScript == '':
-        postScript = 'false'
-    if os.name == 'nt':
+    if osAndroid:
+        cmd = "com.valvesoftware.android.steam.community"
+        log('attempting to launch: "%s"' % cmd)
+        xbmc.executebuiltin('XBMC.StartAndroidActivity("%s")' % cmd)
+        xbmcBusyDialog()
+        sys.exit()
+    elif osWin:
         launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
         steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
         cmd = "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
-        # cmd = "call" + " " + "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
-        if makeShExec == 'true':
-            addon.setSetting(id="MakeShExec", value="false")
-            log('steam-launch.sh doesnt exist in windows, option disabled')
-        try:
-            log('attempting to launch: %s' % cmd)
-            subprocess.Popen(cmd, shell=True)
-            # os.system(cmd)
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            time.sleep(busyDialogTime)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-        except:
-            log('failed to run: %s' % cmd)
-            xbmc.executebuiltin("Notification(" + language(50123) + "," + language(50126) + ",10000," + addonIcon + ")")
-    else:
+    elif osOsx:
         steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-        if makeShExec == 'true':
-            os.chmod(steamlauncher, stat.S_IRWXU)
-            addon.setSetting(id="MakeShExec", value="false")
-            log('steam-launch.sh should now be executable and the option disabled')
-        if not stat.S_IXUSR & os.stat(os.path.join(basePath, 'steam-launch.sh'))[stat.ST_MODE]:
-            log('steam-launch.sh is not executable, exiting')
-            sys.exit()
-        if sys.platform == "darwin":
-            cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamOsx + "\"" + " " + "\"" + xbmcOsx + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
-            try:
-                log('attempting to launch: %s' % cmd)
-                subprocess.Popen(cmd, shell=True)
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                time.sleep(busyDialogTime)
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-            except:
-                log('failed to launch: %s' % cmd)
-                xbmc.executebuiltin(
-                    "Notification(" + language(50123) + "," + language(50126) + ",10000," + addonIcon + ")")
-        else:
-            cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamLinux + "\"" + " " + "\"" + xbmcLinux + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
-            try:
-                log('attempting to launch: %s' % cmd)
-                subprocess.Popen(cmd, shell=True)
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                time.sleep(busyDialogTime)
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-            except:
-                log('failed to launch: %s' % cmd)
-                xbmc.executebuiltin(
-                    "Notification(" + language(50123) + "," + language(50126) + ",10000," + addonIcon + ")")
+        cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamOsx + "\"" + " " + "\"" + xbmcOsx + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+    elif osLinux:
+        steamlauncher = os.path.join(basePath, 'steam-launch.sh')
+        cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamLinux + "\"" + " " + "\"" + xbmcLinux + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+    try:
+        log('attempting to launch: %s' % cmd)
+        subprocess.Popen(cmd, shell=True)
+        xbmcBusyDialog()
+    except:
+        log('ERROR: failed to launch: %s' % cmd)
+        scriptErrorNotification
 
 
-def launchSteamAndroid():
-    if not os.name == 'nt':
-        if not sys.platform == "darwin":
-            if os.path.isfile('/system/build.prop'):
-                log('/system/build.prop found on a linux system, must be running android, attempting to launch: "com.valvesoftware.android.steam.community"')
-                xbmc.executebuiltin('XBMC.StartAndroidActivity("com.valvesoftware.android.steam.community")')
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                time.sleep(busyDialogTime)
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                sys.exit()
+log('****Running Steam-Launcher....')
 
-launchSteamAndroid()
+if osAndroid:
+    global osLinux
+    osLinux = 0
 
-if scriptUpdateCheck == '0':
-    scriptVersionCheck()
-    log('running script version check')
-else:
-    log('script version check disabled')
+log('running on osAndroid, osOsx, osLinux, os Win: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
 
-if delUserScriptSett == 'true':
-    log('delete userdata script option enabled')
-    delUserScript()
-
+scriptVersionCheck()
+usrScriptDelete()
 copyLauncherScriptsToUserdata()
-log('checking if userdata scripts exist')
-
-if not os.name == 'nt':
-    if makeShExec == 'false':
-        MakeShExecCheck()
-        log('checking if steam-launch.sh is executable')
-
-if filePathCheck == '0':
-    log('running program file check')
-    programFileCheck()
-else:
-    log('program file check disabled')
-
+fileChecker()
+makeScriptExec()
+steamPrePost()
 quitXbmcDialog()
-
-log('running steam...')
-if os.name == 'nt':
-    log('steamWin: %s' % steamWin)
-    log('xbmcWin: %s' % xbmcWin)
-else:
-    if sys.platform == "darwin":
-        log('steamOsx: %s' % steamOsx)
-        log('xbmcOsx: %s' % xbmcOsx)
-    else:
-        log('steamLinux: %s' % steamLinux)
-        log('xbmcLinux: %s' % xbmcLinux)
-log('System script revision: %s' % scriptAhkSys)
-log('Userdata script revision: %s' % scriptAhkUsr)
-log('delUserScriptSett: %s' % delUserScriptSett)
-log('makeShExec: %s' % makeShExec)
-log('quitXbmcSetting: %s' % quitXbmcSetting)
-log('busyDialogTime: %s' % busyDialogTime)
-log('scriptUpdateCheck: %s' % scriptUpdateCheck)
-log('filePathCheck: %s' % filePathCheck)
-log('xbmcPortable: %s' % xbmcPortable)
-log('preScriptEnabled: %s' % preScriptEnabled)
-log('preScript: %s' % preScript)
-log('postScriptEnabled: %s' % postScriptEnabled)
-log('postScript: %s' % postScript)
 launchSteam()

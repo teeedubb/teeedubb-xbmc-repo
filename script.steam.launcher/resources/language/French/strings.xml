@@ -13,21 +13,21 @@
     <string id="50090">Linux/OSX</string>
 
     <!-- Advanced Settings -->
-    <string id="50100">Avancé</string>    
-    <string id="50110">Supprimer et mettre à jour les scripts dans addon_data au prochain lancement</string>    
-    <string id="50111">Rendre steam-launch.sh exécutable au prochain lancement</string>    
+    <string id="50100">Avancé</string>
+    <string id="50110">Supprimer et mettre à jour les scripts dans addon_data au prochain lancement</string>
+    <string id="50111">Rendre steam-launch.sh exécutable au prochain lancement</string>
     <string id="50112">Temps d'attente pendant la fenêtre 'Occupé' (en secondes)</string>
     <string id="50113">Notification de mise à jour du script</string>
     <string id="50114">Vérification de l'emplacement du fichier</string>
 
     <!-- Error Messages -->
     <string id="50120">Le fichier n'existe pas</string>
-    <string id="50121">Voulez-vous vous rendre aux paramètres de l'addon ?</string>    
-    <string id="50122">Le fichier n'est pas exécutable</string>    
-    <string id="50123">ERREUR !</string>    
+    <string id="50121">Voulez-vous vous rendre aux paramètres de l'addon ?</string>
+    <string id="50122">Le fichier n'est pas exécutable</string>
+    <string id="50123">ERREUR !</string>
     <string id="50124">Les scripts systèmes ont été mis à jour :</string>
     <string id="50125">Choisir 'Non' pour désactiver la vérification des mises à jours du script</string>
-	<string id="50126">Vérifiez le xbmc.log fichier pour plus de détails</string>
+    <string id="50126">Vérifiez le xbmc.log fichier pour plus de détails</string>
 
 
 </strings>

@@ -1,39 +1,37 @@
- 
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<string id="50000">Steam</string>
+    <string id="50000">Steam</string>
 
-	<!-- Settings -->
-	<string id="50050">General</string>
-	<string id="50060">Linux</string>
-	<string id="50061">XBMC location</string>
-	<string id="50062">Steam location</string>
-	<string id="50070">Windows</string>
-	<string id="50073">Quit XBMC?</string>
-	<string id="50080">OSX</string>
-	<string id="50090">Linux/OSX</string>
+    <!-- Settings -->
+    <string id="50050">General</string>
+    <string id="50060">Linux</string>
+    <string id="50061">XBMC location</string>
+    <string id="50062">Steam location</string>
+    <string id="50070">Windows</string>
+    <string id="50073">Quit XBMC?</string>
+    <string id="50080">OSX</string>
+    <string id="50090">Linux/OSX</string>
 
-	<!-- Advanced Settings -->
-	<string id="50100">Advanced</string>	
-	<string id="50110">Delete and update scripts in addon_data on next run</string>	
-	<string id="50111">Make steam-launch.sh executable on next run</string>	
-	<string id="50112">'Busy dialog' timeout in seconds</string>
-	<string id="50113">Script update notification</string>
-	<string id="50114">File path check</string>
-	<string id="50115">XBMC is running in portable mode?</string>
-	<string id="50116">Run a script before Steam?</string>
-	<string id="50117">Pre Steam script location</string>
-	<string id="50119">Run a script after Steam?</string>
-	<string id="50118">Post Steam script location</string>
+    <!-- Advanced Settings -->
+    <string id="50100">Advanced</string>
+    <string id="50110">Delete and update userdata scripts on next run</string>
+    <string id="50112">'Busy dialog' timeout in seconds</string>
+    <string id="50113">Script update notification</string>
+    <string id="50114">Program file path check</string>
+    <string id="50115">Is XBMC running in portable mode?</string>
+    <string id="50116">Run a script before Steam?</string>
+    <string id="50117">Pre Steam script location</string>
+    <string id="50119">Run a script after Steam?</string>
+    <string id="50118">Post Steam script location</string>
 
-	<!-- Error Messages -->
-	<string id="50120">File does not exist</string>
-	<string id="50121">Do you want to go to the addon settings?</string>	
-	<string id="50122">File is not executable</string>	
-	<string id="50123">ERROR!</string>	
-	<string id="50124">System scripts have been updated:</string>
-	<string id="50125">Select 'No' to disable to disable the Script Update Check</string>
-	<string id="50126">Check xbmc.log file for details</string>
+    <!-- Error Messages -->
+    <string id="50120">File does not exist</string>
+    <string id="50121">Do you want to go to the addon settings?</string>
+    <string id="50122">File is not executable</string>
+    <string id="50123">ERROR!</string>
+    <string id="50124">System scripts have been updated:</string>
+    <string id="50125">Select 'No' to disable to disable the Script Update Check</string>
+    <string id="50126">Check xbmc.log file for details</string>
 
 
 </strings>

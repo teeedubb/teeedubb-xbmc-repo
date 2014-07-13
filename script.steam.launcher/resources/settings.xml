@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="50050">
-   	<setting label="50073" type="enum" id="QuitXbmc" values="Yes|No|Ask" default="0"/>
-      <setting label="50060" type="lsep"/>
-        <setting label="50061" id="XbmcLinux" type="executable" default="/usr/bin/xbmc" />    
-	<setting label="50062" id="SteamLinux" type="executable" default="/usr/bin/steam" />    
-      <setting label="50070" type="lsep"/>
-		<setting label="50061" id="XbmcWin" type="executable" default="C:\Program Files (x86)\XBMC\XBMC.exe" />    
-		<setting label="50062" id="SteamWin" type="executable" default="C:\Program Files (x86)\Steam\steam.exe" />
-      <setting label="50080" type="lsep"/>
-		<setting label="50061" id="XbmcOsx" type="folder" default="/Applications/XBMC.app/" />    
-		<setting label="50062" id="SteamOsx" type="folder" default="/Applications/Steam.app/" />
+        <setting label="50073" type="enum" id="QuitXbmc" values="Yes|No|Ask" default="0"/>
+        <setting label="50061" id="XbmcLinux" type="executable" visible="System.Platform.Linux"
+                 default="/usr/bin/xbmc"/>
+        <setting label="50062" id="SteamLinux" type="executable" visible="System.Platform.Linux"
+                 default="/usr/bin/steam"/>
+        <setting label="50061" id="XbmcWin" type="executable" visible="system.platform.windows"
+                 default="C:\Program Files (x86)\XBMC\XBMC.exe"/>
+        <setting label="50062" id="SteamWin" type="executable" visible="system.platform.windows"
+                 default="C:\Program Files (x86)\Steam\steam.exe"/>
+        <setting label="50061" id="XbmcOsx" type="folder" visible="system.platform.osx"
+                 default="/Applications/XBMC.app/"/>
+        <setting label="50062" id="SteamOsx" type="folder" visible="system.platform.osx"
+                 default="/Applications/Steam.app/"/>
+        <setting label="50116" id="PreScriptEnabled" type="bool" default="false"/>
+        <setting label="50117" id="PreScript" type="executable" enable="eq(-1,true)"/>
+        <setting label="50119" id="PostScriptEnabled" type="bool" default="false"/>
+        <setting label="50118" id="PostScript" type="executable" enable="eq(-1,true)"/>
     </category>
     <category label="50100">
-		<setting label="50110" id="DelUserScript" type="bool" default="false" />
-		<setting label="50115" id="XbmcPortable" type="bool" default="false" />
-		<setting label="50112" id="BusyDialogTime" type="number" default="10" />
-       	<setting label="50113" type="enum" id="ScriptUpdateCheck" values="Enabled|Disabled" default="0"/>
-       	<setting label="50114" type="enum" id="FilePathCheck" values="Enabled|Disabled" default="0"/>
- 		<setting label="50116" id="PreScriptEnabled" type="bool" default="false" />
-		<setting label="50117" id="PreScript" type="executable" enable="eq(-1,true)" />
- 		<setting label="50119" id="PostScriptEnabled" type="bool" default="false" />
-    	<setting label="50118" id="PostScript" type="executable" enable="eq(-1,true)" />
-     <setting label="50090" type="lsep"/>
-		<setting label="50111" id="MakeShExec" type="bool" default="false" />
-	</category>
+        <setting label="50110" id="DelUserScript" type="bool" default="false"/>
+        <setting label="50115" id="XbmcPortable" type="bool" default="false"/>
+        <setting label="50112" id="BusyDialogTime" type="number" default="10"/>
+        <setting label="50113" id="ScriptUpdateCheck" type="bool" default="true"/>
+        <setting label="50114" id="FilePathCheck" type="bool" default="true"/>
+    </category>
 </settings>
  

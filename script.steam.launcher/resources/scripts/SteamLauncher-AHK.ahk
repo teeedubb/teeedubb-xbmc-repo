@@ -1,9 +1,8 @@
 ;xbmc steam launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\xbmc.exe" "0/1"
-;0 = Quit Steam. 1 = Minimize xbmc while steam is running.
-;Edit this script to launch external programs before Steam or XBMC. See the three marked locations below.
-;Change the 'steam.launcher.script.revision=' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
+;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\xbmc.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
+;$3 = 0 Quit XBMC, 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
+;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
 ;steam.launcher.script.revision=004
