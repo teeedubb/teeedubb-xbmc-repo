@@ -6,9 +6,7 @@ import subprocess
 import time
 import shutil
 import stat
-
 import xbmc
-
 import xbmcaddon
 import xbmcgui
 
