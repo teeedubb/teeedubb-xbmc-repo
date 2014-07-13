@@ -166,3 +166,9 @@ Steam-launch.sh is made executable automatically when necessary and the option d
 Rewrote default.py - added extra logging and trimmed it down and cleaned it up a bit, should work better now.
 New locking mechanism to try and prevent xbmc restarting multiple instances on linux if addon run multiple times
 Changes to included scripts
+
+1.9.6
+fixed error notifications
+cleaned up launching commands
+addon check if checks if pre/post steam scripts exist, if not disables them.
+small fixes

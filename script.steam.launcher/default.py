@@ -35,13 +35,12 @@ preScriptEnabled = addon.getSetting("PreScriptEnabled")
 preScript = addon.getSetting("PreScript")
 postScriptEnabled = addon.getSetting("PostScriptEnabled")
 postScript = addon.getSetting("PostScript")
-scriptErrorNotification = "dialog.notification(language(50123), language(50126), addonIcon, 5000)"
-
-
 osWin = xbmc.getCondVisibility('system.platform.windows')
 osOsx = xbmc.getCondVisibility('system.platform.osx')
+global osLinux #osAndroid workaround
 osLinux = xbmc.getCondVisibility('system.platform.linux')
 osAndroid = xbmc.getCondVisibility('system.platform.android')
+
 
 def log(msg):
     xbmc.log(u'%s: %s' % (scriptid, msg))
@@ -61,7 +60,7 @@ def getAddonDataPath():
             log('created directory: %s' % path)
         except:
             log('ERROR: failed to create directory: %s' % path)
-            scriptErrorNotification
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
     return path
 
 
@@ -93,7 +92,7 @@ def copyFile(oldPath, newPath):
             log('sucsessfully created userdata scripts folder: %s' % newDir)
         except:
             log('ERROR: failed to create userdata scripts folder: %s' % newDir)
-            scriptErrorNotification
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
             sys.exit()
     if not os.path.isfile(newPath):
         log('script file does not exist, copying to userdata: %s' % newPath)
@@ -102,7 +101,7 @@ def copyFile(oldPath, newPath):
             log('sucsessfully copied userdata script: %s' % newPath)
         except:
             log('ERROR: failed to copy script file to userdata: %s' % newPath)
-            scriptErrorNotification
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
             sys.exit()
     else:
         log('script file already exists, skipping copy to userdata: %s' % newPath)
@@ -118,7 +117,7 @@ def makeScriptExec():
                 log('steam-launch.sh now executable: %s' % scriptPath)
             except:
                 log('ERROR: unable to make steam-launch.sh executable, exiting: %s' % scriptPath)
-                scriptErrorNotification
+                dialog.notification(language(50123), language(50126), addonIcon, 5000)
                 sys.exit()
             log('steam-launch.sh executable: %s' % scriptPath)
 
@@ -145,7 +144,7 @@ def delUserScript(scriptFile):
             log('found and deleting: %s' % scriptFile)
         except:
             log('ERROR: deleting failed: %s' % scriptFile)
-            scriptErrorNotification
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
         addon.setSetting(id="DelUserScript", value="false")
 
 
@@ -176,7 +175,7 @@ def fileChecker():
 
 def fileCheckDialog(programExe):
     log('ERROR: dialog to go to addon settings because executable does not exist: %s' % programExe)
-    if dialog.yesno(""+ language(50123) +"", ""+ programExe +"", ""+ language(50120) +"", ""+ language(50121) +""):
+    if dialog.yesno(language(50123), programExe, language(50120), language(50121)):
         log('yes selected, opening addon settings')
         addon.openSettings()
         fileChecker()
@@ -188,14 +187,14 @@ def fileCheckDialog(programExe):
 def programFileCheck(steamExe, xbmcExe):
     if osWin + osLinux:
         if not os.path.isfile(os.path.join(steamExe)):
-            fileCheckDialog(programExe)
+            fileCheckDialog(steamExe)
         if not os.path.isfile(os.path.join(xbmcExe)):
-            fileCheckDialog(programExe)
+            fileCheckDialog(xbmcExe)
     if osOsx:
         if not os.path.isdir(os.path.join(steamExe)):
-            fileCheckDialog(programExe)
+            fileCheckDialog(steamExe)
         if not os.path.isdir(os.path.join(xbmcExe)):
-            fileCheckDialog(programExe)
+            fileCheckDialog(xbmcExe)
 
 
 def scriptVersionCheck():
@@ -247,8 +246,7 @@ def compareFile(sysScriptPath, usrScriptPath):
                     log('usr "steam.launcher.script.revision=": %s' % scriptUsrVer)
     if scriptSysVer > scriptUsrVer:
         log('system scripts have been updated: %s > %s' % (scriptSysVer, scriptUsrVer))
-        if dialog.yesno("Steam Launcher", "" + language(50124) + "", "" + language(50121) + "",
-                        "" + language(50125) + ""):
+        if dialog.yesno('Steam Launcher', language(50124), language(50121), language(50125)):
             log('script updated dialog')
             addon.openSettings()
             delUserScriptSett = addon.getSetting("DelUserScript")
@@ -267,7 +265,7 @@ def quitXbmcDialog():
     global quitXbmcSetting
     if quitXbmcSetting == '2':
         log('quit setting: %s selected, asking user to pick' % quitXbmcSetting)
-        if dialog.yesno("Steam Launcher", "" + language(50073) + ""):
+        if dialog.yesno('Steam Launcher', language(50073)):
             quitXbmcSetting = '0'
         else:
             quitXbmcSetting = '1'
@@ -287,11 +285,21 @@ def steamPrePost():
     global preScript
     if preScriptEnabled == 'false':
         preScript = 'false'
+    elif preScriptEnabled == 'true':
+        if not os.path.isfile(os.path.join(preScript)):
+            log('pre-steam script does not exist, disabling!: "%s"' % preScript)
+            preScript = 'false'
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
     elif preScript == '':
         preScript = 'false'
     log('pre steam script: %s' % preScript)
     if postScriptEnabled == 'false':
         postScript = 'false'
+    elif preScriptEnabled == 'true':
+        if not os.path.isfile(os.path.join(postScript)):
+            log('post-steam script does not exist, disabling!: "%s"' % postScript)
+            postScript = 'false'
+            dialog.notification(language(50123), language(50126), addonIcon, 5000)
     elif postScript == '':
         postScript = 'false'
     log('post steam script: %s' % postScript)
@@ -308,26 +316,25 @@ def launchSteam():
     elif osWin:
         launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
         steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-        cmd = "\"" + launchhidden + "\"" + " " + "\"" + steamlauncher + "\"" + " " + "\"" + steamWin + "\"" + " " + "\"" + xbmcWin + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+        cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (launchhidden, steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
     elif osOsx:
         steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-        cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamOsx + "\"" + " " + "\"" + xbmcOsx + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+        cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, xbmcOsx, quitXbmcSetting, xbmcPortable, preScript, postScript)
     elif osLinux:
         steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-        cmd = "\"" + steamlauncher + "\"" + " " + "\"" + steamLinux + "\"" + " " + "\"" + xbmcLinux + "\"" + " " + "\"" + quitXbmcSetting + "\"" + " " + "\"" + xbmcPortable + "\"" + " " + "\"" + preScript + "\"" + " " + "\"" + postScript + "\""
+        cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, xbmcLinux, quitXbmcSetting, xbmcPortable, preScript, postScript)
     try:
         log('attempting to launch: %s' % cmd)
         subprocess.Popen(cmd, shell=True)
         xbmcBusyDialog()
     except:
         log('ERROR: failed to launch: %s' % cmd)
-        scriptErrorNotification
+        dialog.notification(language(50123), language(50126), addonIcon, 5000)
 
 
 log('****Running Steam-Launcher....')
 
-if osAndroid:
-    global osLinux
+if osAndroid: #osAndroid returns linux + android
     osLinux = 0
 
 log('running on osAndroid, osOsx, osLinux, os Win: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
