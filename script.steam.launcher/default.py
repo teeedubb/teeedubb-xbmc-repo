@@ -25,7 +25,6 @@ xbmcWin = addon.getSetting("XbmcWin")
 steamOsx = addon.getSetting("SteamOsx")
 xbmcOsx = addon.getSetting("XbmcOsx")
 delUserScriptSett = addon.getSetting("DelUserScript")
-makeShExec = addon.getSetting("MakeShExec")
 quitXbmcSetting = addon.getSetting("QuitXbmc")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
@@ -37,8 +36,8 @@ postScriptEnabled = addon.getSetting("PostScriptEnabled")
 postScript = addon.getSetting("PostScript")
 osWin = xbmc.getCondVisibility('system.platform.windows')
 osOsx = xbmc.getCondVisibility('system.platform.osx')
-global osLinux #osAndroid workaround
 osLinux = xbmc.getCondVisibility('system.platform.linux')
+global osLinux #osAndroid workaround
 osAndroid = xbmc.getCondVisibility('system.platform.android')
 
 
@@ -245,15 +244,10 @@ def compareFile(sysScriptPath, usrScriptPath):
                         log('"steam.launcher.script.revision=" number not found in script: %s' % usrScriptPath)
                     log('usr "steam.launcher.script.revision=": %s' % scriptUsrVer)
     if scriptSysVer > scriptUsrVer:
-        log('system scripts have been updated: %s > %s' % (scriptSysVer, scriptUsrVer))
-        if dialog.yesno('Steam Launcher', language(50124), language(50121), language(50125)):
-            log('script updated dialog')
-            addon.openSettings()
-            delUserScriptSett = addon.getSetting("DelUserScript")
-            if delUserScriptSett == 'true':
-                log('option delUserScriptSett enabled: %s' % delUserScriptSett)
-            elif delUserScriptSett == 'false':
-                log('option delUserScriptSett disabled: %s' % delUserScriptSett)
+        log('system scripts have been updated: sys:%s > usr:%s' % (scriptSysVer, scriptUsrVer))
+        if dialog.yesno(language(50113), language(50124), language(50125)):
+            addon.setSetting(id="DelUserScript", value="true")
+            log('yes selected, option delUserScriptSett enabled: %s' % delUserScriptSett)
         else:
             addon.setSetting(id="ScriptUpdateCheck", value="false")
             log('no selected, script update check disabled: ScriptUpdateCheck = %s' % scriptUpdateCheck)
