@@ -229,7 +229,7 @@ def compareFile(sysScriptPath, usrScriptPath):
         with open(sysScriptPath) as f:
             for line in f.readlines():
                 if "steam.launcher.script.revision=" in line:
-                    scriptSysVer = line[32:]
+                    scriptSysVer = line[32:35]
                     if scriptSysVer == '':
                         scriptSysVer = '000'
                         log('"steam.launcher.script.revision=" number not found in script: %s' % sysScriptPath)
@@ -238,7 +238,7 @@ def compareFile(sysScriptPath, usrScriptPath):
         with open(usrScriptPath, 'r') as f:
             for line in f.readlines():
                 if "steam.launcher.script.revision=" in line:
-                    scriptUsrVer = line[32:]
+                    scriptUsrVer = line[32:35]
                     if scriptUsrVer == '':
                         scriptUsrVer = '000'
                         log('"steam.launcher.script.revision=" number not found in script: %s' % usrScriptPath)
