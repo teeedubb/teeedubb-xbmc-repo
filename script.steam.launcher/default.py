@@ -310,7 +310,7 @@ def launchSteam():
     elif osWin:
         launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
         steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-        cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (launchhidden, steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
+        cmd = 'cscript //B //Nologo "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (launchhidden, steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
     elif osOsx:
         steamlauncher = os.path.join(basePath, 'steam-launch.sh')
         cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, xbmcOsx, quitXbmcSetting, xbmcPortable, preScript, postScript)
@@ -331,7 +331,7 @@ log('****Running Steam-Launcher....')
 if osAndroid: #osAndroid returns linux + android
     osLinux = 0
 
-log('running on osAndroid, osOsx, osLinux, os Win: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
+log('running on osAndroid, osOsx, osLinux, osWin: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
 
 scriptVersionCheck()
 usrScriptDelete()

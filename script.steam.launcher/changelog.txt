@@ -172,3 +172,9 @@ fixed error notifications
 cleaned up launching commands
 addon check if checks if pre/post steam scripts exist, if not disables them.
 small fixes
+
+1.9.7
+English strings changed and updated.
+Script update dialog has changed - yes now updates scripts instead of going to settings screen.
+Small fixes.
+Readded cscript prefix to windows command, with out it addon fails silently in Frodo.
