@@ -5,11 +5,17 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=004
+;steam.launcher.script.revision=005
 
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
+
+if 0 != 6
+{
+    MsgBox This script requires arguments but it only received %0%. See script file for details.
+    ExitApp
+}
 
 IfNotEqual, 5, false
 {

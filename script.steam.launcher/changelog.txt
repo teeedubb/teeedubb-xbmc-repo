@@ -178,3 +178,8 @@ English strings changed and updated.
 Script update dialog has changed - yes now updates scripts instead of going to settings screen.
 Small fixes.
 Readded cscript prefix to windows command, with out it addon fails silently in Frodo.
+
+1.9.8
+Fixed script update check with older scripts
+Script files give error messages if run with no arguments
+Small fixes

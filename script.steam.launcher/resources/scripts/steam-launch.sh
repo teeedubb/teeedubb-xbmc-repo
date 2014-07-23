@@ -3,11 +3,15 @@
 #See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
 #Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/xbmc" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
 #$3 = 0 Quit XBMC, 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
-#Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
-
-#steam.launcher.script.revision=009
+#Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
+#steam.launcher.script.revision=010
 
 export DISPLAY=:0
+
+if [ -z "$*" ]; then
+        echo "No arguments provided, see script file for details."
+        exit
+fi
 
 case "$(uname -s)" in
     Darwin)
