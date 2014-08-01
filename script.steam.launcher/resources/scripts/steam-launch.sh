@@ -122,7 +122,8 @@ while [[ $(wmctrl -l | grep "$STEAM_WIN_ID") ]] ; do
   sleep 0.5
 done
 
-if mkdir /var/lock/.steam-launcher.exclusivelock ; then
+(
+  flock -x -n 200 || exit
 
   if [[ $6 != false ]] ; then
     "$6"
@@ -141,10 +142,8 @@ if mkdir /var/lock/.steam-launcher.exclusivelock ; then
     fi
   fi
 
-  rmdir /var/lock/.steam-launcher.exclusivelock
-else
-  exit
-fi
+  flock -u 200
+) 200>/tmp/.steam-launcher.exclusivelock
 
 #####################################
         ;;
