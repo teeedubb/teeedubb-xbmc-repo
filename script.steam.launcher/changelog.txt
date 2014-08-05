@@ -183,3 +183,8 @@ Readded cscript prefix to windows command, with out it addon fails silently in F
 Fixed script update check with older scripts
 Script files give error messages if run with no arguments
 Small fixes
+
+2.0.0
+Fixed formatting in addon.xml
+Use proper locking in steam-launch.sh script, thanks BtbN!
+Updated French language strings, thanks Kre|S!
