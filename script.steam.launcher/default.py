@@ -313,7 +313,7 @@ def launchSteam():
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, xbmcLinux, quitXbmcSetting, xbmcPortable, preScript, postScript)
 	try:
 		log('attempting to launch: %s' % cmd)
-		subprocess.Popen(cmd, shell=True)
+		subprocess.Popen(cmd, shell=True, close_fds=True)
 		xbmcBusyDialog()
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
