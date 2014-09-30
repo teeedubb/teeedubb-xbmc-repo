@@ -5,7 +5,7 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=005
+;steam.launcher.script.revision=006
 
 #NoEnv  
 #SingleInstance force
@@ -25,29 +25,29 @@ IfNotEqual, 5, false
 Process, Exist, Steam.exe
 if ErrorLevel
 {
-    if WinExist("ahk_class CUIEngineWin32")
+    IfWinExist, Steam ahk_class CUIEngineWin32
 	{
-		WinActivate Steam ahk_class CUIEngineWin32
+		WinActivate, Steam ahk_class CUIEngineWin32
 	}
 	else
 	{
-		run, %1% steam://open/bigpicture
+		Run, %1% steam://open/bigpicture
 	}
 }
 else
 {
-    run, %1% -bigpicture
+    Run, %1% -bigpicture
 }
 
-GroupAdd, SteamBPM, ahk_class CUIEngineWin32
-GroupAdd, SteamBPM, ahk_class Steam
+GroupAdd, SteamBPM, Steam ahk_class CUIEngineWin32
+GroupAdd, SteamBPM, Steam ahk_class Steam
 
 SteamLoop:
 
 WinWait, ahk_group SteamBPM
 if %3%
 {
-	WinMinimize, XBMC
+	WinMinimize, XBMC ahk_class XBMC
 }
 else
 {
@@ -65,7 +65,7 @@ IfNotEqual, 6, false
 
 if %3%
 {
-	WinMaximize, XBMC
+	WinMaximize, XBMC ahk_class XBMC
 }
 else
 {

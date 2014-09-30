@@ -66,10 +66,7 @@ fi
 if [[ $(uname -a |grep "steamos") ]] ; then
   if [[ $3 = 0 ]] ; then
     kill $(pidof xbmc.bin)
-    (sleep 1
-    if [[ $(pidof xbmc.bin) ]] ; then
-      kill -9 $(pidof xbmc.bin)
-    fi)&
+    (sleep 1 ; if [[ $(pidof xbmc.bin) ]] ; then kill -9 $(pidof xbmc.bin) ; fi)&
   fi
   /usr/bin/returntosteam.sh
   exit

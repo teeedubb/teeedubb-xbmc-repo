@@ -188,3 +188,9 @@ Small fixes
 Fixed formatting in addon.xml
 Use proper locking in steam-launch.sh script, thanks BtbN!
 Updated French language strings, thanks Kre|S!
+
+2.1.0
+Added close_fds=True to the subprocess.Popen call. Prevents the webserver port from being held in linux and renders launchhidden.vbs in windows obsolete. Thanks Lord_Gaav!
+Removed LaunchHidden.vbs
+Added custom icon to AHK script + cleaned/fixed it up a bit.
+Tiny cleanup to steam-launch.sh, no version bump.

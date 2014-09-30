@@ -65,9 +65,6 @@ def copyLauncherScriptsToUserdata():
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 	newBasePath = os.path.join(getAddonDataPath(), 'scripts')
 	if osWin:
-		oldPath = os.path.join(oldBasePath, 'LaunchHidden.vbs')
-		newPath = os.path.join(newBasePath, 'LaunchHidden.vbs')
-		copyFile(oldPath, newPath)
 		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
 		newPath = os.path.join(newBasePath, 'SteamLauncher-AHK.ahk')
 		copyFile(oldPath, newPath)
@@ -126,8 +123,6 @@ def usrScriptDelete():
 		delUserScript(scriptFile)
 		scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'SteamLauncher-AHK.exe')
 		delUserScript(scriptFile)
-		scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'LaunchHidden.vbs')
-		delUserScript(scriptFile)
 		scriptFile = os.path.join(getAddonDataPath(), 'scripts', 'steam-launch.sh')
 		delUserScript(scriptFile)
 	elif delUserScriptSett == 'false':
@@ -183,14 +178,22 @@ def fileCheckDialog(programExe):
 
 def programFileCheck(steamExe, xbmcExe):
 	if osWin + osLinux:
-		if not os.path.isfile(os.path.join(steamExe)):
+		if os.path.isfile(os.path.join(steamExe)):
+			log('Steam executable existis %s' % steamExe)
+		else:
 			fileCheckDialog(steamExe)
-		if not os.path.isfile(os.path.join(xbmcExe)):
+		if os.path.isfile(os.path.join(xbmcExe)):
+			log('Xbmc executable existis %s' % xbmcExe)
+		else:	
 			fileCheckDialog(xbmcExe)
 	if osOsx:
-		if not os.path.isdir(os.path.join(steamExe)):
+		if os.path.isdir(os.path.join(steamExe)):
+			log('Steam folder existis %s' % steamExe)
+		else:
 			fileCheckDialog(steamExe)
-		if not os.path.isdir(os.path.join(xbmcExe)):
+		if os.path.isdir(os.path.join(xbmcExe)):
+			log('Xbmc executable existis %s' % xbmcExe)
+		else:	
 			fileCheckDialog(xbmcExe)
 
 
@@ -302,9 +305,8 @@ def launchSteam():
 		xbmcBusyDialog()
 		sys.exit()
 	elif osWin:
-		launchhidden = os.path.join(basePath, 'LaunchHidden.vbs')
 		steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-		cmd = 'cscript //B //Nologo "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (launchhidden, steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
 	elif osOsx:
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, xbmcOsx, quitXbmcSetting, xbmcPortable, preScript, postScript)
