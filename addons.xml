@@ -33,7 +33,7 @@
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="2.1.0" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="2.1.1" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
