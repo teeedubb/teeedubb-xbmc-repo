@@ -194,3 +194,6 @@ Added close_fds=True to the subprocess.Popen call. Prevents the webserver port f
 Removed LaunchHidden.vbs
 Added custom icon to AHK script + cleaned/fixed it up a bit.
 Tiny cleanup to steam-launch.sh, no version bump.
+
+2.1.1
+Fix line endings in steam-launch.sh
