@@ -197,3 +197,7 @@ Tiny cleanup to steam-launch.sh, no version bump.
 
 2.1.1
 Fix line endings in steam-launch.sh
+
+2.2.0
+Linux: Added a check for the the program 'wmctrl' which is a external dependency, check can be disabled in addon settings (eg for SteamOS users running XBMC in its own session)
+Addon will exit if the addon settings are opened via the script, so any changes can be reloaded.

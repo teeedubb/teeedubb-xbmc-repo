@@ -38,6 +38,7 @@ osWin = xbmc.getCondVisibility('system.platform.windows')
 osOsx = xbmc.getCondVisibility('system.platform.osx')
 osLinux = xbmc.getCondVisibility('system.platform.linux')
 osAndroid = xbmc.getCondVisibility('system.platform.android')
+wmctrlCheck = addon.getSetting("WmctrlCheck")
 
 def log(msg):
 	xbmc.log(u'%s: %s' % (scriptid, msg))
@@ -141,6 +142,12 @@ def delUserScript(scriptFile):
 
 
 def fileChecker():
+	if osLinux:
+		if wmctrlCheck == 'true':
+			if subprocess.call(["which", "wmctrl"]) != 0:
+				log('ERROR: System program "wmctrl" not present, install it via you system package manager or disable the addon option "Check for program wmctrl"')
+				dialog.notification(language(50123), language(50126), addonIcon, 5000)
+				sys.exit()
 	if filePathCheck == 'true':
 		log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
 		if osWin:
@@ -171,6 +178,7 @@ def fileCheckDialog(programExe):
 		log('yes selected, opening addon settings')
 		addon.openSettings()
 		fileChecker()
+		sys.exit()
 	else:
 		log('ERROR: no selected with invalid executable, exiting: %s' % programExe)
 		sys.exit()

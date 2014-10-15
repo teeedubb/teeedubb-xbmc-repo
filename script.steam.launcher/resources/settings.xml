@@ -25,6 +25,7 @@
         <setting label="50112" id="BusyDialogTime" type="number" default="10"/>
         <setting label="50113" id="ScriptUpdateCheck" type="bool" default="true"/>
         <setting label="50114" id="FilePathCheck" type="bool" default="true"/>
+        <setting label="50120" id="WmctrlCheck" type="bool" visible="System.Platform.Linux" default="true"/>
     </category>
 </settings>
  

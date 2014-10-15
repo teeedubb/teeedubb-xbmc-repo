@@ -22,6 +22,7 @@
     <string id="50117">Pre Steam script location</string>
     <string id="50119">Run a script after Steam?</string>
     <string id="50118">Post Steam script location</string>
+    <string id="50120">Check for program 'wmctrl'</string>
 
     <!-- Error Messages -->
     <string id="50120">File does not exist</string>
@@ -30,6 +31,5 @@
     <string id="50124">New scripts available, update userdata scripts?</string>
     <string id="50125">Select 'No' to disable the Script Update Check</string>
     <string id="50126">Check xbmc.log file for details</string>
-
 
 </strings>
