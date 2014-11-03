@@ -5,10 +5,10 @@
     <!-- Settings -->
     <string id="50050">General</string>
     <string id="50060">Linux</string>
-    <string id="50061">XBMC location</string>
+    <string id="50061">Kodi location</string>
     <string id="50062">Steam location</string>
     <string id="50070">Windows</string>
-    <string id="50073">Quit XBMC?</string>
+    <string id="50073">Quit Kodi?</string>
     <string id="50080">OSX</string>
 
     <!-- Advanced Settings -->
@@ -17,7 +17,7 @@
     <string id="50112">'Busy dialog' timeout</string>
     <string id="50113">Script update notification</string>
     <string id="50114">Program path check</string>
-    <string id="50115">XBMC portable mode</string>
+    <string id="50115">Kodi portable mode</string>
     <string id="50116">Run a script before Steam?</string>
     <string id="50117">Pre Steam script location</string>
     <string id="50119">Run a script after Steam?</string>
@@ -30,6 +30,6 @@
     <string id="50123">ERROR!</string>
     <string id="50124">New scripts available, update userdata scripts?</string>
     <string id="50125">Select 'No' to disable the Script Update Check</string>
-    <string id="50126">Check xbmc.log file for details</string>
+    <string id="50126">Check kodi.log file for details</string>
 
 </strings>

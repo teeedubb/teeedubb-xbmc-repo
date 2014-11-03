@@ -1,11 +1,11 @@
-;xbmc steam launcher autohotkey script by teeedubb
+;KODI steam launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\xbmc.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
-;$3 = 0 Quit XBMC, 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
+;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
+;$3 = 0 Quit KODI, 1 Minimize KODI. $4 = KODI portable mode. $5 = pre script. $6 post script.
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=006
+;steam.launcher.script.revision=007
 
 #NoEnv  
 #SingleInstance force
@@ -47,12 +47,12 @@ SteamLoop:
 WinWait, ahk_group SteamBPM
 if %3%
 {
-	WinMinimize, XBMC ahk_class XBMC
+	WinMinimize, Kodi ahk_class Kodi
 }
 else
 {
-	Run, %comspec% /c taskkill /im XBMC.exe,,Hide
-	Run, %comspec% /c timeout /t 1 && tasklist /nh /fi "imagename eq XBMC.exe" | find /i "XBMC.exe" >nul && (taskkill /f /im XBMC.exe),,Hide
+	Run, %comspec% /c taskkill /im Kodi.exe,,Hide
+	Run, %comspec% /c timeout /t 1 && tasklist /nh /fi "imagename eq Kodi.exe" | find /i "Kodi.exe" >nul && (taskkill /f /im Kodi.exe),,Hide
 }
 WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
@@ -65,7 +65,7 @@ IfNotEqual, 6, false
 
 if %3%
 {
-	WinMaximize, XBMC ahk_class XBMC
+	WinMaximize, Kodi ahk_class Kodi
 }
 else
 {
@@ -78,8 +78,8 @@ else
 	    run, %2%
 	}
 }
-WinWait, XBMC ahk_class XBMC
-WinActivate, XBMC ahk_class XBMC
+WinWait, Kodi ahk_class Kodi
+WinActivate, Kodi ahk_class Kodi
 
 WinWait, ahk_group SteamBPM,,5
 if ErrorLevel

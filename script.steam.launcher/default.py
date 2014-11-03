@@ -19,17 +19,17 @@ language = addon.getLocalizedString
 scriptid = 'script.steam.launcher'
 
 steamLinux = addon.getSetting("SteamLinux")
-xbmcLinux = addon.getSetting("XbmcLinux")
+kodiLinux = addon.getSetting("KodiLinux")
 steamWin = addon.getSetting("SteamWin")
-xbmcWin = addon.getSetting("XbmcWin")
+kodiWin = addon.getSetting("KodiWin")
 steamOsx = addon.getSetting("SteamOsx")
-xbmcOsx = addon.getSetting("XbmcOsx")
+kodiOsx = addon.getSetting("KodiOsx")
 delUserScriptSett = addon.getSetting("DelUserScript")
-quitXbmcSetting = addon.getSetting("QuitXbmc")
+quitKodiSetting = addon.getSetting("QuitKodi")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
-xbmcPortable = addon.getSetting("XbmcPortable")
+kodiPortable = addon.getSetting("KodiPortable")
 preScriptEnabled = addon.getSetting("PreScriptEnabled")
 preScript = addon.getSetting("PreScript")
 postScriptEnabled = addon.getSetting("PostScriptEnabled")
@@ -152,21 +152,21 @@ def fileChecker():
 		log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
 		if osWin:
 			steamWin = addon.getSetting("SteamWin")
-			xbmcWin = addon.getSetting("XbmcWin")
+			kodiWin = addon.getSetting("KodiWin")
 			steamExe = os.path.join(steamWin)
-			xbmcExe = os.path.join(xbmcWin)
+			xbmcExe = os.path.join(kodiWin)
 			programFileCheck(steamExe, xbmcExe)
 		elif osOsx:
 			steamOsx = addon.getSetting("SteamOsx")
-			xbmcOsx = addon.getSetting("XbmcOsx")
+			kodiOsx = addon.getSetting("KodiOsx")
 			steamExe = os.path.join(steamOsx)
-			xbmcExe = os.path.join(xbmcOsx)
+			xbmcExe = os.path.join(kodiOsx)
 			programFileCheck(steamExe, xbmcExe)
 		elif osLinux:
 			steamLinux = addon.getSetting("SteamLinux")
-			xbmcLinux = addon.getSetting("XbmcLinux")
+			kodiLinux = addon.getSetting("KodiLinux")
 			steamExe = os.path.join(steamLinux)
-			xbmcExe = os.path.join(xbmcLinux)
+			xbmcExe = os.path.join(kodiLinux)
 			programFileCheck(steamExe, xbmcExe)
 	else:
 		log('skipping program file check, option disabled: filePathCheck = %s' % filePathCheck)
@@ -260,18 +260,18 @@ def compareFile(sysScriptPath, usrScriptPath):
 		log('userdata script are up to date')
 
 
-def quitXbmcDialog():
-	global quitXbmcSetting
-	if quitXbmcSetting == '2':
-		log('quit setting: %s selected, asking user to pick' % quitXbmcSetting)
+def quitKodiDialog():
+	global quitKodiSetting
+	if quitKodiSetting == '2':
+		log('quit setting: %s selected, asking user to pick' % quitKodiSetting)
 		if dialog.yesno('Steam Launcher', language(50073)):
-			quitXbmcSetting = '0'
+			quitKodiSetting = '0'
 		else:
-			quitXbmcSetting = '1'
-	log('quit setting selected: %s' % quitXbmcSetting)
+			quitKodiSetting = '1'
+	log('quit setting selected: %s' % quitKodiSetting)
 
 
-def xbmcBusyDialog():
+def kodiBusyDialog():
 	xbmc.executebuiltin("ActivateWindow(busydialog)")
 	log('busy dialog started')
 	time.sleep(busyDialogTime)
@@ -310,21 +310,21 @@ def launchSteam():
 		cmd = "com.valvesoftware.android.steam.community"
 		log('attempting to launch: "%s"' % cmd)
 		xbmc.executebuiltin('XBMC.StartAndroidActivity("%s")' % cmd)
-		xbmcBusyDialog()
+		kodiBusyDialog()
 		sys.exit()
 	elif osWin:
 		steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, xbmcWin, quitXbmcSetting, xbmcPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript)
 	elif osOsx:
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, xbmcOsx, quitXbmcSetting, xbmcPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript)
 	elif osLinux:
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, xbmcLinux, quitXbmcSetting, xbmcPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
 	try:
 		log('attempting to launch: %s' % cmd)
 		subprocess.Popen(cmd, shell=True, close_fds=True)
-		xbmcBusyDialog()
+		kodiBusyDialog()
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
 		dialog.notification(language(50123), language(50126), addonIcon, 5000)
@@ -343,5 +343,5 @@ copyLauncherScriptsToUserdata()
 fileChecker()
 makeScriptExec()
 steamPrePost()
-quitXbmcDialog()
+quitKodiDialog()
 launchSteam()
