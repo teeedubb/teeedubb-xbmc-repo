@@ -1,10 +1,10 @@
 #!/bin/bash
-#Script to launch Steam BPM from Xbmc, by teeedubb
-#See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-#Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/xbmc" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
-#$3 = 0 Quit XBMC, 1 Minimize XBMC. $4 = xbmc portable mode. $5 = pre script. $6 post script.
+#Script to launch Steam BPM from Kodi, by teeedubb
+#See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.kodi.tv/showthread.php?tid=157499
+#Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/kodi" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
+#$3 = 0 Quit Kodi, 1 Minimize Kodi. $4 = Kodi portable mode. $5 = pre script. $6 post script.
 #Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
-#steam.launcher.script.revision=012
+#steam.launcher.script.revision=013
 
 export DISPLAY=:0
 
@@ -24,10 +24,10 @@ open "$1" steam://open/bigpicture
 
 for i in {1..6} ; do
   if [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
-    if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
+    if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
       if [[ $3 = 0 ]] ; then
-	killall XBMC
-	(sleep 1 ; if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 XBMC ; fi)&
+	killall Kodi
+	(sleep 1 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
       fi
     fi
   else
@@ -36,13 +36,13 @@ for i in {1..6} ; do
 done
 
 if [[ $3 = 0 ]] ; then
-  if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
-    killall XBMC
-    (sleep 1 ; if [[ $(ps -A | grep XBMC.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 XBMC ; fi)&
+  if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
+    killall Kodi
+    (sleep 1 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
   fi
 fi
 
-while [[ $(ps -A | grep steam.sh | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; do
+while [[ $(ps -A | grep steam_osx | grep -v grep | awk '{print $1}') ]] ; do
   sleep 1
 done
 
@@ -65,8 +65,8 @@ fi
 
 if [[ $(uname -a |grep "steamos") ]] ; then
   if [[ $3 = 0 ]] ; then
-    kill $(pidof xbmc.bin)
-    (sleep 1 ; if [[ $(pidof xbmc.bin) ]] ; then kill -9 $(pidof xbmc.bin) ; fi)&
+    kill $(pidof kodi.bin)
+    (sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
   fi
   /usr/bin/returntosteam.sh
   exit
@@ -84,12 +84,12 @@ fi
 
 for i in {1..6} ; do
   if [[ $(wmctrl -l | grep "Steam$") ]] ; then
-    if [[ $(pidof xbmc.bin) ]] ; then
+    if [[ $(pidof kodi.bin) ]] ; then
       if [[ $3 = 0 ]] ; then
-	kill $(pidof xbmc.bin)
-	(sleep 1 ; if [[ $(pidof xbmc.bin) ]] ; then kill -9 $(pidof xbmc.bin) ; fi)&
+	kill $(pidof kodi.bin)
+	(sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
       else
-	wmctrl -r "XBMC Media Center" -b remove,fullscreen
+	wmctrl -r "kodi" -b remove,fullscreen
       fi
     fi
   else
@@ -97,12 +97,12 @@ for i in {1..6} ; do
   fi
 done
 
-if [[ $(pidof xbmc.bin) ]] ; then
+if [[ $(pidof kodi.bin) ]] ; then
   if [[ $3 = 0 ]] ; then
-    kill $(pidof xbmc.bin)
-    (sleep 1 ; if [[ $(pidof xbmc.bin) ]] ; then kill -9 $(pidof xbmc.bin) ; fi)&
+    kill $(pidof kodi.bin)
+    (sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
   else
-    wmctrl -r "XBMC Media Center" -b remove,fullscreen
+    wmctrl -r "kodi" -b remove,fullscreen
   fi
 fi
 
@@ -126,10 +126,10 @@ done
     "$6"
   fi
 
-  if [[ $(pidof xbmc.bin) ]] ; then
-    wmctrl -a "XBMC Media Center"
+  if [[ $(pidof kodi.bin) ]] ; then
+    wmctrl -a "kodi"
     if [[ $3 != 0 ]] ; then
-      wmctrl -r "XBMC Media Center" -b add,fullscreen &
+      wmctrl -r "kodi" -b add,fullscreen &
     fi
   else
     if [[ $4 = true ]] ; then
