@@ -4,7 +4,7 @@
 #Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/kodi" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
 #$3 = 0 Quit Kodi, 1 Minimize Kodi. $4 = Kodi portable mode. $5 = pre script. $6 post script.
 #Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
-#steam.launcher.script.revision=013
+#steam.launcher.script.revision=014
 
 export DISPLAY=:0
 
@@ -74,7 +74,7 @@ fi
 
 if [[ $(pidof steam) ]] ; then
   if [[ $(wmctrl -l | grep "Steam$") ]] ; then
-    wmctrl -i -a $(wmctrl -l | grep "Steam$" | cut -c1-10) &
+    wmctrl -i -a $(wmctrl -l | grep "Steam$" | awk '{print $1}') &
   else
     "$1" steam://open/bigpicture &
   fi
@@ -89,7 +89,7 @@ for i in {1..6} ; do
 	kill $(pidof kodi.bin)
 	(sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
       else
-	wmctrl -r "kodi" -b remove,fullscreen
+	wmctrl -i -r $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}') -b remove,fullscreen
       fi
     fi
   else
@@ -102,7 +102,7 @@ if [[ $(pidof kodi.bin) ]] ; then
     kill $(pidof kodi.bin)
     (sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
   else
-    wmctrl -r "kodi" -b remove,fullscreen
+    wmctrl -i -r $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}') -b remove,fullscreen
   fi
 fi
 
@@ -113,7 +113,7 @@ done
 
 sleep 1
 
-STEAM_WIN_ID=$(wmctrl -l | grep "Steam$" | cut -c1-10)
+STEAM_WIN_ID=$(wmctrl -l | grep "Steam$" | awk '{print $1}')
 
 while [[ $(wmctrl -l | grep "$STEAM_WIN_ID") ]] ; do
   sleep 0.5
@@ -127,9 +127,9 @@ done
   fi
 
   if [[ $(pidof kodi.bin) ]] ; then
-    wmctrl -a "kodi"
+    wmctrl -i -a $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}')
     if [[ $3 != 0 ]] ; then
-      wmctrl -r "kodi" -b add,fullscreen &
+      wmctrl -i -r $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}') -b add,fullscreen &
     fi
   else
     if [[ $4 = true ]] ; then
