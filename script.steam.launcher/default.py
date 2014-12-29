@@ -10,20 +10,20 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 
-
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
 addonIcon = addon.getAddonInfo('icon')
+addonVersion = addon.getAddonInfo('version')
 dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 scriptid = 'script.steam.launcher'
 
-steamLinux = addon.getSetting("SteamLinux")
-kodiLinux = addon.getSetting("KodiLinux")
-steamWin = addon.getSetting("SteamWin")
-kodiWin = addon.getSetting("KodiWin")
-steamOsx = addon.getSetting("SteamOsx")
-kodiOsx = addon.getSetting("KodiOsx")
+steamLinux = addon.getSetting("SteamLinux").decode("utf-8")
+kodiLinux = addon.getSetting("KodiLinux").decode("utf-8")
+steamWin = addon.getSetting("SteamWin").decode("utf-8")
+kodiWin = addon.getSetting("KodiWin").decode("utf-8")
+steamOsx = addon.getSetting("SteamOsx").decode("utf-8")
+kodiOsx = addon.getSetting("KodiOsx").decode("utf-8")
 delUserScriptSett = addon.getSetting("DelUserScript")
 quitKodiSetting = addon.getSetting("QuitKodi")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
@@ -31,26 +31,38 @@ scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
 kodiPortable = addon.getSetting("KodiPortable")
 preScriptEnabled = addon.getSetting("PreScriptEnabled")
-preScript = addon.getSetting("PreScript")
+preScript = addon.getSetting("PreScript").decode("utf-8")
 postScriptEnabled = addon.getSetting("PostScriptEnabled")
-postScript = addon.getSetting("PostScript")
+postScript = addon.getSetting("PostScript").decode("utf-8")
 osWin = xbmc.getCondVisibility('system.platform.windows')
 osOsx = xbmc.getCondVisibility('system.platform.osx')
 osLinux = xbmc.getCondVisibility('system.platform.linux')
 osAndroid = xbmc.getCondVisibility('system.platform.android')
 wmctrlCheck = addon.getSetting("WmctrlCheck")
 
+#HACK: sys.getfilesystemencoding() is not supported on all systems (e.g. Android)
+txt_encode = 'utf-8'
+try:
+	txt_encode = sys.getfilesystemencoding()
+except:
+	pass
+#osAndroid returns linux + android
+if osAndroid: 
+	osLinux = 0
+	txt_encode = 'utf-8'
+
 def log(msg):
-	xbmc.log(u'%s: %s' % (scriptid, msg))
+	msg = msg.encode(txt_encode)
+	xbmc.log('%s: %s' % (scriptid, msg))
 
 
 def getAddonInstallPath():
-	path = addon.getAddonInfo('path')
+	path = addon.getAddonInfo('path').decode("utf-8")
 	return path
 
 
 def getAddonDataPath():
-	path = xbmc.translatePath('special://profile/addon_data/%s' % scriptid)
+	path = xbmc.translatePath('special://profile/addon_data/%s' % scriptid).decode("utf-8")
 	if not os.path.exists(path):
 		log('addon userdata folder does not exist, creating: %s' % path)
 		try:
@@ -153,20 +165,20 @@ def fileChecker():
 		if osWin:
 			steamWin = addon.getSetting("SteamWin")
 			kodiWin = addon.getSetting("KodiWin")
-			steamExe = os.path.join(steamWin)
-			xbmcExe = os.path.join(kodiWin)
+			steamExe = os.path.join(steamWin).decode("utf-8")
+			xbmcExe = os.path.join(kodiWin).decode("utf-8")
 			programFileCheck(steamExe, xbmcExe)
 		elif osOsx:
 			steamOsx = addon.getSetting("SteamOsx")
 			kodiOsx = addon.getSetting("KodiOsx")
-			steamExe = os.path.join(steamOsx)
-			xbmcExe = os.path.join(kodiOsx)
+			steamExe = os.path.join(steamOsx).decode("utf-8")
+			xbmcExe = os.path.join(kodiOsx).decode("utf-8")
 			programFileCheck(steamExe, xbmcExe)
 		elif osLinux:
 			steamLinux = addon.getSetting("SteamLinux")
 			kodiLinux = addon.getSetting("KodiLinux")
-			steamExe = os.path.join(steamLinux)
-			xbmcExe = os.path.join(kodiLinux)
+			steamExe = os.path.join(steamLinux).decode("utf-8")
+			xbmcExe = os.path.join(kodiLinux).decode("utf-8")
 			programFileCheck(steamExe, xbmcExe)
 	else:
 		log('skipping program file check, option disabled: filePathCheck = %s' % filePathCheck)
@@ -315,6 +327,7 @@ def launchSteam():
 	elif osWin:
 		steamlauncher = os.path.join(basePath, 'SteamLauncher-AHK.exe')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript)
+		#log('Windows UTF-8 command: "%s"' % cmdutf8)
 	elif osOsx:
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript)
@@ -323,19 +336,18 @@ def launchSteam():
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
 	try:
 		log('attempting to launch: %s' % cmd)
-		subprocess.Popen(cmd, shell=True, close_fds=True)
+		subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+		print cmd.encode('utf-8')
 		kodiBusyDialog()
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
+		print cmd.encode(txt_encode)
 		dialog.notification(language(50123), language(50126), addonIcon, 5000)
 
 
-log('****Running Steam-Launcher....')
-
-if osAndroid: #osAndroid returns linux + android
-	osLinux = 0
-
+log('****Running Steam-Launcher v%s....' % addonVersion)
 log('running on osAndroid, osOsx, osLinux, osWin: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
+log('System text encoding in use: %s' % txt_encode)
 
 scriptVersionCheck()
 usrScriptDelete()

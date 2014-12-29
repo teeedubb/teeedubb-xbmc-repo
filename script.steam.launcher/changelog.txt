@@ -202,5 +202,8 @@ Fix line endings in steam-launch.sh
 Linux: Added a check for the the program 'wmctrl' which is a external dependency, check can be disabled in addon settings (eg for SteamOS users running XBMC in its own session)
 Addon will exit if the addon settings are opened via the script, so any changes can be reloaded.
 
-3.0.0
+3.0.2
 Changes for Kodi / Helix 14 compatibility.
+Fixed osx check for steam running in steam-launch.sh
+Steam-launch-ahk.exe is now compiled with AHK_L.
+Fixed issues with unicode paths.
