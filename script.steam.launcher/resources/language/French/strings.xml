@@ -24,7 +24,7 @@
     <string id="50118">Emplacement du script après Steam</string>
 
     <!-- Error Messages -->
-    <string id="50120">Le fichier n'existe pas</string>
+    <string id="50122">Le fichier n'existe pas</string>
     <string id="50121">Ouvrir les paramètres de l'addon ?</string>
     <string id="50123">ERREUR !</string>
     <string id="50124">Mises à jour disponibles, mettre les scripts utilisateurs à jour ?</string>
