@@ -186,7 +186,7 @@ def fileChecker():
 
 def fileCheckDialog(programExe):
 	log('ERROR: dialog to go to addon settings because executable does not exist: %s' % programExe)
-	if dialog.yesno(language(50123), programExe, language(50120), language(50121)):
+	if dialog.yesno(language(50123), programExe, language(50122), language(50121)):
 		log('yes selected, opening addon settings')
 		addon.openSettings()
 		fileChecker()

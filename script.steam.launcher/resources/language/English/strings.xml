@@ -25,7 +25,7 @@
     <string id="50120">Check for program 'wmctrl'</string>
 
     <!-- Error Messages -->
-    <string id="50120">File does not exist</string>
+    <string id="50122">File does not exist</string>
     <string id="50121">Open addon settings?</string>
     <string id="50123">ERROR!</string>
     <string id="50124">New scripts available, update userdata scripts?</string>
