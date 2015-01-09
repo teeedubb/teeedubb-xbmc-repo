@@ -26,6 +26,7 @@ steamOsx = addon.getSetting("SteamOsx").decode("utf-8")
 kodiOsx = addon.getSetting("KodiOsx").decode("utf-8")
 delUserScriptSett = addon.getSetting("DelUserScript")
 quitKodiSetting = addon.getSetting("QuitKodi")
+disableSoundSetting = addon.getSetting("DisableSnd")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
@@ -336,11 +337,28 @@ def launchSteam():
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
 	try:
 		log('attempting to launch: %s' % cmd)
-		subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+		log('attempting to launch: %s' % disableSoundSetting)
+		if quitKodiSetting == '1' and disableSoundSetting:
+			xbmc.audioSuspend()
+			log('Audio suspended')
+
+		proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=False, close_fds=False)
 		print cmd.encode('utf-8')
 		kodiBusyDialog()
+
+		if quitKodiSetting == '1' and disableSoundSetting:
+			log('Waiting for exit from Steam')
+			while proc_h.returncode is None:
+				xbmc.sleep(1000)
+				proc_h.poll()
+			log('Start resuming audio....')
+			xbmc.audioResume()
+			log('Audio resumed')
+		del proc_h
+
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
+		log(repr(sys.exc_info()[1]))
 		print cmd.encode(txt_encode)
 		dialog.notification(language(50123), language(50126), addonIcon, 5000)
 
@@ -357,3 +375,4 @@ makeScriptExec()
 steamPrePost()
 quitKodiDialog()
 launchSteam()
+log('Steam left')
