@@ -22,6 +22,8 @@
     <string id="50117">Emplacement du script avant Steam</string>
     <string id="50119">Lancer un script après Steam ?</string>
     <string id="50118">Emplacement du script après Steam</string>
+    <string id="50120">Vérifiez programme 'wmctrl'</string>
+    <string id="50074">Suspendre Kodi audio lors de l'exécution Steam</string>
 
     <!-- Error Messages -->
     <string id="50122">Le fichier n'existe pas</string>

@@ -17,7 +17,8 @@
     <category label="50100">
         <setting label="50110" id="DelUserScript" type="bool" default="false"/>
         <setting label="50115" id="KodiPortable" type="bool" default="false"/>
-        <setting label="50112" id="BusyDialogTime" type="number" default="10"/>
+	<setting label="50074" id="SuspendAudio" type="bool" default="false"/>
+	<setting label="50112" id="BusyDialogTime" type="number" default="10"/>
         <setting label="50113" id="ScriptUpdateCheck" type="bool" default="true"/>
         <setting label="50114" id="FilePathCheck" type="bool" default="true"/>
         <setting label="50120" id="WmctrlCheck" type="bool" visible="System.Platform.Linux" default="true"/>

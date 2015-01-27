@@ -26,7 +26,6 @@ steamOsx = addon.getSetting("SteamOsx").decode("utf-8")
 kodiOsx = addon.getSetting("KodiOsx").decode("utf-8")
 delUserScriptSett = addon.getSetting("DelUserScript")
 quitKodiSetting = addon.getSetting("QuitKodi")
-disableSoundSetting = addon.getSetting("DisableSnd")
 busyDialogTime = int(addon.getSetting("BusyDialogTime"))
 scriptUpdateCheck = addon.getSetting("ScriptUpdateCheck")
 filePathCheck = addon.getSetting("FilePathCheck")
@@ -40,6 +39,7 @@ osOsx = xbmc.getCondVisibility('system.platform.osx')
 osLinux = xbmc.getCondVisibility('system.platform.linux')
 osAndroid = xbmc.getCondVisibility('system.platform.android')
 wmctrlCheck = addon.getSetting("WmctrlCheck")
+suspendAudio = addon.getSetting("SuspendAudio")
 
 #HACK: sys.getfilesystemencoding() is not supported on all systems (e.g. Android)
 txt_encode = 'utf-8'
@@ -158,9 +158,11 @@ def fileChecker():
 	if osLinux:
 		if wmctrlCheck == 'true':
 			if subprocess.call(["which", "wmctrl"]) != 0:
-				log('ERROR: System program "wmctrl" not present, install it via you system package manager or disable the addon option "Check for program wmctrl"')
+				log('ERROR: System program "wmctrl" not present, install it via you system package manager or disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
 				dialog.notification(language(50123), language(50126), addonIcon, 5000)
 				sys.exit()
+			else:
+				log('wmctrl present')
 	if filePathCheck == 'true':
 		log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
 		if osWin:
@@ -285,11 +287,12 @@ def quitKodiDialog():
 
 
 def kodiBusyDialog():
-	xbmc.executebuiltin("ActivateWindow(busydialog)")
-	log('busy dialog started')
-	time.sleep(busyDialogTime)
-	xbmc.executebuiltin("Dialog.Close(busydialog)")
-	log('busy dialog stopped after: %s seconds' % busyDialogTime)
+	if busyDialogTime != 0:
+		xbmc.executebuiltin("ActivateWindow(busydialog)")
+		log('busy dialog started')
+		time.sleep(busyDialogTime)
+		xbmc.executebuiltin("Dialog.Close(busydialog)")
+		log('busy dialog stopped after: %s seconds' % busyDialogTime)
 
 
 def steamPrePost():
@@ -336,29 +339,30 @@ def launchSteam():
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
 	try:
+		print suspendAudio
 		log('attempting to launch: %s' % cmd)
-		log('attempting to launch: %s' % disableSoundSetting)
-		if quitKodiSetting == '1' and disableSoundSetting:
+		print cmd.encode('utf-8')
+		if suspendAudio == 'true':
 			xbmc.audioSuspend()
 			log('Audio suspended')
-
-		proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=False, close_fds=False)
-		print cmd.encode('utf-8')
-		kodiBusyDialog()
-
-		if quitKodiSetting == '1' and disableSoundSetting:
-			log('Waiting for exit from Steam')
+		if quitKodiSetting == '1' and suspendAudio == 'true':
+			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
+			kodiBusyDialog()
+			log('Waiting for Steam to exit')
 			while proc_h.returncode is None:
 				xbmc.sleep(1000)
 				proc_h.poll()
 			log('Start resuming audio....')
 			xbmc.audioResume()
 			log('Audio resumed')
-		del proc_h
+			del proc_h		
+		else:
+			subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+			kodiBusyDialog()
+
 
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
-		log(repr(sys.exc_info()[1]))
 		print cmd.encode(txt_encode)
 		dialog.notification(language(50123), language(50126), addonIcon, 5000)
 
@@ -375,4 +379,3 @@ makeScriptExec()
 steamPrePost()
 quitKodiDialog()
 launchSteam()
-log('Steam left')
