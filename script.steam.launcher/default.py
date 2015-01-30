@@ -158,11 +158,17 @@ def fileChecker():
 	if osLinux:
 		if wmctrlCheck == 'true':
 			if subprocess.call(["which", "wmctrl"]) != 0:
-				log('ERROR: System program "wmctrl" not present, install it via you system package manager or disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
+				log('ERROR: System program "wmctrl" not present, install it via you system package manager or if you are running the SteamOS compositor disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
 				dialog.notification(language(50123), language(50126), addonIcon, 5000)
 				sys.exit()
 			else:
-				log('wmctrl present')
+				log('wmctrl present, checking if a window manager is running...')
+				if subprocess.call('DISPLAY=:0 wmctrl -l', shell=True) != 0:
+					log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
+					dialog.notification(language(50123), language(50126), addonIcon, 5000)
+					sys.exit()
+				else:
+					log('A window manager is running...')
 	if filePathCheck == 'true':
 		log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
 		if osWin:
