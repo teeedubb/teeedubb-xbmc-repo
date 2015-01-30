@@ -208,20 +208,20 @@ def fileCheckDialog(programExe):
 def programFileCheck(steamExe, xbmcExe):
 	if osWin + osLinux:
 		if os.path.isfile(os.path.join(steamExe)):
-			log('Steam executable existis %s' % steamExe)
+			log('Steam executable exists %s' % steamExe)
 		else:
 			fileCheckDialog(steamExe)
 		if os.path.isfile(os.path.join(xbmcExe)):
-			log('Xbmc executable existis %s' % xbmcExe)
+			log('Xbmc executable exists %s' % xbmcExe)
 		else:	
 			fileCheckDialog(xbmcExe)
 	if osOsx:
 		if os.path.isdir(os.path.join(steamExe)):
-			log('Steam folder existis %s' % steamExe)
+			log('Steam folder exists %s' % steamExe)
 		else:
 			fileCheckDialog(steamExe)
 		if os.path.isdir(os.path.join(xbmcExe)):
-			log('Xbmc executable existis %s' % xbmcExe)
+			log('Xbmc executable exists %s' % xbmcExe)
 		else:	
 			fileCheckDialog(xbmcExe)
 
@@ -345,7 +345,6 @@ def launchSteam():
 		steamlauncher = os.path.join(basePath, 'steam-launch.sh')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
 	try:
-		print suspendAudio
 		log('attempting to launch: %s' % cmd)
 		print cmd.encode('utf-8')
 		if suspendAudio == 'true':
