@@ -207,3 +207,11 @@ Changes for Kodi / Helix 14 compatibility.
 Fixed osx check for steam running in steam-launch.sh
 Steam-launch-ahk.exe is now compiled with AHK_L.
 Fixed issues with unicode paths.
+
+3.1.0
+Added option to suspend audio + fixed dual string id's - thanks Scondo!
+Setting Busy Dialog to 0 will disable it.
+Updated French translations.
+
+3.1.1
+Expand wmctrl check t check if a window manager is running.
