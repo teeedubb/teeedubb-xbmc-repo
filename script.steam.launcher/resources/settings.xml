@@ -2,6 +2,7 @@
 <settings>
     <category label="50050">
         <setting label="50073" id="QuitKodi" type="enum" values="Yes|No|Ask" default="0"/>
+        <setting label="50075" id="DisableSnd" type="bool" default="False" enable="!eq(-1,0)"/>
         <setting label="50061" id="KodiLinux" type="executable" visible="System.Platform.Linux" default="/usr/bin/kodi"/>
         <setting label="50062" id="SteamLinux" type="executable" visible="System.Platform.Linux" default="/usr/bin/steam"/>
         <setting label="50061" id="KodiWin" type="executable" visible="system.platform.windows" default="C:\Program Files (x86)\Kodi\Kodi.exe"/>
