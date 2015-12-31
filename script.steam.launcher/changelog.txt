@@ -215,3 +215,7 @@ Updated French translations.
 
 3.1.1
 Expand wmctrl check t check if a window manager is running.
+
+3.1.2
+Added pt-br translation by rokam
+Dual string id fix by Scondo

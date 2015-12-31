@@ -14,7 +14,7 @@
         </extension>
 </addon>
 
-<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.4" provider-name="teeedubb">
+<addon id="script.audio.fbi.radio" name="FBi Radio" version="0.0.2" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -22,18 +22,19 @@
      <provides>audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Starts Music Party Mode.</summary>
-    <description lang="en">Starts Music Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
+    <summary lang="en">FBi online radio stream.</summary>
+    <description lang="en">Stream FBi radio online. See: http://fbiradio.com/on-air-now/</description>
     <platform>all</platform>
     <language>en</language>
-    <forum>http://forum.xbmc.org/showthread.php?tid=166842</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
     <source>https://github.com/teeedubb</source>
     <email></email>
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.1.1" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="3.1.2" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
@@ -73,7 +74,7 @@
   </extension>
 </addon>
 
-<addon id="script.audio.fbi.radio" name="FBi Radio" version="0.0.2" provider-name="teeedubb">
+<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.4" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -81,13 +82,12 @@
      <provides>audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">FBi online radio stream.</summary>
-    <description lang="en">Stream FBi radio online. See: http://fbiradio.com/on-air-now/</description>
+    <summary lang="en">Starts Music Party Mode.</summary>
+    <description lang="en">Starts Music Party Mode, waits for X seconds then switches to full screen visualisation and optionally toggles the fullscreen music info after X seconds. Timeouts can be configured in addon settings, defaults are 5 seconds for each.</description>
     <platform>all</platform>
     <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <forum>http://forum.xbmc.org/showthread.php?tid=166842</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
     <source>https://github.com/teeedubb</source>
     <email></email>
   </extension>
