@@ -5,7 +5,7 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=008
+;steam.launcher.script.revision=009
 
 #NoEnv  
 #SingleInstance force
@@ -28,6 +28,8 @@ if ErrorLevel
     IfWinExist, Steam ahk_class CUIEngineWin32
 	{
 		WinActivate, Steam ahk_class CUIEngineWin32
+		WinWait, Steam ahk_class CUIEngineWin32
+		Send {Esc}
 	}
 	else
 	{
@@ -56,7 +58,21 @@ else
 }
 WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
-WinWaitClose, Steam ahk_class CUIEngineWin32
+loop
+{
+  IfWinNotExist, Steam ahk_class CUIEngineWin32
+  {
+	BPMState = closed
+    break
+  }
+  WinGet, MinMax, MinMax, Steam ahk_class CUIEngineWin32
+  IfEqual MinMax, -1
+  {
+	break
+	BPMState = minimised
+  }
+Sleep, 500
+}
 
 IfNotEqual, 6, false
 {
@@ -80,19 +96,20 @@ else
 }
 WinWait, Kodi ahk_class Kodi
 WinActivate, Kodi ahk_class Kodi
-
-WinWait, ahk_group SteamBPM,,5
-if ErrorLevel
+if BPMState = closed
 {
-    return
+	WinWait, ahk_group SteamBPM,,5
+	if ErrorLevel
+	{
+		return
+	}
+	else
+	{
+		IfNotEqual, 5, false
+		{
+			RunWait, %5%,,Hide
+		}
+		Goto, SteamLoop
+	}
 }
-else
-{
-    IfNotEqual, 5, false
-    {
-	    RunWait, %5%,,Hide
-    }
-    Goto, SteamLoop
-}
-
 ExitApp
