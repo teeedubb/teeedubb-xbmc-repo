@@ -1,9 +1,8 @@
-import xbmcaddon, xbmc, xbmcgui, xbmcplugin
+import xbmcaddon, xbmcgui, xbmcplugin
 import os
 
 addon = xbmcaddon.Addon(id='plugin.audio.triple.j')
 addonPath = addon.getAddonInfo('path')
-
 addon_handle = int(sys.argv[1])
 
 url = 'http://abcradiolivehls-lh.akamaihd.net/i/triplejnsw_1@327300/index_64_a-b.m3u8?sd=10&rebase=on&hdntl='
