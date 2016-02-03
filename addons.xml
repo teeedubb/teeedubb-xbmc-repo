@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
+<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.0" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">FBi online radio stream.</summary>
+    <description lang="en">Stream FBi radio online. See: http://fbiradio.com</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
+  </extension>
+</addon>
+
 <addon id="plugin.audio.triple.j" name="Triple J" version="1.0.0" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -52,26 +72,6 @@
                 <disclaimer></disclaimer>
                 <platform>all</platform>
         </extension>
-</addon>
-
-<addon id="script.audio.fbi.radio" name="FBi Radio" version="0.0.2" provider-name="teeedubb">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-  </requires>
-  <extension point="xbmc.python.script" library="default.py">
-     <provides>audio</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">FBi online radio stream.</summary>
-    <description lang="en">Stream FBi radio online. See: http://fbiradio.com/on-air-now/</description>
-    <platform>all</platform>
-    <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
-    <source>https://github.com/teeedubb</source>
-    <email></email>
-  </extension>
 </addon>
 
 <addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.4" provider-name="teeedubb">
