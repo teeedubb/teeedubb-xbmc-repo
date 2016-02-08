@@ -1,65 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.0" provider-name="teeedubb">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-     <provides>audio</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">FBi online radio stream.</summary>
-    <description lang="en">Stream FBi radio online. See: http://fbiradio.com</description>
-    <platform>all</platform>
-    <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
-    <source>https://github.com/teeedubb</source>
-    <email></email>
-  </extension>
-</addon>
-
-<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.0" provider-name="teeedubb">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-     <provides>audio</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">Triple J online radio streams.</summary>
-    <description lang="en">Stream Triple J radio online. Includes Triple J, Double J and Triple J Unearthed streams.</description>
-    <platform>all</platform>
-    <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
-    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
-    <source>https://github.com/teeedubb</source>
-    <email></email>
-  </extension>
-</addon>
-
-<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.0.0" provider-name="teeedubb">
-    <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="default.py">
-        <provides>game executable video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Hyper Launcher</summary>
-        <description lang="en">A emulator launcher that utilises HyperSpin meta-data.</description>
-        <platform>all</platform>
-        <language>en</language>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <forum></forum>
-        <website></website>
-        <source></source>
-        <email></email>
-    </extension>
-</addon>
-
 <addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.1" provider-name="teeedubb">
         <extension point="xbmc.addon.repository" name="teeedubb's addons">
                 <info compressed="false">http://raw.github.com/teeedubb/teeedubb-xbmc-repo/master/addons.xml</info>
@@ -93,7 +33,27 @@
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.1.3" provider-name="teeedubb">
+<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.0" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Triple J online radio streams.</summary>
+    <description lang="en">Stream Triple J radio online. Includes Triple J, Double J and Triple J Unearthed streams.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
+  </extension>
+</addon>
+
+<addon id="script.steam.launcher" name="Steam" version="3.1.4" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
@@ -125,6 +85,46 @@
     <platform>all</platform>
     <summary lang="en"></summary>
     <description lang="en">Plays the trailer of the selected item in the background after a defined idle time and will can reload prior windows on startup.</description>
+  </extension>
+</addon>
+
+<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.0.0" provider-name="teeedubb">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>game executable video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Hyper Launcher</summary>
+        <description lang="en">A emulator launcher that utilises HyperSpin meta-data.</description>
+        <platform>all</platform>
+        <language>en</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum></forum>
+        <website></website>
+        <source></source>
+        <email></email>
+    </extension>
+</addon>
+
+<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.0" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">FBi online radio stream.</summary>
+    <description lang="en">Stream FBi radio online. See: http://fbiradio.com</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184488</forum>
+    <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
   </extension>
 </addon>
 </addons>
