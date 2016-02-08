@@ -222,3 +222,6 @@ Dual string id fix by Scondo
 
 3.1.3
 Updated Steam-Lanuch-AHK to work with BPM's new option 'Minimise'. Script will also send the 'ESC' button once BPM is active if BPM was previously active, to exit the power menu.
+
+3.1.4
+Fix line endings in steam-launch.sh
