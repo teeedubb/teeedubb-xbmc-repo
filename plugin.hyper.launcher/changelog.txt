@@ -1,3 +1,14 @@
-1.0.0
+1.1.0
+Made available additional kodi artwork types (banners, clearart, thumb, poster, media).
+Changed the way artwork is handled - now will scan a base directory for artwork for a particular ROM and will create a list with available artwork.
+Ability to view PDF manuals in Kodi (plugin.image.pdfreader required)
+Ability to configure a alternate launcher per ROM
+Preliminary RetroPlayer support (needs further testing with multi file roms)
+Only one fallback artwork image for icons and fanart now.
+Display information about console - release year, manufacturer and a description
+System-config.xml file layouts have changed.
+Small changes.
 
+1.0.0
 Initial release
+
