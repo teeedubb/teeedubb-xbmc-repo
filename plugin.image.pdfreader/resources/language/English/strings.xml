@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+    <!-- Meta Data -->
+    <string id="2000">Open PDF</string>
+    <string id="2001">Add-on settings</string>
+    <string id="2002">Error!</string>
+    <string id="2003">Please select a PDF file.</string>
+	<string id="2004">Last version installed</string>
+    <string id="2005">Error verifying version!</string>
+    <string id="2006">New version available</string>
+    <string id="2007">Please update!</string>
+	<string id="2008">Open CBR or CBZ</string>
+	<string id="2009">Please select a CBR or CBZ file.</string>
+	
+    <string id="3000">PDF Reader</string>
+    <string id="3001">Welcome to PDF Reader!</string>
+    <string id="3002">Be aware that this add-on was developed to read,</string>
+    <string id="3003">mostly, comic books.</string>
+    <string id="3004">Please, visit the add-on settings.</string>
+    <string id="3005">Error!</string>
+    <string id="3006">Unable to open PDF.</string>
+    <string id="3007">Page </string>
+    <string id="3008">Please set the PDF's folder.</string>
+    <string id="3009">There's already a file with the same name.</string>
+    <string id="3010">Estimated time</string>
+	<string id="3011">of</string>
+	
+	<string id="4000">Save PDF's</string>
+	<string id="4001">PDF's folder</string>
+	<string id="4002">Initial message</string>
+	<string id="4003">Show real thumbnails</string>
+	<string id="4004">Update thumbnails by PDF's name</string>
+	<string id="4005">Always update thumbnails</string>
+	<string id="4006">Download</string>
+	<string id="4007">Thumbnails</string>
+	<string id="4008">Global settings</string>
+	<string id="4009">Show only files larger than 10KB</string>
+</strings>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <category label="4008">
+		<setting id="limite" type="bool" label="4009" default="true"/>
+   </category>
+   <category label="4006">
+      <setting id="local" type="bool" label="4000" default="false"/>
+	  <setting id="local-folder" type="folder" label="4001" default="" enable="!eq(-1,false)"/>
+	  <setting id="mensagem" type="bool" label="4002" default="true" visible="false"/>
+   </category>
+   <category label="4007">
+      <setting id="thumbs" type="bool" label="4003" default="true"/>
+	  <setting id="thumbs2" type="enum" lvalues="4004|4005" default="0" enable="!eq(-1,false)"/>
+   </category>
+</settings>

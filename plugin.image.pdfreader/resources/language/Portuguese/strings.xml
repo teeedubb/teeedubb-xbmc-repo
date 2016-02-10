@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+    <!-- Meta Data -->
+    <string id="2000">Abrir PDF</string>
+    <string id="2001">Definições do Add-on</string>
+    <string id="2002">Erro!</string>
+    <string id="2003">Por favor seleccione um ficheiro PDF.</string>
+    <string id="2004">Última versão instalada</string>
+    <string id="2005">Erro ao verificar a versão!</string>
+    <string id="2006">Versão nova disponível</string>
+    <string id="2007">Por favor actualize!</string>
+    <string id="2008">Abrir CBR ou CBZ</string>
+	<string id="2009">Por favor seleccione um ficheiro CBR ou CBZ.</string>
+	
+    <string id="3000">PDF Reader</string>
+    <string id="3001">Bem vindo ao PDF Reader!</string>
+    <string id="3002">Tenha em conta que este addon foi desenvolvido para ler,</string>
+    <string id="3003">essencialmente, "comicbooks".</string>
+    <string id="3004">Por favor, visite as configurações do add-on.</string>
+    <string id="3005">Erro!</string>
+    <string id="3006">Impossível abrir PDF.</string>
+    <string id="3007">Página </string>
+    <string id="3008">Por favor defina a pasta dos PDF's.</string>
+    <string id="3009">Já existe um ficheiro com o mesmo nome.</string>
+    <string id="3010">Tempo estimado</string>
+    <string id="3011">de</string>
+	
+	<string id="4000">Guardar PDF's</string>
+	<string id="4001">Pasta dos PDF's</string>
+	<string id="4002">Mensagem Inicial</string>
+	<string id="4003">Ver thumbnails reais</string>
+	<string id="4004">Actualizar thumbnails pelo nome do PDF</string>
+	<string id="4005">Actualizar sempre thumbnails</string>
+	<string id="4006">Download</string>
+	<string id="4007">Thumbnails</string>
+	<string id="4008">Definições globais</string>
+	<string id="4009">Mostrar apenas ficheiros maiores que 10KB</string>
+</strings>
