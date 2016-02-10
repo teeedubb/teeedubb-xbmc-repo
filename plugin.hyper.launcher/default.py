@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import xbmc
 import xbmcaddon
+import xbmcgui
+import xbmcplugin
 import sys
 import urllib
 import urlparse
-import xbmcgui
-import xbmcplugin
 import os
 import subprocess
 import glob
+import random
 import xml.etree.ElementTree as ET
 
 scriptid = 'plugin.hyper.launcher'
@@ -207,6 +208,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		game_trailer = get_game_art(game_name, trailer_path, 'trailer')
 		url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
 		li = xbmcgui.ListItem(game_name, iconImage=game_icon)
+		li.setProperty('mimetype', 'application/rom')
 		li.setProperty('IsPlayable', 'false')
 		li.setArt({ 'thumb': game_thumb, 'fanart': game_fanart, 'poster': game_poster, 'clearlogo': game_logo, 'clearart': game_clearart, 'banner': game_banner, 'discart': game_media })
 		li.setInfo( 'video', { 'Title': game_name, 'OriginalTitle': game_file_name, 'Genre': game_genre, 'Year': game_year, 'Director': game_manufacturer, 'Mpaa': game_rating, 'Trailer': game_trailer, 'Plot': system_name, 'Studio': game_manufacturer, 'Path': rom_path, 'launcher_script': launcher_script } )
@@ -214,6 +216,8 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		if context_mode != 'context_two':
 			contextMenuItems.append(('Search this system', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
 		contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'artwork_base_path': artwork_base_path}) ,))
+		if len(xbmc.getInfoLabel('Container(id).NumItems')) > 1:
+			contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		if context_mode == 'context_one':
 			li.addContextMenuItems(contextMenuItems,  replaceItems=True)
 		else:
@@ -248,6 +252,8 @@ if mode is None:
 			li.setProperty('IsPlayable', 'false')
 			contextMenuItems = []
 			contextMenuItems.append(('Search all systems', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': 'all'}) ,))
+			if len(xbmc.getInfoLabel('Container(id).NumItems')) > 1:
+				contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 			if system_trailer:
 				contextMenuItems.append(('Play trailer', 'PlayMedia(%s)'  % (system_trailer) ,))
 			if system_icon:
@@ -327,3 +333,15 @@ elif mode[0] == 'artwork_display':
 			sys.exit()
 		pdf_url = 'plugin://plugin.image.pdfreader/' + '?' + urllib.urlencode({'mode': '1', 'url': ''.join(args.get('artwork')), 'name': ''.join(args.get('artwork'))})
 		xbmc.executebuiltin('ActivateWindow(Pictures, %s, return)' % pdf_url)
+		
+elif mode[0] == 'random_focus':
+	total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
+	current_selection = int(xbmc.getInfoLabel('Container(id).CurrentItem'))
+	win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+	cid = win.getFocusId()
+	random_pool = range(1, current_selection) + range(current_selection + 1, total_list_items + 1)
+	if len(random_pool) > 0:
+		random_list_item = random.choice(random_pool)
+		if xbmc.Player().isPlayingVideo():
+			xbmc.Player().stop()
+		xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, random_list_item))

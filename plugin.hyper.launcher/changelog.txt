@@ -1,4 +1,7 @@
 1.1.0
+Added contect menu item to focus random item.
+
+1.1.0
 Made available additional kodi artwork types (banners, clearart, thumb, poster, media).
 Changed the way artwork is handled - now will scan a base directory for artwork for a particular ROM and will create a list with available artwork.
 Ability to view PDF manuals in Kodi (plugin.image.pdfreader required)
