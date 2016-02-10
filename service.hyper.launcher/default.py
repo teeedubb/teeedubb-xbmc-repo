@@ -37,9 +37,10 @@ while not xbmc.abortRequested:
 				win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
 				cid = win.getFocusId()
 				random_pool = range(1, current_selection) + range(current_selection + 1, total_list_items + 1)
-				random_list_item = random.choice(random_pool)
-				if xbmc.Player().isPlayingVideo():
-					xbmc.Player().stop()
-				xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, int(random_list_item)))
-				xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
+				if len(random_pool) > 0:
+					random_list_item = random.choice(random_pool)
+					if xbmc.Player().isPlayingVideo():
+						xbmc.Player().stop()
+					xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, random_list_item))
+					xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
 	xbmc.sleep(500)

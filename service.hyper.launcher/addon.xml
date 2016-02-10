@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.0.0" provider-name="teeedubb">
+<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.1.0" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.hyper.launcher" version="0.0.1"/>
@@ -8,8 +8,14 @@
              library="default.py" start="startup">
   </extension>
   <extension point="xbmc.addon.metadata">
+    <summary lang="en">Hyper Launcher service addon</summary>
+    <description lang="en">Hyper Launcher service addon</description>
     <platform>all</platform>
-    <summary lang="en"></summary>
-    <description lang="en">Plays the trailer of the selected item in the background after a defined idle time and will can reload prior windows on startup.</description>
+	<language>en</language>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<forum>http://forum.kodi.tv/showthread.php?tid=258159</forum>
+	<website>http://forum.kodi.tv/showthread.php?tid=258159</website>
+	<source>https://github.com/teeedubb/teeedubb-xbmc-repo/tree/master/plugin.hyper.launcher</source>
+	<email></email>
   </extension>
 </addon>
