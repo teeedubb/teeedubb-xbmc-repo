@@ -40,24 +40,41 @@
   </extension>
 </addon>
 
-<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.0.0" provider-name="teeedubb">
+<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.1.0" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
-        <provides>game executable video</provides>
+        <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Hyper Launcher</summary>
-        <description lang="en">A emulator launcher that utilises HyperSpin meta-data.</description>
+        <description lang="en">A ROM launcher that utilises HyperSpin hyperlists and artwork packs.</description>
         <platform>all</platform>
         <language>en</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <forum></forum>
-        <website></website>
-        <source></source>
+        <forum>http://forum.kodi.tv/showthread.php?tid=258159</forum>
+        <website>http://forum.kodi.tv/showthread.php?tid=258159</website>
+        <source>https://github.com/teeedubb/teeedubb-xbmc-repo/tree/master/plugin.hyper.launcher</source>
         <email></email>
     </extension>
+</addon>
+
+<addon id="plugin.image.pdfreader" name="PDF Reader" version="1.0.2" provider-name="Anonymous">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en</language>
+    <platform>all</platform>
+    <summary lang="en">PDF Reader</summary>
+    <description lang="en">Read your pdf's.</description>
+    <platform>all</platform>
+	<license>GPL 2.0</license>
+  </extension>
 </addon>
 
 <addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.1" provider-name="teeedubb">
@@ -113,7 +130,7 @@
     </extension>
 </addon>
 
-<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.0.0" provider-name="teeedubb">
+<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.1.0" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.hyper.launcher" version="0.0.1"/>
@@ -122,9 +139,15 @@
              library="default.py" start="startup">
   </extension>
   <extension point="xbmc.addon.metadata">
+    <summary lang="en">Hyper Launcher service addon</summary>
+    <description lang="en">Hyper Launcher service addon</description>
     <platform>all</platform>
-    <summary lang="en"></summary>
-    <description lang="en">Plays the trailer of the selected item in the background after a defined idle time and will can reload prior windows on startup.</description>
+	<language>en</language>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<forum>http://forum.kodi.tv/showthread.php?tid=258159</forum>
+	<website>http://forum.kodi.tv/showthread.php?tid=258159</website>
+	<source>https://github.com/teeedubb/teeedubb-xbmc-repo/tree/master/plugin.hyper.launcher</source>
+	<email></email>
   </extension>
 </addon>
 </addons>
