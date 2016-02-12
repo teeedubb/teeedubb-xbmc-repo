@@ -66,42 +66,42 @@ def file_check(file, required_file):
 		log(error_message, error_message)
 		sys.exit()
 		
-def get_game_art(game_name, path, fallback_path):
-#	search_item = os.path.join(path, game_name + '.*') #game_name + '.*'
+def get_game_art(game_file_name, path, fallback_path):
+#	search_item = os.path.join(path, game_file_name + '.*') #game_file_name + '.*'
 #	search = glob.glob('%s' % search_item)
 #	for filename in search:
 #		return filename
 #reminder that there is probably a better way to do this
 	fanart = ''
-	artwork = os.path.join(path, game_name + '.pdf')
+	artwork = os.path.join(path, game_file_name + '.pdf')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(path, game_name + '.flv')
+	artwork = os.path.join(path, game_file_name + '.flv')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(path, game_name + '.avi')
+	artwork = os.path.join(path, game_file_name + '.avi')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(path, game_name + '.mp4')
+	artwork = os.path.join(path, game_file_name + '.mp4')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(fallback_path, game_name + '.png')
+	artwork = os.path.join(fallback_path, game_file_name + '.png')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(fallback_path, game_name + '.jpg')
+	artwork = os.path.join(fallback_path, game_file_name + '.jpg')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(path, game_name + '.png')
+	artwork = os.path.join(path, game_file_name + '.png')
 	if os.path.isfile(artwork):
 		fanart = artwork
-	artwork = os.path.join(path, game_name + '.jpg')
+	artwork = os.path.join(path, game_file_name + '.jpg')
 	if os.path.isfile(artwork):
 		fanart = artwork
 	return fanart
 	
-def create_artwork_list(game_name, artwork_base_path):
+def create_artwork_list(game_file_name, artwork_base_path):
 	for folder in os.listdir(artwork_base_path):
-		artwork = get_game_art(game_name, os.path.join(artwork_base_path, folder), 'none')
+		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none')
 		if artwork:
 			file_types = ['.png', '.jpg']
 			if any(x in artwork for x in file_types):
@@ -197,15 +197,15 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		game_manufacturer = game.find('manufacturer').text
 		game_rating = game.find('rating').text
 		game_genre = game.find('genre').text
-		game_icon = get_game_art(game_name, icon_path, icon_fallback_path)
-		game_fanart = get_game_art(game_name, fanart_path, fanart_fallback_path)
-		game_thumb = get_game_art(game_name, thumb_path, 'none')
-		game_poster = get_game_art(game_name, poster_path, 'none')
-		game_logo = get_game_art(game_name, logo_path, 'none')
-		game_clearart = get_game_art(game_name, clearart_path, 'none')
-		game_banner = get_game_art(game_name, banner_path, 'none')
-		game_media = get_game_art(game_name, media_path, 'none')
-		game_trailer = get_game_art(game_name, trailer_path, 'trailer')
+		game_icon = get_game_art(game_file_name, icon_path, icon_fallback_path)
+		game_fanart = get_game_art(game_file_name, fanart_path, fanart_fallback_path)
+		game_thumb = get_game_art(game_file_name, thumb_path, 'none')
+		game_poster = get_game_art(game_file_name, poster_path, 'none')
+		game_logo = get_game_art(game_file_name, logo_path, 'none')
+		game_clearart = get_game_art(game_file_name, clearart_path, 'none')
+		game_banner = get_game_art(game_file_name, banner_path, 'none')
+		game_media = get_game_art(game_file_name, media_path, 'none')
+		game_trailer = get_game_art(game_file_name, trailer_path, 'trailer')
 		url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
 		li = xbmcgui.ListItem(game_name, iconImage=game_icon)
 		li.setProperty('mimetype', 'application/rom')
@@ -215,7 +215,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		contextMenuItems = []
 		if context_mode != 'context_two':
 			contextMenuItems.append(('Search this system', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
-		contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'artwork_base_path': artwork_base_path}) ,))
+		contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 		contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		if context_mode == 'context_one':
 			li.addContextMenuItems(contextMenuItems,  replaceItems=True)
@@ -262,7 +262,7 @@ if mode is None:
 				contextMenuItems.append(('View logo', 'ShowPicture(%s)'  % (system_logo) ,))
 			li.addContextMenuItems(contextMenuItems)
 			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
 
 elif mode[0] == 'folder':
 	system_name = args['foldername'][0]
@@ -291,7 +291,7 @@ elif mode[0] == 'folder':
 	root = tree.getroot()
 	for game in root.findall('game'):
 		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
 
 elif mode[0] == 'file':
 	emulator_launcher()
@@ -316,9 +316,9 @@ elif mode[0] == 'search':
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 	
 elif mode[0] == 'artwork':
-	game_name = ''.join(args.get('game_name'))
+	game_file_name = ''.join(args.get('game_file_name'))
 	artwork_base_path = ''.join(args.get('artwork_base_path'))
-	create_artwork_list(game_name, artwork_base_path)
+	create_artwork_list(game_file_name, artwork_base_path)
 
 elif mode[0] == 'artwork_display':
 #	if ''.join(args.get('artwork_type')) == 'video':
