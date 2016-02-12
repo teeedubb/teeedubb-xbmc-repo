@@ -216,8 +216,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		if context_mode != 'context_two':
 			contextMenuItems.append(('Search this system', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
 		contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'artwork_base_path': artwork_base_path}) ,))
-		if len(xbmc.getInfoLabel('Container(id).NumItems')) > 1:
-			contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
+		contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		if context_mode == 'context_one':
 			li.addContextMenuItems(contextMenuItems,  replaceItems=True)
 		else:
@@ -252,8 +251,7 @@ if mode is None:
 			li.setProperty('IsPlayable', 'false')
 			contextMenuItems = []
 			contextMenuItems.append(('Search all systems', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': 'all'}) ,))
-			if len(xbmc.getInfoLabel('Container(id).NumItems')) > 1:
-				contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
+			contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 			if system_trailer:
 				contextMenuItems.append(('Play trailer', 'PlayMedia(%s)'  % (system_trailer) ,))
 			if system_icon:
