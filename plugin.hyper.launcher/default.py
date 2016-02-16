@@ -73,6 +73,12 @@ def get_game_art(game_file_name, path, fallback_path):
 #		return filename
 #reminder that there is probably a better way to do this
 	fanart = ''
+	artwork = os.path.join(path, game_file_name + '.ico')
+	if os.path.isfile(artwork):
+		fanart = artwork
+	artwork = os.path.join(path, game_file_name + '.mp3')
+	if os.path.isfile(artwork):
+		fanart = artwork
 	artwork = os.path.join(path, game_file_name + '.pdf')
 	if os.path.isfile(artwork):
 		fanart = artwork
@@ -103,7 +109,7 @@ def create_artwork_list(game_file_name, artwork_base_path):
 	for folder in os.listdir(artwork_base_path):
 		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none')
 		if artwork:
-			file_types = ['.png', '.jpg']
+			file_types = ['.png', '.jpg', 'ico']
 			if any(x in artwork for x in file_types):
 				artwork_type = 'image'
 			file_types = ['.mp4', '.avi', '.flv']
@@ -112,15 +118,21 @@ def create_artwork_list(game_file_name, artwork_base_path):
 			file_types = ['.pdf']
 			if any(x in artwork for x in file_types):
 				artwork_type = 'pdf'
+			file_types = ['.mp3']
+			if any(x in artwork for x in file_types):
+				artwork_type = 'audio'
 			if artwork_type == 'pdf':
 				li = xbmcgui.ListItem(folder, iconImage=os.path.join(addonPath, 'resources', 'media', 'pdf-artwork-icon.png'))
+			elif artwork_type == 'audio':
+				li = xbmcgui.ListItem(folder, iconImage=os.path.join(addonPath, 'resources', 'media', 'music-artwork-icon.png'))
 			else:
 				li = xbmcgui.ListItem(folder, iconImage=artwork)
-			li.setProperty('IsPlayable', 'false')
 			url = build_url({ 'mode': 'artwork_display', 'artwork': artwork, 'artwork_type': artwork_type })
-			if artwork_type == 'video':
+			if artwork_type in ('video', 'audio'):
 				li.setProperty('IsPlayable', 'true')
 				url = artwork
+			else:
+				li.setProperty('IsPlayable', 'false')
 			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, False)])
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
@@ -187,9 +199,12 @@ def search(system, search_string):
 	root = tree.getroot()
 	for game in root.findall('game'):
 		game_description = game.find('description').text
-		if search_string.lower() in game_description.lower():
+		if search_string != False:
+			if search_string.lower() in game_description.lower():
+				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
+		else:
 			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
-		
+			
 def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
 		game_name = game.find('description').text
 		game_file_name = game.attrib['name']
@@ -208,7 +223,6 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		game_trailer = get_game_art(game_file_name, trailer_path, 'trailer')
 		url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
 		li = xbmcgui.ListItem(game_name, iconImage=game_icon)
-		li.setProperty('mimetype', 'application/rom')
 		li.setProperty('IsPlayable', 'false')
 		li.setArt({ 'thumb': game_thumb, 'fanart': game_fanart, 'poster': game_poster, 'clearlogo': game_logo, 'clearart': game_clearart, 'banner': game_banner, 'discart': game_media })
 		li.setInfo( 'video', { 'Title': game_name, 'OriginalTitle': game_file_name, 'Genre': game_genre, 'Year': game_year, 'Director': game_manufacturer, 'Mpaa': game_rating, 'Trailer': game_trailer, 'Plot': system_name, 'Studio': game_manufacturer, 'Path': rom_path, 'launcher_script': launcher_script } )
@@ -227,7 +241,6 @@ if addon_handle > 0:
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR)
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_GENRE)
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_FULLPATH)
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING)
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_STUDIO)
 		
@@ -303,12 +316,16 @@ elif mode[0] == 'search_input':
 	search_string = dialog.input('Search', type=xbmcgui.INPUT_ALPHANUM)
 	url = build_url({'mode': 'search', 'system_name': ''.join(args.get('system_name')), 'search_string': search_string})
 	if len(search_string) == 0:
-		log('Zero length search query', 'No search query entered')
-	else:
-		xbmc.executebuiltin('Container.Update(%s, refresh)' % url)
+		if addon.getSetting("BlankSearch") == 'false':
+			log('Zero length search query', 'No search query entered')
+			sys.exit()
+	xbmc.executebuiltin('Container.Update(%s, refresh)' % url)
 	
 elif mode[0] == 'search':
-	search_string = ''.join(args.get('search_string'))
+	if args.get('search_string'):
+		search_string = ''.join(args.get('search_string'))
+	else:
+		search_string = False
 	if ''.join(args.get('system_name')) == 'all':
 		for system in os.listdir(SYSTEMS_PATH):
 			if system.endswith('.xml'):
@@ -332,8 +349,12 @@ elif mode[0] == 'artwork_display':
 		if not os.path.exists(xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')):
 			log('special://home/addons/plugin.image.pdfreader/resources/lib not found, is plugin.image.pdfreader installed?', 'Is plugin.image.pdfreader installed?')
 			sys.exit()
-		pdf_url = 'plugin://plugin.image.pdfreader/' + '?' + urllib.urlencode({'mode': '1', 'url': ''.join(args.get('artwork')), 'name': ''.join(args.get('artwork'))})
-		xbmc.executebuiltin('ActivateWindow(Pictures, %s, return)' % pdf_url)
+		addon_pdf = xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')
+		sys.path.append(addon_pdf)
+		from pdf import pdf
+		pdf = pdf()
+		pdf.clean_temp()
+		pdf.pdf_read(''.join(args.get('artwork')), ''.join(args.get('artwork')), 'true')
 		
 elif mode[0] == 'random_focus':
 	total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
