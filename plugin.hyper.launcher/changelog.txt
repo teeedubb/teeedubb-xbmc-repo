@@ -1,5 +1,14 @@
-1.1.0
-Added contect menu item to focus random item.
+1.1.2
+Artwork lists now display mp3 and ico files
+Add addon option to enable blank search
+Artwork now uses filename not game name (fixes mame not displaying artwork)
+Fix opening of pdf files
+Enable cacheToDisc=True on system and game lists
+Add additional sort methods
+Always display random items context menu item
+
+1.1.1
+Added context menu item to focus random item.
 
 1.1.0
 Made available additional kodi artwork types (banners, clearart, thumb, poster, media).
