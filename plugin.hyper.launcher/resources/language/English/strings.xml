@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- General Settings -->
+    <string id="50000">General</string>
+    <string id="50050">Allow blank search</string>
+</strings>
