@@ -10,6 +10,7 @@ import os
 import subprocess
 import glob
 import random
+import threading
 import xml.etree.ElementTree as ET
 
 scriptid = 'plugin.hyper.launcher'
@@ -43,6 +44,13 @@ args = urlparse.parse_qs(sys.argv[2][1:])
 xbmcplugin.setContent(addon_handle, 'movies')
 mode = args.get('mode', None)
 
+if addon_handle > 0:
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_GENRE)
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING)
+	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_STUDIO)
+
 txt_encode = 'utf-8'
 try:
 	txt_encode = sys.getfilesystemencoding()
@@ -56,14 +64,14 @@ def log(msg, notification_msg):
 	msg = msg.encode(txt_encode)
 	xbmc.log('%s: %s' % (scriptid + '.log', msg))
 	if 	notification_msg:
-		dialog.notification('ERROR! Check log file...', notification_msg, addonIcon, 10000)
+		dialog.notification(language(50103), notification_msg, addonIcon, 10000)
 	
 def file_check(file, required_file):
 	if not file:
 		file = required_file
 	if not os.path.isfile(file):
-		error_message = 'Required file does not exist "%s"' % file
-		log(error_message, error_message)
+		log_message = language(50102) + ': "%s"' % file
+		log(log_message, log_message)
 		sys.exit()
 		
 def get_game_art(game_file_name, path, fallback_path):
@@ -105,7 +113,150 @@ def get_game_art(game_file_name, path, fallback_path):
 		fanart = artwork
 	return fanart
 	
-def create_artwork_list(game_file_name, artwork_base_path):
+def get_system_info(system_config):
+	tree = ET.parse(system_config)
+	root = tree.getroot()
+	for item in root.findall('config'):
+		if not item.find('rom_path').text:
+			log_message = language(50105) + ': %s, %s' % (system_config, 'rom_path')
+			log(log_message, language(50105))
+		else:
+			rom_path = item.find('rom_path').text
+		if item.find('rom_extensions').text:
+			rom_extensions = item.find('rom_extensions').text
+		if not item.find('launcher_script').text:
+			log_message = language(50105) + ': %s, %s' % (system_config, 'launcher_script')
+			log(log_message, language(50105))
+		else:
+			launcher_script = item.find('launcher_script').text
+	for item in root.findall('artwork'):
+		if item.find('base_path').text:
+			artwork_base_path = item.find('base_path').text
+		else:
+			artwork_base_path = ''
+		if item.find('icon').text:
+			icon_path = item.find('icon').text
+		else:
+			icon_path = ''
+		if item.find('icon_fallback').text:
+			icon_fallback_path = item.find('icon_fallback').text
+		else:
+			icon_fallback_path = ''
+		if item.find('fanart').text:
+			fanart_path = item.find('fanart').text
+		else:
+			fanart_path = ''
+		if item.find('fanart_fallback').text:
+			fanart_fallback_path = item.find('fanart_fallback').text
+		else:
+			fanart_fallback_path = ''
+		if item.find('poster').text:
+			poster_path = item.find('poster').text
+		else:
+			poster_path = ''
+		if item.find('thumb').text:
+			thumb_path = item.find('thumb').text
+		else:
+			thumb_path = ''
+		if item.find('logo').text:
+			logo_path = item.find('logo').text
+		else:
+			logo_path = ''
+		if item.find('clearart').text:
+			clearart_path = item.find('clearart').text
+		else:
+			clearart_path = ''
+		if item.find('banner').text:
+			banner_path = item.find('banner').text
+		else:
+			banner_path = ''
+		if item.find('media').text:
+			media_path = item.find('media').text
+		else:
+			media_path = ''
+		if item.find('trailer').text:
+			trailer_path = item.find('trailer').text
+		else:
+			trailer_path = ''
+		return (rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path)
+	
+def emulator_launcher():
+	selected_game = ''.join(args.get('filename'))
+	launcher_script = ''.join(args.get('launcher_script'))
+	rom_path = ''.join(args.get('rom_path'))
+	folder_url = build_url({'mode': 'folder', 'foldername': ''.join(args.get('foldername'))})
+	f = open(RESTART_FILE, 'w')
+	f.write(folder_url)
+	f.close()
+	system_config = os.path.join(SYSTEMS_CONFIG_PATH, ''.join(args.get('foldername')) + '-config.xml')
+	tree = ET.parse(system_config)
+	root = tree.getroot()
+	for item in root.findall('game_variations'):
+		for game in item.iter('game'):
+			if ''.join(args.get('game_name')) in game.attrib['name']:
+				if os.path.exists(os.path.join(rom_path, selected_game)):
+					game_variation_list = []
+					game_variation_list.append( selected_game, )
+					for game_variation in os.listdir(os.path.join(rom_path, selected_game)):
+						game_variation_list.append( os.path.splitext(game_variation)[0], )
+					selected_var_game = dialog.select(language(50200), game_variation_list)
+					if selected_var_game == -1:
+						sys.exit()
+					elif selected_var_game == 0:
+						break
+					else:
+						selected_var_game = game_variation_list[selected_var_game]
+					rom_path = os.path.join(rom_path, selected_game)
+					selected_game = selected_var_game
+					if game.find('launcher').text:
+						launcher_script = game.find('launcher').text
+				else:
+					log_message = language(50109) + os.path.join(rom_path, selected_game)
+					log(log_message, language(50109))
+	for item in root.findall('alt_launchers'):
+		for game in item.iter('game'):
+			if selected_game in game.attrib['name']:
+				launcher_script = game.find('launcher').text
+	if selected_game: 
+		search_item = os.path.join(rom_path, selected_game + '.*')
+		search = glob.glob('%s' % search_item)
+		if not search:
+			file_check(''.join(search), search_item)
+		for rom_full_path in search:
+			rom_extension = os.path.splitext(rom_full_path)[1]
+			rom_file = 	os.path.basename(rom_full_path)
+		if launcher_script == 'kodi_retroplayer':
+			listitem = xbmcgui.ListItem(rom_file, "0", "", "")
+			parameters = {'Platform': ''.join(args.get('foldername')), 'Title': ''.join(args.get('game_name')), 'URL': rom_full_path}
+			listitem.setInfo( type='game', infoLabels=parameters)
+			xbmc.Player().play(rom_full_path, listitem)
+		else:
+			launcher_script_command = os.path.join(LAUNCHER_SCRIPTS, launcher_script)
+			file_check(launcher_script_command, launcher_script_command)
+			cmd = '"%s" "%s" "%s" "%s" "%s" "%s"' % (launcher_script_command, ''.join(args.get('foldername')), selected_game, rom_full_path, rom_file, rom_extension)
+			log(language(50104), False)
+			cmd = cmd
+			log(cmd, False)
+			subprocess.Popen(cmd, shell=True, close_fds=True)
+
+def search(system, search_string):
+	system_name = system[:-4]
+	system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
+	file_check(system_config, system_config)
+	log_message = 'Reading: %s' % system_config
+	log(log_message, False)
+	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
+	tree = ET.parse(os.path.join(SYSTEMS_PATH, system))
+	root = tree.getroot()
+	for game in root.findall('game'):
+		game_description = game.find('description').text
+		if search_string != False:
+			if search_string.lower() in game_description.lower():
+				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
+		else:
+			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
+			
+def artwork_list_create(game_file_name, artwork_base_path):
 	for folder in os.listdir(artwork_base_path):
 		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none')
 		if artwork:
@@ -131,87 +282,32 @@ def create_artwork_list(game_file_name, artwork_base_path):
 			if artwork_type in ('video', 'audio'):
 				li.setProperty('IsPlayable', 'true')
 				url = artwork
+				folder = False
 			else:
 				li.setProperty('IsPlayable', 'false')
-			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, False)])
+				folder = True
+			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, folder)])
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
-def emulator_launcher():
-	selected_game = ''.join(args.get('filename'))
-	launcher_script = ''.join(args.get('launcher_script'))
-	rom_path = ''.join(args.get('rom_path'))
-	folder_url = build_url({'mode': 'folder', 'foldername': ''.join(args.get('foldername'))})
-	f = open(RESTART_FILE, 'w')
-	f.write(folder_url)
-	f.close()
-	system_config = os.path.join(SYSTEMS_CONFIG_PATH, ''.join(args.get('foldername')) + '-config.xml')
-	tree = ET.parse(system_config)
-	root = tree.getroot()
-	for item in root.findall('alt_launchers'):
-		for game in item.iter('game'):
-			if ''.join(args.get('game_name')) in game.attrib['name']:
-				launcher_script = game.find('launcher').text
-	if selected_game: 
-		search_item = os.path.join(rom_path, selected_game + '.*')
-		search = glob.glob('%s' % search_item)
-		if not search:
-			file_check(''.join(search), search_item)
-		for rom_full_path in search:
-			rom_extension = os.path.splitext(rom_full_path)[1]
-			rom_file = 	os.path.basename(rom_full_path)
-		if launcher_script == 'kodi_retroplayer':
-			listitem = xbmcgui.ListItem(rom_file, "0", "", "")
-			parameters = {'Platform': ''.join(args.get('foldername')), 'Title': ''.join(args.get('game_name')), 'URL': rom_full_path}
-			listitem.setInfo( type='game', infoLabels=parameters)
-			xbmc.Player().play(rom_full_path, listitem)
-		else:
-			launcher_script_command = os.path.join(LAUNCHER_SCRIPTS, launcher_script)
-			file_check(launcher_script_command, launcher_script_command)
-			cmd = '"%s" "%s" "%s" "%s" "%s" "%s"' % (launcher_script_command, ''.join(args.get('foldername')), selected_game, rom_full_path, rom_file, rom_extension)
-			log('Attempted command is:' , False)
-			log(cmd, False)
-			subprocess.Popen(cmd, shell=True, close_fds=True)
-	
-def search(system, search_string):
-	system_name = system[:-4]
-	system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
-	file_check(system_config, system_config)
-	tree = ET.parse(system_config)
-	root = tree.getroot()
-	for item in root.findall('config'):
-		rom_path = item.find('rom_path').text
-		rom_extensions = item.find('rom_extensions').text
-		launcher_script = item.find('launcher_script').text
-	for item in root.findall('artwork'):
-		artwork_base_path = item.find('base_path').text
-		icon_path = item.find('icon').text
-		icon_fallback_path = item.find('icon_fallback').text
-		fanart_path = item.find('fanart').text
-		fanart_fallback_path = item.find('fanart_fallback').text
-		poster_path = item.find('poster').text
-		thumb_path = item.find('thumb').text
-		logo_path = item.find('logo').text
-		clearart_path = item.find('clearart').text
-		banner_path = item.find('banner').text
-		media_path = item.find('media').text
-		trailer_path = item.find('trailer').text
-	tree = ET.parse(os.path.join(SYSTEMS_PATH, system))
-	root = tree.getroot()
-	for game in root.findall('game'):
-		game_description = game.find('description').text
-		if search_string != False:
-			if search_string.lower() in game_description.lower():
-				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
-		else:
-			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
-			
 def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
 		game_name = game.find('description').text
 		game_file_name = game.attrib['name']
-		game_year = game.find('year').text
-		game_manufacturer = game.find('manufacturer').text
-		game_rating = game.find('rating').text
-		game_genre = game.find('genre').text
+		if game.find('year').text:
+			game_year = game.find('year').text
+		else:
+			game_year =  ''
+		if game.find('manufacturer').text:
+			game_manufacturer = game.find('manufacturer').text
+		else:
+			game_manufacturer = ''
+		if game.find('rating').text:
+			game_rating = game.find('rating').text
+		else:
+			game_rating = ''
+		if game.find('genre').text:
+			game_genre = game.find('genre').text
+		else:
+			game_genre = ''
 		game_icon = get_game_art(game_file_name, icon_path, icon_fallback_path)
 		game_fanart = get_game_art(game_file_name, fanart_path, fanart_fallback_path)
 		game_thumb = get_game_art(game_file_name, thumb_path, 'none')
@@ -229,21 +325,15 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		contextMenuItems = []
 		if context_mode != 'context_two':
 			contextMenuItems.append(('Search this system', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
-		contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
+		if artwork_base_path:
+			contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 		contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		if context_mode == 'context_one':
 			li.addContextMenuItems(contextMenuItems,  replaceItems=True)
 		else:
 			li.addContextMenuItems(contextMenuItems)
-		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, False)])
+		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
 
-if addon_handle > 0:
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_GENRE)
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING)
-	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_STUDIO)
-		
 if mode is None:
 	for system in os.listdir(SYSTEMS_PATH):
 		if system.endswith(".xml"):
@@ -253,9 +343,18 @@ if mode is None:
 			tree = ET.parse(system_config)
 			root = tree.getroot()
 			for item in root.findall('info'):
-				release_year = item.find('release_year').text
-				manufacturer = item.find('manufacturer').text
-				description = item.find('description').text
+				if item.find('release_year').text:
+					release_year = item.find('release_year').text
+				else:
+					release_year = ''
+				if item.find('manufacturer').text:
+					manufacturer = item.find('manufacturer').text
+				else:
+					manufacturer = ''
+				if item.find('description').text:
+					description = item.find('description').text
+				else:
+					description = ''
 			system_icon = get_game_art(system_name + '-icon', SYSTEMS_PATH, 'none')
 			system_logo = get_game_art(system_name + '-logo', SYSTEMS_PATH, 'none')
 			system_fanart = get_game_art(system_name + '-fanart', SYSTEMS_PATH, 'none')
@@ -278,36 +377,25 @@ if mode is None:
 				contextMenuItems.append(('View logo', 'ShowPicture(%s)'  % (system_logo) ,))
 			li.addContextMenuItems(contextMenuItems)
 			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
 elif mode[0] == 'folder':
 	system_name = args['foldername'][0]
 	system_game_list = args['foldername'][0] + '.xml'
 	system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
-	tree = ET.parse(system_config)
-	root = tree.getroot()
-	for item in root.findall('config'):
-		rom_path = item.find('rom_path').text
-		rom_extensions = item.find('rom_extensions').text
-		launcher_script = item.find('launcher_script').text
-	for item in root.findall('artwork'):
-		artwork_base_path = item.find('base_path').text
-		icon_path = item.find('icon').text
-		icon_fallback_path = item.find('icon_fallback').text
-		fanart_path = item.find('fanart').text
-		fanart_fallback_path = item.find('fanart_fallback').text
-		poster_path = item.find('poster').text
-		thumb_path = item.find('thumb').text
-		logo_path = item.find('logo').text
-		clearart_path = item.find('clearart').text
-		banner_path = item.find('banner').text
-		media_path = item.find('media').text
-		trailer_path = item.find('trailer').text
+	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system_game_list))
 	root = tree.getroot()
+	thread_list = []
 	for game in root.findall('game'):
-		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
+		t = threading.Thread(target=game_list_create, args=(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one'))
+		thread_list.append(t)
+#		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
+	for thread in thread_list:
+		thread.start()
+	for thread in thread_list:
+		thread.join()
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
 elif mode[0] == 'file':
 	emulator_launcher()
@@ -317,7 +405,7 @@ elif mode[0] == 'search_input':
 	url = build_url({'mode': 'search', 'system_name': ''.join(args.get('system_name')), 'search_string': search_string})
 	if len(search_string) == 0:
 		if addon.getSetting("BlankSearch") == 'false':
-			log('Zero length search query', 'No search query entered')
+			log(language(50100), language(50101))
 			sys.exit()
 	xbmc.executebuiltin('Container.Update(%s, refresh)' % url)
 	
@@ -327,9 +415,15 @@ elif mode[0] == 'search':
 	else:
 		search_string = False
 	if ''.join(args.get('system_name')) == 'all':
+		thread_list = []
 		for system in os.listdir(SYSTEMS_PATH):
 			if system.endswith('.xml'):
-				search(system, search_string)
+				t = threading.Thread(target=search, args=(system, search_string))
+				thread_list.append(t)
+		for thread in thread_list:
+			thread.start()
+		for thread in thread_list:
+			thread.join()
 	else:
 		system = ''.join(args.get('system_name')) + '.xml'
 		search(system, search_string)
@@ -338,7 +432,7 @@ elif mode[0] == 'search':
 elif mode[0] == 'artwork':
 	game_file_name = ''.join(args.get('game_file_name'))
 	artwork_base_path = ''.join(args.get('artwork_base_path'))
-	create_artwork_list(game_file_name, artwork_base_path)
+	artwork_list_create(game_file_name, artwork_base_path)
 
 elif mode[0] == 'artwork_display':
 #	if ''.join(args.get('artwork_type')) == 'video':
@@ -347,7 +441,8 @@ elif mode[0] == 'artwork_display':
 		xbmc.executebuiltin('ShowPicture("%s")' % (''.join(args.get('artwork'))))
 	if ''.join(args.get('artwork_type')) == 'pdf':
 		if not os.path.exists(xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')):
-			log('special://home/addons/plugin.image.pdfreader/resources/lib not found, is plugin.image.pdfreader installed?', 'Is plugin.image.pdfreader installed?')
+			log_message = 'special://home/addons/plugin.image.pdfreader/resources/lib ' + language(50107)
+			log(log_message, language(50108))
 			sys.exit()
 		addon_pdf = xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')
 		sys.path.append(addon_pdf)

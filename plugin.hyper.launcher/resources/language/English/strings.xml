@@ -3,4 +3,21 @@
     <!-- General Settings -->
     <string id="50000">General</string>
     <string id="50050">Allow blank search</string>
+
+
+    <!-- Log/notification messages -->
+    <string id="50100">Blank searches disabled, enable in the addon settings</string>
+    <string id="50101">Blank searches disabled</string>
+    <string id="50102">Required file does not exist</string>
+    <string id="50103">ERROR! Check log file...</string>
+    <string id="50104">Attempted command is:</string>
+    <string id="50105">Required config parameter missing</string>
+    <string id="50106">Reading file</string>
+    <string id="50107">not found, is plugin.image.pdfreader installed?</string>
+    <string id="50108">Is plugin.image.pdfreader installed?</string>
+    <string id="50109">Directory for variants does not exist</string>
+
+    <!-- GUI messages -->
+    <string id="50200">Choose a variant</string>
+	
 </strings>
