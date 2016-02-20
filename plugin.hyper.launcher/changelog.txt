@@ -1,3 +1,11 @@
+1.1.3
+Add support for game variants. 
+Add threading for game list generation and searches (dont think it makes much difference, might do on low power systems). 
+Add multi-language support. 
+Checks for blank xml data.
+Do not replace default context menu items.
+Fix text encoding... hopefully...
+
 1.1.2
 Artwork lists now display mp3 and ico files
 Add addon option to enable blank search
