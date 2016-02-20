@@ -450,7 +450,7 @@ elif mode[0] == 'artwork_display':
 		from pdf import pdf
 		pdf = pdf()
 		pdf.clean_temp()
-		pdf.pdf_read(''.join(args.get('artwork')), ''.join(args.get('artwork')), 'true')
+		pdf.pdf_read(''.join(args.get('artwork')).encode(txt_encode), ''.join(args.get('artwork')).encode(txt_encode), 'true')
 		
 elif mode[0] == 'random_focus':
 	total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
