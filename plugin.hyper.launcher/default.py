@@ -237,7 +237,6 @@ def emulator_launcher():
 			file_check(launcher_script_command, launcher_script_command)
 			cmd = '"%s" "%s" "%s" "%s" "%s" "%s"' % (launcher_script_command, ''.join(args.get('foldername')), selected_game, rom_full_path, rom_file, rom_extension)
 			log(language(50104), False)
-			cmd = cmd
 			log(cmd, False)
 			subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
 
@@ -330,10 +329,10 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		if artwork_base_path:
 			contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 		contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
-		if context_mode == 'context_one':
-			li.addContextMenuItems(contextMenuItems,  replaceItems=True)
-		else:
-			li.addContextMenuItems(contextMenuItems)
+#		if context_mode == 'context_one':
+		li.addContextMenuItems(contextMenuItems) #,  replaceItems=True)
+#		else:
+#			li.addContextMenuItems(contextMenuItems)
 		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
 
 if mode is None:
