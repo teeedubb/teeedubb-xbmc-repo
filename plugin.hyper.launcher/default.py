@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -13,10 +14,18 @@ import random
 import threading
 import xml.etree.ElementTree as ET
 
+#set text encoding.... ugh...
+try:
+	txt_encode = sys.getfilesystemencoding()
+except:
+	txt_encode = 'utf-8'
+reload(sys)  
+sys.setdefaultencoding('utf-8')
+
 scriptid = 'plugin.hyper.launcher'
 addon = xbmcaddon.Addon(id='plugin.hyper.launcher')
-addonPath = addon.getAddonInfo('path').decode("utf-8")
-addonDataPath = xbmc.translatePath('special://profile/addon_data/%s' % scriptid).decode("utf-8")
+addonPath = addon.getAddonInfo('path')
+addonDataPath = xbmc.translatePath('special://profile/addon_data/%s' % scriptid)
 addonIcon = addon.getAddonInfo('icon')
 addonVersion = addon.getAddonInfo('version')
 dialog = xbmcgui.Dialog()
@@ -51,21 +60,14 @@ if addon_handle > 0:
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_MPAA_RATING)
 	xbmcplugin.addSortMethod(handle=addon_handle, sortMethod=xbmcplugin.SORT_METHOD_STUDIO)
 
-txt_encode = 'utf-8'
-try:
-	txt_encode = sys.getfilesystemencoding()
-except:
-	pass
-
 def build_url(query):
 	return base_url + '?' + urllib.urlencode(query)
 
 def log(msg, notification_msg):
-	msg = msg.encode(txt_encode)
 	xbmc.log('%s: %s' % (scriptid + '.log', msg))
 	if 	notification_msg:
 		dialog.notification(language(50103), notification_msg, addonIcon, 10000)
-	
+
 def file_check(file, required_file):
 	if not file:
 		file = required_file
@@ -237,7 +239,7 @@ def emulator_launcher():
 			log(language(50104), False)
 			cmd = cmd
 			log(cmd, False)
-			subprocess.Popen(cmd, shell=True, close_fds=True)
+			subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
 
 def search(system, search_string):
 	system_name = system[:-4]
