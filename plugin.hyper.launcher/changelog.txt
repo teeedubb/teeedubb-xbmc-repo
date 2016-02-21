@@ -1,3 +1,7 @@
+1.1.5
+Add context menu item to select specific launcher at rom run time.
+Add more language strings. 
+
 1.1.4
 Fix text encoding for launching pdf's 
 
