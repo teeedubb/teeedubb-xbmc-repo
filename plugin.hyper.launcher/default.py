@@ -210,15 +210,17 @@ def emulator_launcher():
 						selected_var_game = game_variation_list[selected_var_game]
 					rom_path = os.path.join(rom_path, selected_game)
 					selected_game = selected_var_game
-					if game.find('launcher').text:
-						launcher_script = game.find('launcher').text
+					if not args.get('alt_launcher'):
+						if game.find('launcher').text:
+							launcher_script = game.find('launcher').text
 				else:
 					log_message = language(50109) + os.path.join(rom_path, selected_game)
 					log(log_message, language(50109))
-	for item in root.findall('alt_launchers'):
-		for game in item.iter('game'):
-			if selected_game in game.attrib['name']:
-				launcher_script = game.find('launcher').text
+	if not args.get('alt_launcher'):
+		for item in root.findall('alt_launchers'):
+			for game in item.iter('game'):
+				if selected_game in game.attrib['name']:
+					launcher_script = game.find('launcher').text
 	if selected_game: 
 		search_item = os.path.join(rom_path, selected_game + '.*')
 		search = glob.glob('%s' % search_item)
@@ -325,10 +327,11 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		li.setInfo( 'video', { 'Title': game_name, 'OriginalTitle': game_file_name, 'Genre': game_genre, 'Year': game_year, 'Director': game_manufacturer, 'Mpaa': game_rating, 'Trailer': game_trailer, 'Plot': system_name, 'Studio': game_manufacturer, 'Path': rom_path, 'launcher_script': launcher_script } )
 		contextMenuItems = []
 		if context_mode != 'context_two':
-			contextMenuItems.append(('Search this system', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
+			contextMenuItems.append((language(50208), 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
 		if artwork_base_path:
-			contextMenuItems.append(('View artwork', 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
-		contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
+			contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
+		contextMenuItems.append((language(50210), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
+		contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
 #		if context_mode == 'context_one':
 		li.addContextMenuItems(contextMenuItems) #,  replaceItems=True)
 #		else:
@@ -366,16 +369,16 @@ if mode is None:
 			li.setInfo( 'video', { "Title": system_name, "Trailer": system_trailer, 'Year': release_year, 'Director': manufacturer, 'Plot': description } )
 			li.setProperty('IsPlayable', 'false')
 			contextMenuItems = []
-			contextMenuItems.append(('Search all systems', 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': 'all'}) ,))
-			contextMenuItems.append(('Random item', 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
+			contextMenuItems.append((language(50201), 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': 'all'}) ,))
+			contextMenuItems.append((language(50202), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 			if system_trailer:
-				contextMenuItems.append(('Play trailer', 'PlayMedia(%s)'  % (system_trailer) ,))
+				contextMenuItems.append((language(50203), 'PlayMedia(%s)'  % (system_trailer) ,))
 			if system_icon:
-				contextMenuItems.append(('View icon', 'ShowPicture(%s)' % (system_icon) ,))
+				contextMenuItems.append((language(50204), 'ShowPicture(%s)' % (system_icon) ,))
 			if system_fanart:
-				contextMenuItems.append(('View fanart', 'ShowPicture(%s)' % (system_fanart) ,))
+				contextMenuItems.append((language(50205), 'ShowPicture(%s)' % (system_fanart) ,))
 			if system_logo:
-				contextMenuItems.append(('View logo', 'ShowPicture(%s)'  % (system_logo) ,))
+				contextMenuItems.append((language(50206), 'ShowPicture(%s)'  % (system_logo) ,))
 			li.addContextMenuItems(contextMenuItems)
 			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
@@ -402,7 +405,7 @@ elif mode[0] == 'file':
 	emulator_launcher()
 
 elif mode[0] == 'search_input':
-	search_string = dialog.input('Search', type=xbmcgui.INPUT_ALPHANUM)
+	search_string = dialog.input(language(50207), type=xbmcgui.INPUT_ALPHANUM)
 	url = build_url({'mode': 'search', 'system_name': ''.join(args.get('system_name')), 'search_string': search_string})
 	if len(search_string) == 0:
 		if addon.getSetting("BlankSearch") == 'false':
@@ -436,8 +439,6 @@ elif mode[0] == 'artwork':
 	artwork_list_create(game_file_name, artwork_base_path)
 
 elif mode[0] == 'artwork_display':
-#	if ''.join(args.get('artwork_type')) == 'video':
-#		xbmc.Player().play(''.join(args.get('artwork')))
 	if ''.join(args.get('artwork_type')) == 'image':
 		xbmc.executebuiltin('ShowPicture("%s")' % (''.join(args.get('artwork'))))
 	if ''.join(args.get('artwork_type')) == 'pdf':
@@ -463,3 +464,19 @@ elif mode[0] == 'random_focus':
 		if xbmc.Player().isPlayingVideo():
 			xbmc.Player().stop()
 		xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, random_list_item))
+
+elif mode[0] == 'select_launcher':
+	if os.path.exists(LAUNCHER_SCRIPTS):
+		select_launcher_list = []
+		for alt_launcher in os.listdir(os.path.join(LAUNCHER_SCRIPTS)):
+			select_launcher_list.append( alt_launcher, )
+		selected_launcher = dialog.select(language(50211), select_launcher_list)
+		if selected_launcher == -1:
+			sys.exit()
+		else:
+			selected_launcher = select_launcher_list[selected_launcher]
+			url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes', 'rom_extensions': ''.join(args.get('rom_extensions'))})			
+			xbmc.executebuiltin('RunPlugin(%s)' % url)
+	else:
+		log_message = language(50109) + LAUNCHER_SCRIPTS
+		log(log_message, language(50109))

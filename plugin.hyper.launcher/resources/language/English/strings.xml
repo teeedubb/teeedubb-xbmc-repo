@@ -15,9 +15,20 @@
     <string id="50106">Reading file</string>
     <string id="50107">not found, is plugin.image.pdfreader installed?</string>
     <string id="50108">Is plugin.image.pdfreader installed?</string>
-    <string id="50109">Directory for variants does not exist</string>
+    <string id="50109">Directory does not exist</string>
 
     <!-- GUI messages -->
     <string id="50200">Choose a variant</string>
-	
+	<string id="50201">Search all systems</string>
+	<string id="50202">Random item</string>
+	<string id="50203">Play trailer</string>
+	<string id="50204">View icon</string>
+	<string id="50205">View fanart</string>
+	<string id="50206">View logo</string>
+	<string id="50207">Search</string>
+	<string id="50208">Search this system</string>
+	<string id="50209">View artwork</string>
+	<string id="50210">Random item</string>
+	<string id="50211">Select launcher</string>
+
 </strings>
