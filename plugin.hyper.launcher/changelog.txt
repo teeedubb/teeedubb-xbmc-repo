@@ -1,3 +1,8 @@
+1.1.6
+Reduce amount of searching for artwork.
+Add option to designate file types to launch. 
+Clean up
+
 1.1.5
 Add context menu item to select specific launcher at rom run time.
 Add more language strings. 
