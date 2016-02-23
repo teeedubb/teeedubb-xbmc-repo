@@ -462,7 +462,9 @@ elif mode[0] == 'select_launcher':
 			sys.exit()
 		else:
 			selected_launcher = select_launcher_list[selected_launcher]
-			url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes', 'rom_extensions': ''.join(args.get('rom_extensions'))})			
+			if args.get('rom_extensions'):
+				rom_extensions = ''.join(args.get('rom_extensions'))
+			url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes', 'rom_extensions': rom_extensions})			
 			xbmc.executebuiltin('RunPlugin(%s)' % url)
 	else:
 		log_message = language(50109) + LAUNCHER_SCRIPTS
