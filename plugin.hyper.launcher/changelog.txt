@@ -1,3 +1,6 @@
+1.1.7
+Fix for selected launchers with no configured extensions
+
 1.1.6
 Reduce amount of searching for artwork.
 Add option to designate file types to launch. 
