@@ -77,43 +77,15 @@ def file_check(file, required_file):
 		sys.exit()
 		
 def get_game_art(game_file_name, path, fallback_path):
-#	search_item = os.path.join(path, game_file_name + '.*') #game_file_name + '.*'
-#	search = glob.glob('%s' % search_item)
-#	for filename in search:
-#		return filename
-#reminder that there is probably a better way to do this
 	fanart = ''
-	artwork = os.path.join(path, game_file_name + '.ico')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.mp3')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.pdf')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.flv')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.avi')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.mp4')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(fallback_path, game_file_name + '.png')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(fallback_path, game_file_name + '.jpg')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.png')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	artwork = os.path.join(path, game_file_name + '.jpg')
-	if os.path.isfile(artwork):
-		fanart = artwork
-	return fanart
+	fanart_file_types = ('.ico', '.mp3', '.pdf', '.flv', '.avi', '.mp4', '.png', '.jpg')
+	for fanart_file_type in fanart_file_types:
+		artwork = os.path.join(fallback_path, game_file_name + fanart_file_type)
+		if os.path.isfile(artwork):
+			return artwork
+		artwork = os.path.join(path, game_file_name + fanart_file_type)
+		if os.path.isfile(artwork):
+			return artwork
 	
 def get_system_info(system_config):
 	tree = ET.parse(system_config)
@@ -221,14 +193,22 @@ def emulator_launcher():
 			for game in item.iter('game'):
 				if selected_game in game.attrib['name']:
 					launcher_script = game.find('launcher').text
-	if selected_game: 
-		search_item = os.path.join(rom_path, selected_game + '.*')
-		search = glob.glob('%s' % search_item)
-		if not search:
-			file_check(''.join(search), search_item)
-		for rom_full_path in search:
-			rom_extension = os.path.splitext(rom_full_path)[1]
-			rom_file = 	os.path.basename(rom_full_path)
+	if selected_game:
+		if ''.join(args.get('rom_extensions')) == 'none':
+			search_item = os.path.join(rom_path, selected_game + '.*')
+			rom_full_path = ''.join(glob.glob('%s' % search_item))
+		else:
+			file_types = []
+			file_types = ''.join(args.get('rom_extensions')).split(' ')
+			for file_type in file_types:
+				file_type = '.' + file_type
+				rom_full_path = os.path.join(rom_path, selected_game) + file_type
+				if os.path.isfile(rom_full_path):
+					break
+		if not rom_full_path:
+			file_check(''.join(search_item), search_item)
+		rom_extension = os.path.splitext(rom_full_path)[1]
+		rom_file = 	os.path.basename(rom_full_path)
 		if launcher_script == 'kodi_retroplayer':
 			listitem = xbmcgui.ListItem(rom_file, "0", "", "")
 			parameters = {'Platform': ''.join(args.get('foldername')), 'Title': ''.join(args.get('game_name')), 'URL': rom_full_path}
@@ -332,10 +312,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 			contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 		contextMenuItems.append((language(50210), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
-#		if context_mode == 'context_one':
-		li.addContextMenuItems(contextMenuItems) #,  replaceItems=True)
-#		else:
-#			li.addContextMenuItems(contextMenuItems)
+		li.addContextMenuItems(contextMenuItems)
 		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
 
 if mode is None:
@@ -394,7 +371,6 @@ elif mode[0] == 'folder':
 	for game in root.findall('game'):
 		t = threading.Thread(target=game_list_create, args=(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one'))
 		thread_list.append(t)
-#		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
 	for thread in thread_list:
 		thread.start()
 	for thread in thread_list:
