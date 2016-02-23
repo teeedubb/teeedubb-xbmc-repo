@@ -85,14 +85,15 @@ def get_game_art(game_file_name, path, fallback_path, type):
 	else:
 		fanart_file_types = ('.flv', '.avi', '.mp4', '.ico', '.png', '.jpg', '.mp3', '.pdf')
 	for fanart_file_type in fanart_file_types:
-		if not fallback_path == 'none':
+		if fallback_path != 'none':
 			artwork = os.path.join(fallback_path, game_file_name + fanart_file_type)
 			if os.path.isfile(artwork):
-				return artwork
+				fanart = artwork
 		artwork = os.path.join(path, game_file_name + fanart_file_type)
 		if os.path.isfile(artwork):
-			return artwork
+			fanart = artwork
 			break
+	return fanart
 	
 def get_system_info(system_config):
 	tree = ET.parse(system_config)
