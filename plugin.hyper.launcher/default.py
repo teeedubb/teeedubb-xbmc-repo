@@ -76,16 +76,23 @@ def file_check(file, required_file):
 		log(log_message, log_message)
 		sys.exit()
 		
-def get_game_art(game_file_name, path, fallback_path):
+def get_game_art(game_file_name, path, fallback_path, type):
 	fanart = ''
-	fanart_file_types = ('.ico', '.mp3', '.pdf', '.flv', '.avi', '.mp4', '.png', '.jpg')
+	if type == 'video':
+		fanart_file_types = ('.flv', '.avi', '.mp4')
+	elif type == 'image':
+		fanart_file_types = ('.ico', '.png', '.jpg')
+	else:
+		fanart_file_types = ('.flv', '.avi', '.mp4', '.ico', '.png', '.jpg', '.mp3', '.pdf')
 	for fanart_file_type in fanart_file_types:
-		artwork = os.path.join(fallback_path, game_file_name + fanart_file_type)
-		if os.path.isfile(artwork):
-			return artwork
+		if not fallback_path == 'none':
+			artwork = os.path.join(fallback_path, game_file_name + fanart_file_type)
+			if os.path.isfile(artwork):
+				return artwork
 		artwork = os.path.join(path, game_file_name + fanart_file_type)
 		if os.path.isfile(artwork):
 			return artwork
+			break
 	
 def get_system_info(system_config):
 	tree = ET.parse(system_config)
@@ -98,6 +105,8 @@ def get_system_info(system_config):
 			rom_path = item.find('rom_path').text
 		if item.find('rom_extensions').text:
 			rom_extensions = item.find('rom_extensions').text
+		else:
+			rom_extensions = ''
 		if not item.find('launcher_script').text:
 			log_message = language(50105) + ': %s, %s' % (system_config, 'launcher_script')
 			log(log_message, language(50105))
@@ -165,36 +174,36 @@ def emulator_launcher():
 	system_config = os.path.join(SYSTEMS_CONFIG_PATH, ''.join(args.get('foldername')) + '-config.xml')
 	tree = ET.parse(system_config)
 	root = tree.getroot()
-	for item in root.findall('game_variations'):
-		for game in item.iter('game'):
-			if ''.join(args.get('game_name')) in game.attrib['name']:
-				if os.path.exists(os.path.join(rom_path, selected_game)):
-					game_variation_list = []
-					game_variation_list.append( selected_game, )
-					for game_variation in os.listdir(os.path.join(rom_path, selected_game)):
-						game_variation_list.append( os.path.splitext(game_variation)[0], )
-					selected_var_game = dialog.select(language(50200), game_variation_list)
-					if selected_var_game == -1:
-						sys.exit()
-					elif selected_var_game == 0:
-						break
-					else:
-						selected_var_game = game_variation_list[selected_var_game]
-					rom_path = os.path.join(rom_path, selected_game)
-					selected_game = selected_var_game
-					if not args.get('alt_launcher'):
-						if game.find('launcher').text:
-							launcher_script = game.find('launcher').text
-				else:
-					log_message = language(50109) + os.path.join(rom_path, selected_game)
-					log(log_message, language(50109))
-	if not args.get('alt_launcher'):
-		for item in root.findall('alt_launchers'):
-			for game in item.iter('game'):
-				if selected_game in game.attrib['name']:
-					launcher_script = game.find('launcher').text
 	if selected_game:
-		if ''.join(args.get('rom_extensions')) == 'none':
+		for item in root.findall('game_variations'):
+			for game in item.iter('game'):
+				if ''.join(args.get('game_name')) in game.attrib['name']:
+					if os.path.exists(os.path.join(rom_path, selected_game)):
+						game_variation_list = []
+						game_variation_list.append( selected_game, )
+						for game_variation in os.listdir(os.path.join(rom_path, selected_game)):
+							game_variation_list.append( os.path.splitext(game_variation)[0], )
+						selected_var_game = dialog.select(language(50200), game_variation_list)
+						if selected_var_game == -1:
+							sys.exit()
+						elif selected_var_game == 0:
+							break
+						else:
+							selected_var_game = game_variation_list[selected_var_game]
+						rom_path = os.path.join(rom_path, selected_game)
+						selected_game = selected_var_game
+						if not args.get('alt_launcher'):
+							if game.find('launcher').text:
+								launcher_script = game.find('launcher').text
+					else:
+						log_message = language(50109) + os.path.join(rom_path, selected_game)
+						log(log_message, language(50109))
+		if not args.get('alt_launcher'):
+			for item in root.findall('alt_launchers'):
+				for game in item.iter('game'):
+					if selected_game in game.attrib['name']:
+						launcher_script = game.find('launcher').text
+		if not args.get('rom_extensions'): # == 'none':
 			search_item = os.path.join(rom_path, selected_game + '.*')
 			rom_full_path = ''.join(glob.glob('%s' % search_item))
 		else:
@@ -221,6 +230,8 @@ def emulator_launcher():
 			log(language(50104), False)
 			log(cmd, False)
 			subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+	else:
+		log(language(50110), language(50110))
 
 def search(system, search_string):
 	system_name = system[:-4]
@@ -241,7 +252,7 @@ def search(system, search_string):
 			
 def artwork_list_create(game_file_name, artwork_base_path):
 	for folder in os.listdir(artwork_base_path):
-		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none')
+		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none', 'all')
 		if artwork:
 			file_types = ['.png', '.jpg', 'ico']
 			if any(x in artwork for x in file_types):
@@ -291,15 +302,15 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 			game_genre = game.find('genre').text
 		else:
 			game_genre = ''
-		game_icon = get_game_art(game_file_name, icon_path, icon_fallback_path)
-		game_fanart = get_game_art(game_file_name, fanart_path, fanart_fallback_path)
-		game_thumb = get_game_art(game_file_name, thumb_path, 'none')
-		game_poster = get_game_art(game_file_name, poster_path, 'none')
-		game_logo = get_game_art(game_file_name, logo_path, 'none')
-		game_clearart = get_game_art(game_file_name, clearart_path, 'none')
-		game_banner = get_game_art(game_file_name, banner_path, 'none')
-		game_media = get_game_art(game_file_name, media_path, 'none')
-		game_trailer = get_game_art(game_file_name, trailer_path, 'trailer')
+		game_icon = get_game_art(game_file_name, icon_path, icon_fallback_path, 'image')
+		game_fanart = get_game_art(game_file_name, fanart_path, fanart_fallback_path, 'image')
+		game_thumb = get_game_art(game_file_name, thumb_path, 'none', 'image')
+		game_poster = get_game_art(game_file_name, poster_path, 'none', 'image')
+		game_logo = get_game_art(game_file_name, logo_path, 'none', 'image')
+		game_clearart = get_game_art(game_file_name, clearart_path, 'none', 'image')
+		game_banner = get_game_art(game_file_name, banner_path, 'none', 'image')
+		game_media = get_game_art(game_file_name, media_path, 'none', 'image')
+		game_trailer = get_game_art(game_file_name, trailer_path, 'none', 'video')
 		url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
 		li = xbmcgui.ListItem(game_name, iconImage=game_icon)
 		li.setProperty('IsPlayable', 'false')
@@ -336,10 +347,10 @@ if mode is None:
 					description = item.find('description').text
 				else:
 					description = ''
-			system_icon = get_game_art(system_name + '-icon', SYSTEMS_PATH, 'none')
-			system_logo = get_game_art(system_name + '-logo', SYSTEMS_PATH, 'none')
-			system_fanart = get_game_art(system_name + '-fanart', SYSTEMS_PATH, 'none')
-			system_trailer = get_game_art(system_name + '-trailer', SYSTEMS_PATH, 'none')
+			system_icon = get_game_art(system_name + '-icon', SYSTEMS_PATH, 'none', 'image')
+			system_logo = get_game_art(system_name + '-logo', SYSTEMS_PATH, 'none', 'image')
+			system_fanart = get_game_art(system_name + '-fanart', SYSTEMS_PATH, 'none', 'image')
+			system_trailer = get_game_art(system_name + '-trailer', SYSTEMS_PATH, 'none', 'video')
 			url = build_url({'mode': 'folder', 'foldername': system_name})
 			li = xbmcgui.ListItem(system_name, iconImage=system_icon)
 			li.setArt({ 'thumb': system_icon, 'fanart': system_fanart, 'clearlogo': system_logo })

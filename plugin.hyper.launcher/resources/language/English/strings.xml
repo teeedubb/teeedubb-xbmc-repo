@@ -16,6 +16,7 @@
     <string id="50107">not found, is plugin.image.pdfreader installed?</string>
     <string id="50108">Is plugin.image.pdfreader installed?</string>
     <string id="50109">Directory does not exist</string>
+    <string id="50110">No selected game</string>
 
     <!-- GUI messages -->
     <string id="50200">Choose a variant</string>
