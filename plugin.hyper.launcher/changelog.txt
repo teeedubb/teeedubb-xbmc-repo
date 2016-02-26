@@ -1,3 +1,7 @@
+1.1.9
+Fix plugin failing when using a runtime launcher with no file types.
+Reshuffle the order of finding artwork files
+
 1.1.8
 Fix fallback artwork having priority
 
