@@ -1,5 +1,6 @@
-1.1.8
-Fix fallback artwork having priority
+1.1.9
+Fix plugin failing when selecting a runtime launcher with no filetypes configured.
+Reshuffle order od finding artwork.
 
 1.1.7
 Fix for selected launchers with no configured extensions
