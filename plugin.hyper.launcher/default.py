@@ -79,11 +79,11 @@ def file_check(file, required_file):
 def get_game_art(game_file_name, path, fallback_path, type):
 	fanart = ''
 	if type == 'video':
-		fanart_file_types = ('.flv', '.avi', '.mp4')
+		fanart_file_types = ('.mp4', '.avi', '.flv')
 	elif type == 'image':
-		fanart_file_types = ('.ico', '.png', '.jpg')
+		fanart_file_types = ('.png', '.jpg', '.ico')
 	else:
-		fanart_file_types = ('.flv', '.avi', '.mp4', '.ico', '.png', '.jpg', '.mp3', '.pdf')
+		fanart_file_types = ('.png', '.jpg', '.mp4', '.mp3', '.pdf', '.ico', '.flv', '.avi')
 	for fanart_file_type in fanart_file_types:
 		if fallback_path != 'none':
 			artwork = os.path.join(fallback_path, game_file_name + fanart_file_type)
@@ -204,7 +204,7 @@ def emulator_launcher():
 				for game in item.iter('game'):
 					if selected_game in game.attrib['name']:
 						launcher_script = game.find('launcher').text
-		if not args.get('rom_extensions'): # == 'none':
+		if not args.get('rom_extensions'):
 			search_item = os.path.join(rom_path, selected_game + '.*')
 			rom_full_path = ''.join(glob.glob('%s' % search_item))
 		else:
@@ -464,8 +464,9 @@ elif mode[0] == 'select_launcher':
 		else:
 			selected_launcher = select_launcher_list[selected_launcher]
 			if args.get('rom_extensions'):
-				rom_extensions = ''.join(args.get('rom_extensions'))
-			url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes', 'rom_extensions': rom_extensions})			
+				url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes', 'rom_extensions': ''.join(args.get('rom_extensions'))})	
+			else:
+				url = build_url({'mode': 'file', 'foldername': ''.join(args.get('foldername')), 'game_name': ''.join(args.get('game_name')), 'filename': ''.join(args.get('filename')), 'rom_path': ''.join(args.get('rom_path')), 'launcher_script': selected_launcher, 'alt_launcher': 'yes'})
 			xbmc.executebuiltin('RunPlugin(%s)' % url)
 	else:
 		log_message = language(50109) + LAUNCHER_SCRIPTS
