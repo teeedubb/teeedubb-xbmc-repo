@@ -381,12 +381,7 @@ elif mode[0] == 'folder':
 	root = tree.getroot()
 	thread_list = []
 	for game in root.findall('game'):
-		t = threading.Thread(target=game_list_create, args=(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one'))
-		thread_list.append(t)
-	for thread in thread_list:
-		thread.start()
-	for thread in thread_list:
-		thread.join()
+		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
 elif mode[0] == 'file':
@@ -407,15 +402,9 @@ elif mode[0] == 'search':
 	else:
 		search_string = False
 	if ''.join(args.get('system_name')) == 'all':
-		thread_list = []
 		for system in os.listdir(SYSTEMS_PATH):
 			if system.endswith('.xml'):
-				t = threading.Thread(target=search, args=(system, search_string))
-				thread_list.append(t)
-		for thread in thread_list:
-			thread.start()
-		for thread in thread_list:
-			thread.join()
+				search(system, search_string)
 	else:
 		system = ''.join(args.get('system_name')) + '.xml'
 		search(system, search_string)
