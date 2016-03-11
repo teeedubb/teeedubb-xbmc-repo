@@ -1,3 +1,9 @@
+1.2.0
+Remove threading - was causing random errors on my system. dont think it made any difference anyway.
+Prevent trailer playback in certain scenarios
+Add option to suspend kodi audio when launching rom
+Add option to select whether user chooses to keep kodi running in background (for preventing trailer playback)
+
 1.1.9
 Fix plugin failing when using a runtime launcher with no file types.
 Reshuffle the order of finding artwork files
