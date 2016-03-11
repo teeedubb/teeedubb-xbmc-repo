@@ -11,7 +11,6 @@ import os
 import subprocess
 import glob
 import random
-import threading
 import xml.etree.ElementTree as ET
 
 #set text encoding.... ugh...
@@ -30,12 +29,15 @@ addonIcon = addon.getAddonInfo('icon')
 addonVersion = addon.getAddonInfo('version')
 dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
+suspendAudio = addon.getSetting("SuspendAudio")
+backgroundKodi = addon.getSetting("BackgroundKodi")
 
 #addon paths
 SYSTEMS_PATH = os.path.join(addonDataPath, 'systems')
 SYSTEMS_CONFIG_PATH = os.path.join(addonDataPath, 'systems_config')
 LAUNCHER_SCRIPTS = os.path.join(addonDataPath, 'launcher_scripts')
 RESTART_FILE = os.path.join(addonDataPath, 'restart_file.txt')
+SUPRESS_VIDEO_FILE = os.path.join(addonDataPath, 'suppress_video_file.txt')
 
 #create addon paths
 if not os.path.exists(addonDataPath): 
@@ -67,6 +69,23 @@ def log(msg, notification_msg):
 	xbmc.log('%s: %s' % (scriptid + '.log', msg))
 	if 	notification_msg:
 		dialog.notification(language(50103), notification_msg, addonIcon, 10000)
+
+def prevent_video_playback(option):
+	if option == 'start':
+		if not os.path.exists(SUPRESS_VIDEO_FILE):
+			try:
+				f = open(SUPRESS_VIDEO_FILE, 'w')
+				f.write('prevent_video_playback')
+				f.close()
+			except:
+				pass
+	elif option == 'stop':
+		if os.path.exists(SUPRESS_VIDEO_FILE):
+			try:
+				xbmc.sleep(1000)
+				os.remove(SUPRESS_VIDEO_FILE)
+			except:
+				pass
 
 def file_check(file, required_file):
 	if not file:
@@ -165,6 +184,7 @@ def get_system_info(system_config):
 		return (rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path)
 	
 def emulator_launcher():
+	prevent_video_playback('start')
 	selected_game = ''.join(args.get('filename'))
 	launcher_script = ''.join(args.get('launcher_script'))
 	rom_path = ''.join(args.get('rom_path'))
@@ -230,7 +250,19 @@ def emulator_launcher():
 			cmd = '"%s" "%s" "%s" "%s" "%s" "%s"' % (launcher_script_command, ''.join(args.get('foldername')), selected_game, rom_full_path, rom_file, rom_extension)
 			log(language(50104), False)
 			log(cmd, False)
-			subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+			if suspendAudio == 'true':
+				xbmc.audioSuspend()
+				log(language(50111), False)
+			if backgroundKodi == 'true':
+				proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
+				while proc_h.returncode is None:
+					xbmc.sleep(1000)
+					proc_h.poll()
+				del proc_h		
+			else:
+				subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=True)
+			prevent_video_playback('stop')
+			xbmc.audioResume()
 	else:
 		log(language(50110), language(50110))
 
@@ -243,6 +275,7 @@ def search(system, search_string):
 	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system))
 	root = tree.getroot()
+	prevent_video_playback('start')
 	for game in root.findall('game'):
 		game_description = game.find('description').text
 		if search_string != False:
@@ -250,8 +283,10 @@ def search(system, search_string):
 				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
 		else:
 			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
-			
+	prevent_video_playback('stop')
+	
 def artwork_list_create(game_file_name, artwork_base_path):
+	prevent_video_playback('start')
 	for folder in os.listdir(artwork_base_path):
 		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none', 'all')
 		if artwork:
@@ -283,6 +318,7 @@ def artwork_list_create(game_file_name, artwork_base_path):
 				folder = True
 			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, folder)])
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	prevent_video_playback('stop')
 
 def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
 		game_name = game.find('description').text
@@ -326,6 +362,10 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
 		li.addContextMenuItems(contextMenuItems)
 		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
+
+if xbmc.Player().isPlayingVideo():
+	xbmc.Player().stop()
+prevent_video_playback('stop')
 
 if mode is None:
 	for system in os.listdir(SYSTEMS_PATH):
@@ -373,21 +413,23 @@ if mode is None:
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
 elif mode[0] == 'folder':
+	prevent_video_playback('start')
 	system_name = args['foldername'][0]
 	system_game_list = args['foldername'][0] + '.xml'
 	system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
 	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system_game_list))
 	root = tree.getroot()
-	thread_list = []
 	for game in root.findall('game'):
 		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	prevent_video_playback('stop')
 
 elif mode[0] == 'file':
 	emulator_launcher()
 
 elif mode[0] == 'search_input':
+	prevent_video_playback('start')
 	search_string = dialog.input(language(50207), type=xbmcgui.INPUT_ALPHANUM)
 	url = build_url({'mode': 'search', 'system_name': ''.join(args.get('system_name')), 'search_string': search_string})
 	if len(search_string) == 0:
@@ -395,8 +437,10 @@ elif mode[0] == 'search_input':
 			log(language(50100), language(50101))
 			sys.exit()
 	xbmc.executebuiltin('Container.Update(%s, refresh)' % url)
+	prevent_video_playback('stop')
 	
 elif mode[0] == 'search':
+	prevent_video_playback('start')
 	if args.get('search_string'):
 		search_string = ''.join(args.get('search_string'))
 	else:
@@ -409,6 +453,7 @@ elif mode[0] == 'search':
 		system = ''.join(args.get('system_name')) + '.xml'
 		search(system, search_string)
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	prevent_video_playback('stop')
 	
 elif mode[0] == 'artwork':
 	game_file_name = ''.join(args.get('game_file_name'))

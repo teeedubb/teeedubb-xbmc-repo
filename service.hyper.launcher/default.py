@@ -9,6 +9,7 @@ bg_video_wait_time = int(addon.getSetting("bg_video_wait_time"))
 attract_wait_time = int(addon.getSetting("attract_wait_time"))
 relaunch_previous_view = addon.getSetting("relaunch_previous_view")
 RESTART_FILE = os.path.join(HLaddonDataPath, 'restart_file.txt')
+SUPRESS_VIDEO_FILE = os.path.join(HLaddonDataPath, 'suppress_video_file.txt')
 
 if relaunch_previous_view == 'true':
 	if os.path.exists(RESTART_FILE):
@@ -18,20 +19,21 @@ if relaunch_previous_view == 'true':
 		xbmc.executebuiltin('xbmc.ActivateWindow(Videos,%s)' % plugin_path)
 		os.remove(RESTART_FILE)
 
-
 while not xbmc.abortRequested:
 	addon_path = xbmc.getInfoLabel('Container.FolderPath')
 	if 'plugin.hyper.launcher' in addon_path:
 		if not '&mode=artwork&' in addon_path:
 			idle_time = xbmc.getGlobalIdleTime()
 	#		print('idle', idle_time)
-			if bg_video_wait_time != 0:
-				if idle_time > bg_video_wait_time:
-					if not xbmc.Player().isPlayingVideo():
-						xbmc.Player().play(item=xbmc.getInfoLabel('ListItem.Trailer'), windowed=1)
-				else:
-					if xbmc.Player().isPlayingVideo():
-						xbmc.Player().stop()
+			if xbmc.getCondVisibility('Window.IsActive(busydialog)') != 1:
+				if not os.path.exists(SUPRESS_VIDEO_FILE):
+					if bg_video_wait_time != 0:
+						if idle_time > bg_video_wait_time:
+							if not xbmc.Player().isPlayingVideo():
+								xbmc.Player().play(item=xbmc.getInfoLabel('ListItem.Trailer'), windowed=1)
+						else:
+							if xbmc.Player().isPlayingVideo():
+								xbmc.Player().stop()
 			if attract_wait_time != 0:
 				if idle_time > attract_wait_time:
 					total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
