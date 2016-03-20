@@ -22,18 +22,15 @@ if relaunch_previous_view == 'true':
 while not xbmc.abortRequested:
 	addon_path = xbmc.getInfoLabel('Container.FolderPath')
 	if 'plugin.hyper.launcher' in addon_path:
-		if not '&mode=artwork&' in addon_path:
+		if not any(('&mode=artwork&' in addon_path, xbmc.translatePath('special://temp/plugin.hyper.launcher') in addon_path, xbmc.getCondVisibility('Window.IsActive(contextmenu)'), xbmc.getCondVisibility('Window.IsActive(busydialog)'), os.path.exists(SUPRESS_VIDEO_FILE))):
 			idle_time = xbmc.getGlobalIdleTime()
-	#		print('idle', idle_time)
-			if xbmc.getCondVisibility('Window.IsActive(busydialog)') != 1:
-				if not os.path.exists(SUPRESS_VIDEO_FILE):
-					if bg_video_wait_time != 0:
-						if idle_time > bg_video_wait_time:
-							if not xbmc.Player().isPlayingVideo():
-								xbmc.Player().play(item=xbmc.getInfoLabel('ListItem.Trailer'), windowed=1)
-						else:
-							if xbmc.Player().isPlayingVideo():
-								xbmc.Player().stop()
+			if bg_video_wait_time != 0:
+				if idle_time > bg_video_wait_time:
+					if not xbmc.Player().isPlayingVideo():
+						xbmc.Player().play(item=xbmc.getInfoLabel('ListItem.Trailer'), windowed=1)
+				else:
+					if xbmc.Player().isPlayingVideo():
+						xbmc.Player().stop()
 			if attract_wait_time != 0:
 				if idle_time > attract_wait_time:
 					total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
@@ -51,4 +48,5 @@ while not xbmc.abortRequested:
 							xbmc.Player().stop()
 						xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
 						xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, random_list_item))
-	xbmc.sleep(500)
+	#print('addon_path', addon_path)
+	xbmc.sleep(250)
