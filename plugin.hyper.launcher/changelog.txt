@@ -1,3 +1,9 @@
+1.3.0
+Prevent double searches
+Option to enable threading on 'all systems' searches. Speeds searches up considerably. On by default.
+Poster art for systems.
+Option to use Ghostscript to view PDF's. Much better compatibility and integration, but needs a external program, can be slower and is not available on all platforms (Android). Addon still works with plugin.image.pdfreader. Configure preferences via the addons settings.
+
 1.2.0
 Remove threading - was causing random errors on my system. dont think it made any difference anyway.
 Prevent trailer playback in certain scenarios
