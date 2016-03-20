@@ -486,13 +486,14 @@ elif mode[0] == 'artwork_display':
 		xbmc.executebuiltin("ActivateWindow(busydialog)")
 		temp_directory = xbmc.translatePath('special://temp/%s/%s' % (scriptid, game_name))
 		output_file = '%s/%%03d.jpg' % (temp_directory)
-		log(temp_directory, False)
+		log_message = 'Temp directory: %s' % temp_directory
+		log(log_message, False)
 		if all ((ghostscriptUse == 'true', os.path.isfile(ghostscriptPath))):
 			if os.path.exists(xbmc.translatePath('special://temp/%s' % scriptid)):
 				log('Temp PDF dir exists, deleteing', False)
 				shutil.rmtree(xbmc.translatePath('special://temp/%s' % scriptid))
 			os.makedirs(temp_directory)
-			cmd = '"%s" -sDEVICE=jpeg -dNumRenderingThreads=4 -dNOGC -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, artwork) #, artwork,   #HI%03d.jpg Hi-Octane\ -\ The\ Track\ Fights\ Back\!\ \(USA\)\ \(En\,Fr\,De\,Es\).pdf 
+			cmd = '"%s" -sDEVICE=jpeg -dNumRenderingThreads=4 -dNOGC -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, artwork)
 			log_message = 'Ghostscript command: %s' % cmd
 			log(log_message, False)
 			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
@@ -500,8 +501,8 @@ elif mode[0] == 'artwork_display':
 				xbmc.sleep(500)
 				proc_h.poll()
 			del proc_h
-			xbmc.executebuiltin("ActivateWindow(Pictures,%s,return)" %  temp_directory)
-			xbmc.executebuiltin("Container.SetViewMode(%s)" % defaultImageView)
+			xbmc.executebuiltin('ActivateWindow(Pictures,"%s",return)' %  temp_directory)
+			xbmc.executebuiltin('Container.SetViewMode(%s)' % defaultImageView)
 		elif all ((os.path.exists(xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')), pluginPdfReaderUse == 'true')):
 			addon_pdf = xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')
 			sys.path.append(addon_pdf)
