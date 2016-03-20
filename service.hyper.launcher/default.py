@@ -21,7 +21,7 @@ if relaunch_previous_view == 'true':
 
 while not xbmc.abortRequested:
 	addon_path = xbmc.getInfoLabel('Container.FolderPath')
-	if 'plugin.hyper.launcher' in addon_path:
+	if 'plugin.hyper.launcher' in addon_path and xbmc.getInfoLabel('System.CurrentWindow') == 'Videos':
 		if not any(('&mode=artwork&' in addon_path, xbmc.translatePath('special://temp/plugin.hyper.launcher') in addon_path, xbmc.getCondVisibility('Window.IsActive(contextmenu)'), xbmc.getCondVisibility('Window.IsActive(busydialog)'), os.path.exists(SUPRESS_VIDEO_FILE))):
 			idle_time = xbmc.getGlobalIdleTime()
 			if bg_video_wait_time != 0:
