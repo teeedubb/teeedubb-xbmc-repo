@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="50000">
-		<setting id="BlankSearch" label="50050" type="bool" default="false"/>
 		<setting id="SuspendAudio" label="50051" type="bool" default="false"/>
 		<setting id="BackgroundKodi" label="50052" type="bool" default="false"/>
+	</category>
+	<category label="50010">
+		<setting id="GhostscriptUse" label="50011" type="bool" default="false"/>
+		<setting id="GhostscriptPath" label="50012" type="executable" default="c:\Program Files\gs\gs9.18\bin\gswin64c.exe" enable="eq(-1,true)"/>
+		<setting id="GhostscriptDpi" label="50013" type="number" default="150" enable="eq(-2,true)"/>
+		<setting id="DefaultImageView" label="50014" type="number" default="500" enable="eq(-3,true)"/>
+	    <setting type="sep"/>
+		<setting id="PluginPdfReaderUse" label="50015" type="bool" default="false"/>
+	</category>
+	<category label="50020">
+		<setting id="BlankSearch" label="50021" type="bool" default="false"/>
+		<setting id="SearchThreading" label="50022" type="bool" default="true"/>
+		<setting id="DefaultSearchView" label="50023" type="number" default="501"/>
 	</category>
 </settings>

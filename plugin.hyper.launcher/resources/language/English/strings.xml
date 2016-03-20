@@ -6,6 +6,20 @@
     <string id="50051">Suspend audio when launching ROM</string>
     <string id="50052">Will Kodi stay running in background</string>
 
+    <!-- Additional software -->
+    <string id="50010">Additional software</string>   
+    <string id="50011">Use Ghostscript</string>   
+    <string id="50012">Ghostscript executable location</string>
+    <string id="50013">Ghostscript DPI</string>
+    <string id="50014">Default PDF view</string>
+    <string id="50015">Use plugin.image.pdfreader</string>   
+
+    <!-- Search Settings -->
+    <string id="50020">Search</string>   
+    <string id="50021">Allow blank searches</string>   
+    <string id="50022">Use threading when searching all systems</string>
+    <string id="50023">Default search results view</string>
+    
     <!-- Log/notification messages -->
     <string id="50100">Blank searches disabled, enable in the addon settings</string>
     <string id="50101">Blank searches disabled</string>
@@ -14,8 +28,8 @@
     <string id="50104">Attempted command is:</string>
     <string id="50105">Required config parameter missing</string>
     <string id="50106">Reading file</string>
-    <string id="50107">not found, is plugin.image.pdfreader installed?</string>
-    <string id="50108">Is plugin.image.pdfreader installed?</string>
+    <string id="50107">Additional software required to view PDF's</string>
+    <string id="50108"></string>
     <string id="50109">Directory does not exist</string>
     <string id="50110">No selected game</string>
     <string id="50111">Audio suspended</string>

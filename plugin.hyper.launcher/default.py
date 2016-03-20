@@ -11,6 +11,8 @@ import os
 import subprocess
 import glob
 import random
+import shutil
+import threading
 import xml.etree.ElementTree as ET
 
 #set text encoding.... ugh...
@@ -31,6 +33,13 @@ dialog = xbmcgui.Dialog()
 language = addon.getLocalizedString
 suspendAudio = addon.getSetting("SuspendAudio")
 backgroundKodi = addon.getSetting("BackgroundKodi")
+searchThreading = addon.getSetting("SearchThreading")
+defaultSearchView = int(addon.getSetting("DefaultSearchView"))
+defaultImageView = int(addon.getSetting("DefaultImageView"))
+ghostscriptDpi = int(addon.getSetting("GhostscriptDpi"))
+ghostscriptPath = addon.getSetting("GhostscriptPath")
+ghostscriptUse = addon.getSetting("GhostscriptUse")
+pluginPdfReaderUse = addon.getSetting("PluginPdfReaderUse")
 
 #addon paths
 SYSTEMS_PATH = os.path.join(addonDataPath, 'systems')
@@ -256,7 +265,7 @@ def emulator_launcher():
 			if backgroundKodi == 'true':
 				proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
 				while proc_h.returncode is None:
-					xbmc.sleep(1000)
+					xbmc.sleep(500)
 					proc_h.poll()
 				del proc_h		
 			else:
@@ -275,7 +284,6 @@ def search(system, search_string):
 	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system))
 	root = tree.getroot()
-	prevent_video_playback('start')
 	for game in root.findall('game'):
 		game_description = game.find('description').text
 		if search_string != False:
@@ -283,9 +291,8 @@ def search(system, search_string):
 				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
 		else:
 			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
-	prevent_video_playback('stop')
 	
-def artwork_list_create(game_file_name, artwork_base_path):
+def artwork_list_create(game_file_name, artwork_base_path, game_name):
 	prevent_video_playback('start')
 	for folder in os.listdir(artwork_base_path):
 		artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none', 'all')
@@ -308,15 +315,18 @@ def artwork_list_create(game_file_name, artwork_base_path):
 				li = xbmcgui.ListItem(folder, iconImage=os.path.join(addonPath, 'resources', 'media', 'music-artwork-icon.png'))
 			else:
 				li = xbmcgui.ListItem(folder, iconImage=artwork)
-			url = build_url({ 'mode': 'artwork_display', 'artwork': artwork, 'artwork_type': artwork_type })
+			artworkname = game_file_name + '.' + folder
+			url = build_url({ 'mode': 'artwork_display', 'artwork': artwork, 'artwork_type': artwork_type, 'game_name': artworkname})
 			if artwork_type in ('video', 'audio'):
 				li.setProperty('IsPlayable', 'true')
 				url = artwork
-				folder = False
+				isfolder = False
+			elif artwork_type in ('pdf'):
+				isfolder = False
 			else:
 				li.setProperty('IsPlayable', 'false')
-				folder = True
-			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, folder)])
+				isfolder = True
+			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, isfolder)])
 	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 	prevent_video_playback('stop')
 
@@ -357,7 +367,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		if context_mode != 'context_two':
 			contextMenuItems.append((language(50208), 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'system_name': system_name}) ,))
 		if artwork_base_path:
-			contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
+			contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 		contextMenuItems.append((language(50210), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
 		li.addContextMenuItems(contextMenuItems)
@@ -389,12 +399,13 @@ if mode is None:
 				else:
 					description = ''
 			system_icon = get_game_art(system_name + '-icon', SYSTEMS_PATH, 'none', 'image')
+			system_poster = get_game_art(system_name + '-poster', SYSTEMS_PATH, 'none', 'image')
 			system_logo = get_game_art(system_name + '-logo', SYSTEMS_PATH, 'none', 'image')
 			system_fanart = get_game_art(system_name + '-fanart', SYSTEMS_PATH, 'none', 'image')
 			system_trailer = get_game_art(system_name + '-trailer', SYSTEMS_PATH, 'none', 'video')
 			url = build_url({'mode': 'folder', 'foldername': system_name})
 			li = xbmcgui.ListItem(system_name, iconImage=system_icon)
-			li.setArt({ 'thumb': system_icon, 'fanart': system_fanart, 'clearlogo': system_logo })
+			li.setArt({ 'thumb': system_icon, 'fanart': system_fanart, 'clearlogo': system_logo, 'poster': system_poster })
 			li.setInfo( 'video', { "Title": system_name, "Trailer": system_trailer, 'Year': release_year, 'Director': manufacturer, 'Plot': description } )
 			li.setProperty('IsPlayable', 'false')
 			contextMenuItems = []
@@ -431,49 +442,79 @@ elif mode[0] == 'file':
 elif mode[0] == 'search_input':
 	prevent_video_playback('start')
 	search_string = dialog.input(language(50207), type=xbmcgui.INPUT_ALPHANUM)
-	url = build_url({'mode': 'search', 'system_name': ''.join(args.get('system_name')), 'search_string': search_string})
 	if len(search_string) == 0:
 		if addon.getSetting("BlankSearch") == 'false':
 			log(language(50100), language(50101))
 			sys.exit()
-	xbmc.executebuiltin('Container.Update(%s, refresh)' % url)
-	prevent_video_playback('stop')
-	
-elif mode[0] == 'search':
-	prevent_video_playback('start')
-	if args.get('search_string'):
-		search_string = ''.join(args.get('search_string'))
-	else:
+	if not search_string:
 		search_string = False
 	if ''.join(args.get('system_name')) == 'all':
-		for system in os.listdir(SYSTEMS_PATH):
-			if system.endswith('.xml'):
-				search(system, search_string)
+		if searchThreading == 'true':
+			log('Using threading for all systems search', False)
+			thread_list = []
+			for system in os.listdir(SYSTEMS_PATH):
+				if system.endswith('.xml'):
+					t = threading.Thread(target=search, args=(system, search_string))
+					thread_list.append(t)
+			for thread in thread_list:
+				thread.start()
+			for thread in thread_list:
+				thread.join()
+		else:
+			log('Not using threading for all systems search', False)
+			for system in os.listdir(SYSTEMS_PATH):
+				if system.endswith('.xml'):
+					search(system, search_string)
 	else:
+		log('Single system search', False)
 		system = ''.join(args.get('system_name')) + '.xml'
 		search(system, search_string)
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
+	xbmc.executebuiltin("Container.SetViewMode(%s)" % defaultSearchView)
 	prevent_video_playback('stop')
 	
 elif mode[0] == 'artwork':
 	game_file_name = ''.join(args.get('game_file_name'))
+	game_name = ''.join(args.get('game_name'))
 	artwork_base_path = ''.join(args.get('artwork_base_path'))
-	artwork_list_create(game_file_name, artwork_base_path)
+	artwork_list_create(game_file_name, artwork_base_path, game_name)
 
 elif mode[0] == 'artwork_display':
-	if ''.join(args.get('artwork_type')) == 'image':
-		xbmc.executebuiltin('ShowPicture("%s")' % (''.join(args.get('artwork'))))
+	artwork = ''.join(args.get('artwork'))
+	game_name = ''.join(args.get('game_name'))
 	if ''.join(args.get('artwork_type')) == 'pdf':
-		if not os.path.exists(xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')):
-			log_message = 'special://home/addons/plugin.image.pdfreader/resources/lib ' + language(50107)
-			log(log_message, language(50108))
-			sys.exit()
-		addon_pdf = xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')
-		sys.path.append(addon_pdf)
-		from pdf import pdf
-		pdf = pdf()
-		pdf.clean_temp()
-		pdf.pdf_read(''.join(args.get('artwork')).encode(txt_encode), ''.join(args.get('artwork')).encode(txt_encode), 'true')
+		xbmc.executebuiltin("ActivateWindow(busydialog)")
+		temp_directory = xbmc.translatePath('special://temp/%s/%s' % (scriptid, game_name))
+		output_file = '%s/%%03d.jpg' % (temp_directory)
+		log(temp_directory, False)
+		if all ((ghostscriptUse == 'true', os.path.isfile(ghostscriptPath))):
+			if os.path.exists(xbmc.translatePath('special://temp/%s' % scriptid)):
+				log('Temp PDF dir exists, deleteing', False)
+				shutil.rmtree(xbmc.translatePath('special://temp/%s' % scriptid))
+			os.makedirs(temp_directory)
+			cmd = '"%s" -sDEVICE=jpeg -dNumRenderingThreads=4 -dNOGC -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, artwork) #, artwork,   #HI%03d.jpg Hi-Octane\ -\ The\ Track\ Fights\ Back\!\ \(USA\)\ \(En\,Fr\,De\,Es\).pdf 
+			log_message = 'Ghostscript command: %s' % cmd
+			log(log_message, False)
+			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
+			while proc_h.returncode is None:
+				xbmc.sleep(500)
+				proc_h.poll()
+			del proc_h
+			xbmc.executebuiltin("ActivateWindow(Pictures,%s,return)" %  temp_directory)
+			xbmc.executebuiltin("Container.SetViewMode(%s)" % defaultImageView)
+		elif all ((os.path.exists(xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')), pluginPdfReaderUse == 'true')):
+			addon_pdf = xbmc.translatePath('special://home/addons/plugin.image.pdfreader/resources/lib')
+			sys.path.append(addon_pdf)
+			from pdf import pdf
+			pdf = pdf()
+			pdf.clean_temp()
+			log('Using plugin.image.pdfreader', False)
+			pdf.pdf_read(''.join(args.get('artwork')).encode(txt_encode), ''.join(args.get('artwork')).encode(txt_encode), 'true')
+		else:
+			log(language(50107), language(50107))
+		xbmc.executebuiltin("Dialog.Close(busydialog)")
+	elif ''.join(args.get('artwork_type')) == 'image':
+		xbmc.executebuiltin('ShowPicture("%s")' % (''.join(args.get('artwork'))))
 		
 elif mode[0] == 'random_focus':
 	total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))
