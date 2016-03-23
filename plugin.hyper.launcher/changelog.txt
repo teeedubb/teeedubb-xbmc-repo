@@ -1,3 +1,13 @@
+1.4.0
+Add option to display a 'All Games' main menu item.
+Add artwork for 'All Games'.
+Removed ability to perform blank searches.
+System artwork moved to 'systems_artwork/SYSTEM NAME'. Naming for files remains the same.
+Added option to create new artwork directories and move artwork to 'systems_artwork/SYSTEM NAME' based on systems xml's in 'systems' directory.
+System artwork displayed via a list and any additional artwork in
+systems_artwork/SYSTEM NAME folder will be displayed in the list (eg pdf manuals, video adverts etc).
+Use Container.Move instead of SetFocus which fixes random game selection.
+
 1.3.0
 Prevent double searches
 Option to enable threading on 'all systems' searches. Speeds searches up considerably. On by default.
