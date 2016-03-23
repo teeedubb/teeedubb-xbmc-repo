@@ -22,7 +22,7 @@ if relaunch_previous_view == 'true':
 while not xbmc.abortRequested:
 	addon_path = xbmc.getInfoLabel('Container.FolderPath')
 	if 'plugin.hyper.launcher' in addon_path and xbmc.getInfoLabel('System.CurrentWindow') == 'Videos':
-		if not any(('&mode=artwork&' in addon_path, xbmc.translatePath('special://temp/plugin.hyper.launcher') in addon_path, xbmc.getCondVisibility('Window.IsActive(contextmenu)'), xbmc.getCondVisibility('Window.IsActive(busydialog)'), os.path.exists(SUPRESS_VIDEO_FILE))):
+		if not any(('&mode=artwork&' in addon_path, xbmc.translatePath('special://temp/plugin.hyper.launcher') in addon_path, os.path.exists(SUPRESS_VIDEO_FILE))):
 			idle_time = xbmc.getGlobalIdleTime()
 			if bg_video_wait_time != 0:
 				if idle_time > bg_video_wait_time:
@@ -38,15 +38,20 @@ while not xbmc.abortRequested:
 					win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
 					cid = win.getFocusId()
 					random_pool = range(1, current_selection) + range(current_selection + 1, total_list_items + 1)
-	#				print('tli', total_list_items)
-	#				print('cli', current_selection)
-	#				print('rpoo', random_pool)
+#					print('tli', total_list_items)
+#					print('cli', current_selection)
+#					print('rpoo', random_pool)
 					if len(random_pool) > 0:
-						random_list_item = random.choice(random_pool)
-	#					print('rli', random_list_item)
+						random_listi = random.choice(random_pool)
+						random_list_item = (random_listi - current_selection)
+#						print('rli', random_list_item)
+#						print('cid + rlii', cid, int(random_listi))
+						xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, 1))
+						xbmc.executebuiltin('Control.Move(%s, %s)' % (cid, random_list_item))
 						if xbmc.Player().isPlayingVideo():
 							xbmc.Player().stop()
-						xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
-						xbmc.executebuiltin('SetFocus(%s, %s)' % (cid, random_list_item))
-	#print('addon_path', addon_path)
+					xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
+#	print('addon_path', addon_path)
 	xbmc.sleep(250)
+#	print('cli2', xbmc.getInfoLabel('Container(id).CurrentItem'))
+
