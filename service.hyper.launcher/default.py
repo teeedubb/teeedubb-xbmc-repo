@@ -39,7 +39,7 @@ while not xbmc.abortRequested:
 					cid = win.getFocusId()
 					random_pool = range(1, current_selection) + range(current_selection + 1, total_list_items + 1)
 #					print('tli', total_list_items)
-#					print('cli', current_selection)
+#					print('cli', current_selection, xbmc.getInfoLabel('ListItem.Title'))
 #					print('rpoo', random_pool)
 					if len(random_pool) > 0:
 						random_listi = random.choice(random_pool)
@@ -53,5 +53,5 @@ while not xbmc.abortRequested:
 					xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Input.ExecuteAction", "params": { "action": "noop"} }')
 #	print('addon_path', addon_path)
 	xbmc.sleep(250)
-#	print('cli2', xbmc.getInfoLabel('Container(id).CurrentItem'))
+#	print('cli2', xbmc.getInfoLabel('Container(id).CurrentItem'), xbmc.getInfoLabel('ListItem.Title'))
 
