@@ -44,6 +44,7 @@ ghostscriptUse = addon.getSetting("GhostscriptUse")
 pluginPdfReaderUse = addon.getSetting("PluginPdfReaderUse")
 showAllGames = addon.getSetting("ShowAllGames")
 createSystemArtworkFolder = addon.getSetting("CreateSystemArtworkFolder")
+additionalLogging = addon.getSetting("AdditionalLogging")
 
 #addon paths
 SYSTEMS_PATH = os.path.join(addonDataPath, 'systems')
@@ -91,6 +92,10 @@ def log(msg, notification_msg):
 	if 	notification_msg:
 		dialog.notification(language(50103), notification_msg, addonIcon, 10000)
 
+def vlog(msg):
+	if additionalLogging == 'true':
+		xbmc.log('%s: %s' % (scriptid + '.verbose.log', msg))
+
 def prevent_video_playback(option):
 	if option == 'start':
 		if not os.path.exists(SUPRESS_VIDEO_FILE):
@@ -125,12 +130,14 @@ def get_game_art(game_file_name, path, fallback_path, type):
 	else:
 		fanart_file_types = ('.png', '.jpg', '.mp4', '.mp3', '.pdf', '.ico', '.flv', '.avi')
 	for fanart_file_type in fanart_file_types:
-		artwork = os.path.join(path, game_file_name + fanart_file_type) 
+		artwork = os.path.join(path, game_file_name + fanart_file_type)
 		if os.path.isfile(artwork):
 			fanart = artwork
 		if fanart != 'false':
-#			log('break time', False)
+			vlog('Found artwork, breaking')
 			break
+	vlog('Artwork:')
+	vlog(fanart)
 	return fanart
 	
 def get_system_info(system_config):
@@ -157,6 +164,8 @@ def get_system_info(system_config):
 			d1[o2] = 'false'
 			if item.find(i2).text != None:
 				if os.path.exists(item.find(i2).text):
+					log('Path exists:', False)
+					log(item.find(i2).text, False)
 					d1[o2] = item.find(i2).text
 	return (d1['rom_path'], d1['rom_extensions'], d1['launcher_script'], d1['artwork_base_path'], d1['icon_path'], d1['icon_fallback_path'], d1['fanart_path'], d1['fanart_fallback_path'], d1['poster_path'], d1['thumb_path'], d1['logo_path'], d1['clearart_path'], d1['banner_path'], d1['media_path'], d1['trailer_path'])
 	
@@ -225,11 +234,11 @@ def emulator_launcher():
 			launcher_script_command = os.path.join(LAUNCHER_SCRIPTS, launcher_script)
 			file_check(launcher_script_command, launcher_script_command)
 			cmd = '"%s" "%s" "%s" "%s" "%s" "%s"' % (launcher_script_command, ''.join(args.get('foldername')), selected_game, rom_full_path, rom_file, rom_extension)
-			log(language(50104), False)
+			log('Attempted command is:', False)
 			log(cmd, False)
 			if suspendAudio == 'true':
 				xbmc.audioSuspend()
-				log(language(50111), False)
+				log('Suspending Kodi audio', False)
 			if backgroundKodi == 'true':
 				proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
 				while proc_h.returncode is None:
@@ -241,7 +250,7 @@ def emulator_launcher():
 			prevent_video_playback('stop')
 			xbmc.audioResume()
 	else:
-		log(language(50110), language(50110))
+		log('No selected game', language(50110))
 
 def search(system, search_string):
 	system_name = system[:-4]
@@ -320,26 +329,24 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		if game.find(i1).text:
 			d1[l1] = game.find(i1).text
 	input2 = [icon_path, fanart_path, thumb_path, poster_path, logo_path, clearart_path, banner_path, media_path, trailer_path]
-	label2 = ['thumb', 'fanart', 'thumb', 'poster', 'clearlogo', 'clearart', 'banner', 'discart', 'Trailer']
+	label2 = ['thumb', 'fanart', 'thumb', 'poster', 'clearlogo', 'clearart', 'banner', 'discart', 'trailer']
 	d2 = {}
 	for i2, l2 in izip(input2, label2):
 		f2 = False
 		if i2 != 'false':
-			log('Checking for art', False)
-			if i2 == 'trailer_path':
+			vlog('Path exists, checking for art')
+			if i2 and l2 == 'trailer':
 				f2 = get_game_art(game_file_name, i2, 'none', 'video')
 			else:
 				f2 = get_game_art(game_file_name, i2, 'none', 'image')
-		if f2:
-			if i2 == 'trailer_path':
+		else:
+			vlog('Path does not exist for artwork type:')
+			vlog(l2)
+		if f2 != 'false':
+			if i2 and l2 == 'trailer':
 				d1[l2] = f2
 			else:
 				d2[l2] = f2
-#			log_message = 'Found art type: "%s" : "%s" for game "%s" on "%s"' % (lble2, foput2, game_name, system_name)
-#			log(log_message, False)
-#		else:
-#			log_message = 'Art type: "%s" not found for game "%s" on "%s"' % (lble2, game_name, system_name)
-#			log(log_message, False)
 	d1.update({ 'Title': game_name, 'OriginalTitle': game_file_name, 'plot': system_name, 'launcher_script': launcher_script })
 	li.setArt(d2)
 	li.setInfo('video', d1)			
@@ -356,6 +363,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
 
 prevent_video_playback('stop')
+
 if createSystemArtworkFolder == 'true':
 	if not os.path.exists(system_artwork_path):
 		os.makedirs(system_artwork_path)
@@ -395,7 +403,6 @@ if mode is None:
 					d1[sao] = game_art
 				else:
 					d2[sao] = game_art
-			log(d2, False)
 			d1.update({ "Title": system_name })
 			li.setArt(d2)
 			li.setInfo('video', d1)			
@@ -553,3 +560,9 @@ elif mode[0] == 'select_launcher':
 	else:
 		log_message = 'Directory does not exist: ' + LAUNCHER_SCRIPTS
 		log(log_message, language(50109))
+
+elif mode[0] == 'hls_settings':
+	if os.path.exists(xbmc.translatePath('special://home/addons/service.hyper.launcher')):
+		xbmc.executebuiltin('Addon.OpenSettings(service.hyper.launcher)')
+	else:
+		log('service.hyper.launcher not installed', language(50203))

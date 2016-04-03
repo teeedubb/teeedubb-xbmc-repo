@@ -5,7 +5,7 @@
 		<setting id="BackgroundKodi" label="50052" type="bool" default="false"/>
 		<setting id="ShowAllGames" label="50021" type="bool" default="false"/>
 		<setting id="CreateSystemArtworkFolder" label="50053" type="bool" default="True"/>
-
+		<setting id="AdditionalLogging" label="50108" type="bool" default="false"/>
 	</category>
 	<category label="50010">
 		<setting label="Ghostscript" type="lsep"/>
@@ -20,8 +20,8 @@
 		<setting id="SearchThreading" label="50022" type="bool" default="true"/>
 		<setting id="DefaultSearchView" label="50023" type="number" default="501"/>
 	</category>
-	<category label="hlservice_settings">
-		<setting id="hlservice_settings" type="action" label="hlservice_settings" option="close" action="Addon.OpenSettings(service.hyper.launcher)"/> 
+	<category label="50030">
+		<setting id="hlservice_settings" type="action" label="50030" option="close" action="RunPlugin(plugin://plugin.hyper.launcher/?mode=hls_settings)"/> 
 	</category>	
 
 </settings>
