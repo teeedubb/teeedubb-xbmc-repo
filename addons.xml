@@ -40,7 +40,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.4.0" provider-name="teeedubb">
+<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.5.0" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
