@@ -162,11 +162,10 @@ def get_system_info(system_config):
 	for item in root.findall('artwork'):
 		for i2,o2 in izip(input2, output2):
 			d1[o2] = 'false'
-			if item.find(i2).text != None:
-				if os.path.exists(item.find(i2).text):
-					log('Path exists:', False)
-					log(item.find(i2).text, False)
-					d1[o2] = item.find(i2).text
+			if item.find(i2).text != None and os.path.exists(item.find(i2).text):
+				log('Path exists:', False)
+				log(item.find(i2).text, False)
+				d1[o2] = item.find(i2).text
 	return (d1['rom_path'], d1['rom_extensions'], d1['launcher_script'], d1['artwork_base_path'], d1['icon_path'], d1['icon_fallback_path'], d1['fanart_path'], d1['fanart_fallback_path'], d1['poster_path'], d1['thumb_path'], d1['logo_path'], d1['clearart_path'], d1['banner_path'], d1['media_path'], d1['trailer_path'])
 	
 def emulator_launcher():
@@ -319,6 +318,8 @@ def artwork_list_create(game_file_name, artwork_base_path, game_name):
 	prevent_video_playback('stop')
 
 def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
+	if game.find('enabled') != None and game.find('enabled').text != 'Yes':
+		return
 	game_name = game.find('description').text
 	game_file_name = game.attrib['name']
 	li = xbmcgui.ListItem('%s' % game_name)
@@ -326,7 +327,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	label1 = ['Year', 'Studio', 'Director', 'Mpaa', 'Genre']
 	d1 = {}
 	for i1,l1 in izip(input1, label1):
-		if game.find(i1).text:
+		if game.find(i1) != None and game.find(i1).text:
 			d1[l1] = game.find(i1).text
 	input2 = [icon_path, fanart_path, thumb_path, poster_path, logo_path, clearart_path, banner_path, media_path, trailer_path]
 	label2 = ['thumb', 'fanart', 'thumb', 'poster', 'clearlogo', 'clearart', 'banner', 'discart', 'trailer']
