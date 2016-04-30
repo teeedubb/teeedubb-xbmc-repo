@@ -314,7 +314,7 @@ def artwork_list_create(game_file_name, artwork_base_path, game_name):
 			artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none', 'all')
 			if artwork:
 				artwork_list_find(artwork, folder, game_file_name)
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	xbmcplugin.endOfDirectory(addon_handle)
 	prevent_video_playback('stop')
 
 def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
@@ -360,9 +360,8 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 		contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
 	contextMenuItems.append((language(50210), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 	contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
-	li.addContextMenuItems(contextMenuItems)
-	xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
-
+	li.addContextMenuItems(contextMenuItems)	
+	listing.append((url, li, True))
 prevent_video_playback('stop')
 
 if createSystemArtworkFolder == 'true':
@@ -378,6 +377,7 @@ if createSystemArtworkFolder == 'true':
 
 if mode is None:
 	showAllGamesTrailers = []
+	listing = []
 	for system in os.listdir(SYSTEMS_PATH):
 		if system.endswith(".xml"):
 			system_name = system[:-4]
@@ -417,7 +417,7 @@ if mode is None:
 			if os.path.exists(system_artwork_path):
 				contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': system_name, 'game_file_name': system, 'artwork_base_path': system_artwork_path}) ,))
 			li.addContextMenuItems(contextMenuItems)
-			xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
+			listing.append((url, li, True))
 	if showAllGames == 'true':
 		log('Show all games enabled', False)
 		if showAllGamesTrailers:
@@ -435,8 +435,9 @@ if mode is None:
 		contextMenuItems.append((language(50201), 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'foldername': 'none', 'system_name': 'all'}) ,))
 		contextMenuItems.append((language(50202), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 		li.addContextMenuItems(contextMenuItems)		
-		xbmcplugin.addDirectoryItems(addon_handle, [(url, li, True)])
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+		listing.append((url, li, True))
+	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
+	xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'folder':
 	prevent_video_playback('start')
@@ -446,9 +447,11 @@ elif mode[0] == 'folder':
 	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system_game_list))
 	root = tree.getroot()
+	listing = []
 	for game in root.findall('game'):
 		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
+	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
+	xbmcplugin.endOfDirectory(addon_handle)
 	prevent_video_playback('stop')
 	log('Folder loaded:', False)
 	log(system_game_list, False)
@@ -458,6 +461,7 @@ elif mode[0] == 'file':
 
 elif mode[0] == 'search_input':
 	prevent_video_playback('start')
+	listing = []
 	search_string = False
 	all_games_list = ''.join(args.get('foldername'))
 	all_systems = ''.join(args.get('system_name'))
@@ -487,8 +491,10 @@ elif mode[0] == 'search_input':
 		log('Single system search', False)
 		system = ''.join(args.get('system_name')) + '.xml'
 		search(system, search_string)
+	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
+
 	xbmc.executebuiltin("Container.SetViewMode(%s)" % defaultSearchView)
-	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=True)
+	xbmcplugin.endOfDirectory(addon_handle)
 	prevent_video_playback('stop')
 	
 elif mode[0] == 'artwork':
