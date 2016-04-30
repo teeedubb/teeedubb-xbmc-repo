@@ -323,8 +323,8 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	game_name = game.find('description').text
 	game_file_name = game.attrib['name']
 	li = xbmcgui.ListItem('%s' % game_name)
-	input1 = ['year', 'manufacturer', 'manufacturer', 'rating', 'genre']
-	label1 = ['Year', 'Studio', 'Director', 'Mpaa', 'Genre']
+	input1 = ['year', 'dev', 'manufacturer', 'rating', 'genre', 'score', 'story', 'player']
+	label1 = ['Year', 'Studio', 'Director', 'Mpaa', 'Genre', 'Rating', 'Plot', 'Players']
 	d1 = {}
 	for i1,l1 in izip(input1, label1):
 		if game.find(i1) != None and game.find(i1).text:
@@ -348,7 +348,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 				d1[l2] = f2
 			else:
 				d2[l2] = f2
-	d1.update({ 'Title': game_name, 'OriginalTitle': game_file_name, 'plot': system_name, 'launcher_script': launcher_script })
+	d1.update({ 'Title': game_name, 'OriginalTitle': game_file_name, 'launcher_script': launcher_script })
 	li.setArt(d2)
 	li.setInfo('video', d1)			
 	url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
