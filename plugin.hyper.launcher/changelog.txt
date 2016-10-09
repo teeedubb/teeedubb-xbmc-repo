@@ -1,3 +1,11 @@
+1.5.0
+Dont attempt to use info tags that dont exist in hyperlist xmls
+Respect 'enabled' tag, if not set to 'Yes' game will not display
+Add option to view hyper launcher service settings from hyper launcher settings window
+Add option to print more logging to kodi.log
+Fix game trailers and fallback art not working.
+Clean up
+
 1.4.0
 Add option to display a 'All Games' main menu item.
 Add artwork for 'All Games'.

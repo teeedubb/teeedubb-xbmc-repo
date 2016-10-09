@@ -24,7 +24,7 @@ while not xbmc.abortRequested:
 	if 'plugin.hyper.launcher' in addon_path and xbmc.getInfoLabel('System.CurrentWindow') == 'Videos' and '&mode=artwork&' not in addon_path and xbmc.translatePath('special://temp/plugin.hyper.launcher') not in addon_path and os.path.exists(SUPRESS_VIDEO_FILE) == False:
 		idle_time = xbmc.getGlobalIdleTime()
 		if bg_video_wait_time != 0 and idle_time > bg_video_wait_time:
-			if not xbmc.Player().isPlayingVideo():
+			if xbmc.getInfoLabel('ListItem.Trailer') != 'False' and not xbmc.Player().isPlayingVideo():
 				xbmc.Player().play(item=xbmc.getInfoLabel('ListItem.Trailer'), windowed=1)
 		else:
 			if xbmc.Player().isPlayingVideo():
