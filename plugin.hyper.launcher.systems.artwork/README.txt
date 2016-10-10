@@ -20,6 +20,8 @@ Export as PNG/JPG
 Poster:
 Select 2:3 background (GIMP can use that ratio for selections)
 Scale image to 666x1000
+Convert image to grayscale then back to colour.
+Create new layer.
 Paste logo in center and strech layer to 636w.
 Export as PNG/JPG
 
