@@ -108,7 +108,7 @@ def prevent_video_playback(option):
 	elif option == 'stop':
 		if os.path.exists(SUPRESS_VIDEO_FILE):
 			try:
-				xbmc.sleep(1000)
+				xbmc.sleep(2000)
 				os.remove(SUPRESS_VIDEO_FILE)
 			except:
 				pass
@@ -157,16 +157,19 @@ def get_system_info(system_config):
 					log(log_message, language(50105))
 				else:
 					d1[i1] = 'false'
-	input2 = ['base_path', 'icon', 'icon_fallback', 'fanart', 'fanart_fallback', 'poster', 'thumb', 'logo', 'clearart', 'banner', 'media', 'trailer']
-	output2 = ['artwork_base_path', 'icon_path', 'icon_fallback_path', 'fanart_path', 'fanart_fallback_path', 'poster_path', 'thumb_path', 'logo_path', 'clearart_path', 'banner_path', 'media_path', 'trailer_path']
+	input2 = ['base_path', 'icon', 'poster', 'poster_fallback', 'fanart', 'fanart_fallback', 'thumb', 'logo', 'clearart', 'banner', 'media', 'trailer']
+	output2 = ['artwork_base_path', 'icon_path', 'poster_path', 'poster_fallback_path', 'fanart_path', 'fanart_fallback_path', 'thumb_path', 'logo_path', 'clearart_path', 'banner_path', 'media_path', 'trailer_path']
 	for item in root.findall('artwork'):
 		for i2,o2 in izip(input2, output2):
-			d1[o2] = 'false'
-			if item.find(i2).text != None and os.path.exists(item.find(i2).text):
+			log('yoyoyoyoyo', False)
+			log(item.find(i2), False)
+			if item.find(i2) != None and item.find(i2).text != None and os.path.exists(item.find(i2).text):
 				log('Path exists:', False)
 				log(item.find(i2).text, False)
 				d1[o2] = item.find(i2).text
-	return (d1['rom_path'], d1['rom_extensions'], d1['launcher_script'], d1['artwork_base_path'], d1['icon_path'], d1['icon_fallback_path'], d1['fanart_path'], d1['fanart_fallback_path'], d1['poster_path'], d1['thumb_path'], d1['logo_path'], d1['clearart_path'], d1['banner_path'], d1['media_path'], d1['trailer_path'])
+			else:
+				d1[o2] = 'false'
+	return (d1['rom_path'], d1['rom_extensions'], d1['launcher_script'], d1['artwork_base_path'], d1['icon_path'], d1['poster_path'], d1['poster_fallback_path'], d1['fanart_path'], d1['fanart_fallback_path'], d1['thumb_path'], d1['logo_path'], d1['clearart_path'], d1['banner_path'], d1['media_path'], d1['trailer_path'])
 	
 def emulator_launcher():
 	prevent_video_playback('start')
@@ -209,9 +212,10 @@ def emulator_launcher():
 				for game in item.iter('game'):
 					if selected_game in game.attrib['name']:
 						launcher_script = game.find('launcher').text
-		if not args.get('rom_extensions'):
+		if args.get('rom_extensions') == ['false']:
 			search_item = os.path.join(rom_path, selected_game + '.*')
-			rom_full_path = ''.join(glob.glob('%s' % search_item))
+			rom_full_path_list = glob.glob('%s' % search_item)
+			rom_full_path = ''.join(rom_full_path_list[0])
 		else:
 			file_types = []
 			file_types = ''.join(args.get('rom_extensions')).split(' ')
@@ -257,16 +261,16 @@ def search(system, search_string):
 	file_check(system_config, system_config)
 	log_message = 'Reading: %s' % system_config
 	log(log_message, False)
-	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
+	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system))
 	root = tree.getroot()
 	for game in root.findall('game'):
 		game_description = game.find('description').text
 		if search_string != False:
 			if search_string.lower() in game_description.lower():
-				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
+				game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
 		else:
-			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
+			game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_two')
 
 def artwork_list_find(artwork, folder, game_file_name):
 	artwork_type = 'false'
@@ -314,10 +318,10 @@ def artwork_list_create(game_file_name, artwork_base_path, game_name):
 			artwork = get_game_art(game_file_name, os.path.join(artwork_base_path, folder), 'none', 'all')
 			if artwork:
 				artwork_list_find(artwork, folder, game_file_name)
-	xbmcplugin.endOfDirectory(addon_handle)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 	prevent_video_playback('stop')
 
-def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
+def game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, context_mode):
 	if game.find('enabled') != None and game.find('enabled').text != 'Yes':
 		return
 	game_name = game.find('description').text
@@ -329,11 +333,11 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	for i1,l1 in izip(input1, label1):
 		if game.find(i1) != None and game.find(i1).text:
 			d1[l1] = game.find(i1).text
-	input2 = [icon_path, fanart_path, thumb_path, poster_path, logo_path, clearart_path, banner_path, media_path, trailer_path]
-	label2 = ['thumb', 'fanart', 'thumb', 'poster', 'clearlogo', 'clearart', 'banner', 'discart', 'trailer']
+	input2 = [icon_path, fanart_fallback_path, fanart_path, thumb_path, poster_fallback_path, poster_path, logo_path, clearart_path, banner_path, media_path, trailer_path]
+	label2 = ['icon', 'fanart', 'fanart', 'thumb', 'poster', 'poster', 'clearlogo', 'clearart', 'banner', 'discart', 'trailer']
 	d2 = {}
 	for i2, l2 in izip(input2, label2):
-		f2 = False
+		f2 = 'false'
 		if i2 != 'false':
 			vlog('Path exists, checking for art')
 			if i2 and l2 == 'trailer':
@@ -342,7 +346,6 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 				f2 = get_game_art(game_file_name, i2, 'none', 'image')
 		else:
 			vlog('Path does not exist for artwork type:')
-			vlog(l2)
 		if f2 != 'false':
 			if i2 and l2 == 'trailer':
 				d1[l2] = f2
@@ -364,16 +367,16 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	listing.append((url, li, True))
 prevent_video_playback('stop')
 
-if createSystemArtworkFolder == 'true':
+def create_system_artwork_folder():
 	if not os.path.exists(system_artwork_path):
 		os.makedirs(system_artwork_path)
-	for file in os.listdir(SYSTEMS_PATH):
-		if system_name+'-' in file:
-			if not os.path.exists(os.path.join(system_artwork_path, file)):
-				shutil.move(os.path.join(SYSTEMS_PATH, file), os.path.join(system_artwork_path, file))
+		for file in os.listdir(SYSTEMS_PATH):
+			if system_name+'-' in file:
+				if not os.path.exists(os.path.join(system_artwork_path, file)):
+					shutil.move(os.path.join(SYSTEMS_PATH, file), os.path.join(system_artwork_path, file))
+		log_message = 'Creating system artwork directory %s and moving files' % system_artwork_path
+		log(log_message, False)
 	addon.setSetting(id="CreateSystemArtworkFolder", value="false")
-	log_message = 'Creating system artwork directory %s and moving files' % system_artwork_path
-	log(log_message, False)
 
 if mode is None:
 	showAllGamesTrailers = []
@@ -383,6 +386,8 @@ if mode is None:
 			system_name = system[:-4]
 			system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
 			system_artwork_path = os.path.join(SYSTEMS_ARTWORK_PATH, system_name)
+			if createSystemArtworkFolder == 'true':
+				create_system_artwork_folder()
 			file_check(system_config, system_config)
 			tree = ET.parse(system_config)
 			root = tree.getroot()
@@ -396,7 +401,7 @@ if mode is None:
 						d1[l1] = item.find(i1).text
 			d2 = {}
 			system_art = ['icon', 'poster', 'logo', 'fanart', 'trailer']
-			system_art_out = ['thumb', 'poster', 'clearlogo', 'fanart', 'trailer']
+			system_art_out = ['icon', 'poster', 'clearlogo', 'fanart', 'trailer']
 			system_art_type = ['image', 'image', 'image', 'image', 'video' ]
 			for sa, sao, sat in izip(system_art, system_art_out, system_art_type):
 				game_art = get_game_art(system_name + '-' + sa, system_artwork_path, 'none', sat)
@@ -428,7 +433,7 @@ if mode is None:
 			system_trailer = 'false'
 			log('No trailers to choose from for all games item', False)
 		li = xbmcgui.ListItem('All Games', iconImage=os.path.join(addonPath, 'resources', 'media', 'all-games-icon.png'))
-		li.setArt({ 'thumb': os.path.join(addonPath, 'resources', 'media', 'all-games-icon.png'), 'fanart': os.path.join(addonPath, 'fanart.jpg'), 'clearlogo': os.path.join(addonPath, 'resources', 'media', 'all-games-logo.png'), 'poster': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg') })
+		li.setArt({ 'thumb': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg'), 'fanart': os.path.join(addonPath, 'fanart.jpg'), 'clearlogo': os.path.join(addonPath, 'resources', 'media', 'all-games-logo.png'), 'poster': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg') })
 		li.setInfo( 'video', { 'Title': 'All Games', 'Trailer': ''.join(system_trailer), 'Year': 'All', 'Director': 'All' } )
 		url = build_url({'mode': 'search_input', 'foldername': 'all_games_list', 'system_name': 'all'})
 		contextMenuItems = []
@@ -437,21 +442,21 @@ if mode is None:
 		li.addContextMenuItems(contextMenuItems)		
 		listing.append((url, li, True))
 	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
-	xbmcplugin.endOfDirectory(addon_handle)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 
 elif mode[0] == 'folder':
 	prevent_video_playback('start')
 	system_name = args['foldername'][0]
 	system_game_list = args['foldername'][0] + '.xml'
 	system_config = os.path.join(SYSTEMS_CONFIG_PATH, system_name + '-config.xml')
-	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
+	rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path = get_system_info(system_config)
 	tree = ET.parse(os.path.join(SYSTEMS_PATH, system_game_list))
 	root = tree.getroot()
 	listing = []
 	for game in root.findall('game'):
-		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, icon_fallback_path, fanart_path, fanart_fallback_path, poster_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
+		game_list_create(game, system_name, rom_path, rom_extensions, launcher_script, artwork_base_path, icon_path, poster_path, poster_fallback_path, fanart_path, fanart_fallback_path, thumb_path, logo_path, clearart_path, banner_path, media_path, trailer_path, 'context_one')
 	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
-	xbmcplugin.endOfDirectory(addon_handle)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 	prevent_video_playback('stop')
 	log('Folder loaded:', False)
 	log(system_game_list, False)
@@ -494,7 +499,7 @@ elif mode[0] == 'search_input':
 	xbmcplugin.addDirectoryItems(addon_handle, listing, len(listing))
 
 	xbmc.executebuiltin("Container.SetViewMode(%s)" % defaultSearchView)
-	xbmcplugin.endOfDirectory(addon_handle)
+	xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 	prevent_video_playback('stop')
 	
 elif mode[0] == 'artwork':

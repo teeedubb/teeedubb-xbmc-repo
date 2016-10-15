@@ -1,3 +1,8 @@
+2.5.2
+Fix bug when 'create artwork folders' enabled
+Fix bug when no rom file type supplied.
+Artwork - poster + icon and poster_fallback + icon_fallback swapped - system config files need to be udated. Sorry
+
 1.5.0
 Dont attempt to use info tags that dont exist in hyperlist xmls
 Respect 'enabled' tag, if not set to 'Yes' game will not display
