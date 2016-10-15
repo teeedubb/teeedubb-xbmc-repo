@@ -328,7 +328,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	game_file_name = game.attrib['name']
 	li = xbmcgui.ListItem('%s' % game_name)
 	input1 = ['year', 'dev', 'manufacturer', 'rating', 'genre', 'score', 'story', 'player']
-	label1 = ['Year', 'Studio', 'Director', 'Mpaa', 'Genre', 'Rating', 'Plot', 'Players']
+	label1 = ['Year', 'Studio', 'Director', 'Mpaa', 'Genre', 'Rating', 'Plot', 'Writer']
 	d1 = {}
 	for i1,l1 in izip(input1, label1):
 		if game.find(i1) != None and game.find(i1).text:
@@ -391,7 +391,6 @@ if mode is None:
 			file_check(system_config, system_config)
 			tree = ET.parse(system_config)
 			root = tree.getroot()
-			li = xbmcgui.ListItem(system_name)
 			input1 = ['release_year', 'manufacturer', 'manufacturer', 'description']
 			label1 = ['Year', 'Studio', 'Director', 'Plot']
 			d1 = {}
@@ -409,6 +408,7 @@ if mode is None:
 					d1[sao] = game_art
 				else:
 					d2[sao] = game_art
+			li = xbmcgui.ListItem(system_name) #, iconImage=d2['icon'])
 			d1.update({ "Title": system_name })
 			li.setArt(d2)
 			li.setInfo('video', d1)			
@@ -433,7 +433,7 @@ if mode is None:
 			system_trailer = 'false'
 			log('No trailers to choose from for all games item', False)
 		li = xbmcgui.ListItem('All Games', iconImage=os.path.join(addonPath, 'resources', 'media', 'all-games-icon.png'))
-		li.setArt({ 'thumb': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg'), 'fanart': os.path.join(addonPath, 'fanart.jpg'), 'clearlogo': os.path.join(addonPath, 'resources', 'media', 'all-games-logo.png'), 'poster': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg') })
+		li.setArt({ 'thumb': os.path.join(addonPath, 'resources', 'media', 'all-games-icon.jpg'), 'fanart': os.path.join(addonPath, 'fanart.jpg'), 'clearlogo': os.path.join(addonPath, 'resources', 'media', 'all-games-logo.png'), 'poster': os.path.join(addonPath, 'resources', 'media', 'all-games-poster.jpg') })
 		li.setInfo( 'video', { 'Title': 'All Games', 'Trailer': ''.join(system_trailer), 'Year': 'All', 'Director': 'All' } )
 		url = build_url({'mode': 'search_input', 'foldername': 'all_games_list', 'system_name': 'all'})
 		contextMenuItems = []
