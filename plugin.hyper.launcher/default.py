@@ -511,7 +511,7 @@ elif mode[0] == 'artwork_display':
 	if ''.join(args.get('artwork_type')) == 'pdf':
 		xbmc.executebuiltin("ActivateWindow(busydialog)")
 		temp_directory = xbmc.translatePath('special://temp/%s/%s' % (scriptid, ''.join(args.get('game_name'))))
-		output_file = '%s/%%03d.jpg' % (temp_directory)
+		output_file = '%s/%%03d.png' % (temp_directory)
 		log_message = 'Temp directory: %s' % temp_directory
 		log(log_message, False)
 		if ghostscriptUse == 'true' and os.path.isfile(ghostscriptPath):
@@ -519,7 +519,7 @@ elif mode[0] == 'artwork_display':
 				log('Temp PDF dir exists, deleteing', False)
 				shutil.rmtree(xbmc.translatePath('special://temp/%s' % scriptid))
 			os.makedirs(temp_directory)
-			cmd = '"%s" -sDEVICE=jpeg -dNumRenderingThreads=4 -dNOGC -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, ''.join(args.get('artwork')))
+			cmd = '"%s" -sDEVICE=png16m -dNumRenderingThreads=4 -dSAFER -dBATCH -dNOPAUSE -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, ''.join(args.get('artwork')))
 			log_message = 'Ghostscript command: %s' % cmd
 			log(log_message, False)
 			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
