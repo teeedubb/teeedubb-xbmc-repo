@@ -353,6 +353,8 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 				d2[l2] = f2
 	d1.update({ 'Title': game_name, 'OriginalTitle': game_file_name, 'launcher_script': launcher_script })
 	li.setArt(d2)
+	b_url = build_url({'mode': 'artwork', 'game_name': game_name, 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path})
+	d1['Album'] = b_url
 	li.setInfo('video', d1)			
 	url = build_url({'mode': 'file', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions})
 	li.setProperty('IsPlayable', 'false')
@@ -360,7 +362,7 @@ def game_list_create(game, system_name, rom_path, rom_extensions, launcher_scrip
 	if context_mode != 'context_two':
 		contextMenuItems.append((language(50208), 'XBMC.Container.Update(%s)' % build_url({'mode': 'search_input', 'foldername': 'none', 'system_name': system_name}) ,))
 	if artwork_base_path:
-		contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % build_url({'mode': 'artwork', 'game_name': game_name, 'game_file_name': game_file_name, 'artwork_base_path': artwork_base_path}) ,))
+		contextMenuItems.append((language(50209), 'XBMC.Container.Update(%s)' % b_url ,))
 	contextMenuItems.append((language(50210), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'random_focus'}) ,))
 	contextMenuItems.append((language(50211), 'XBMC.RunPlugin(%s)' % build_url({'mode': 'select_launcher', 'foldername': system_name, 'game_name': game_name, 'filename': game_file_name, 'rom_path': rom_path, 'launcher_script': launcher_script, 'rom_extensions': rom_extensions}) ,))
 	li.addContextMenuItems(contextMenuItems)	
