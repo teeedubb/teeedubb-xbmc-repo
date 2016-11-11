@@ -12,8 +12,11 @@
     <string id="50011">Use Ghostscript</string>   
     <string id="50012">Ghostscript executable location</string>
     <string id="50013">Ghostscript DPI</string>
+    <string id="50016">Ghostscript Down Scale Factor</string>
     <string id="50014">Default PDF view</string>
     <string id="50015">Use plugin.image.pdfreader</string>   
+    <string id="50017">Use External PDF viewer</string>
+    <string id="50018">External PDF Viewer Path</string>   
 
     <!-- Search Settings -->
     <string id="50020">Search</string>   

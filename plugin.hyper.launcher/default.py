@@ -39,9 +39,12 @@ searchThreading = addon.getSetting("SearchThreading")
 defaultSearchView = int(addon.getSetting("DefaultSearchView"))
 defaultImageView = int(addon.getSetting("DefaultImageView"))
 ghostscriptDpi = int(addon.getSetting("GhostscriptDpi"))
+ghostscriptDSF = int(addon.getSetting("GhostscriptDSF"))
 ghostscriptPath = addon.getSetting("GhostscriptPath")
 ghostscriptUse = addon.getSetting("GhostscriptUse")
 pluginPdfReaderUse = addon.getSetting("PluginPdfReaderUse")
+extPdfReaderPath = addon.getSetting("ExtPdfReaderPath")
+extPdfReaderUse = addon.getSetting("ExtPdfReaderUse")
 showAllGames = addon.getSetting("ShowAllGames")
 createSystemArtworkFolder = addon.getSetting("CreateSystemArtworkFolder")
 additionalLogging = addon.getSetting("AdditionalLogging")
@@ -512,21 +515,21 @@ elif mode[0] == 'artwork_display':
 	game_name = ''.join(args.get('game_name'))
 	if ''.join(args.get('artwork_type')) == 'pdf':
 		xbmc.executebuiltin("ActivateWindow(busydialog)")
-		temp_directory = xbmc.translatePath('special://temp/%s/%s' % (scriptid, ''.join(args.get('game_name'))))
-		output_file = '%s/%%03d.png' % (temp_directory)
-		log_message = 'Temp directory: %s' % temp_directory
-		log(log_message, False)
 		if ghostscriptUse == 'true' and os.path.isfile(ghostscriptPath):
 			if os.path.exists(xbmc.translatePath('special://temp/%s' % scriptid)):
 				log('Temp PDF dir exists, deleteing', False)
 				shutil.rmtree(xbmc.translatePath('special://temp/%s' % scriptid))
+			temp_directory = xbmc.translatePath('special://temp/%s/%s' % (scriptid, ''.join(args.get('game_name'))))
+			log_message = 'Temp directory: %s' % temp_directory
+			log(log_message, False)
 			os.makedirs(temp_directory)
-			cmd = '"%s" -sDEVICE=png16m -dNumRenderingThreads=4 -dSAFER -dBATCH -dNOPAUSE -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDpi, output_file, ''.join(args.get('artwork')))
+			output_file = '%s/%%03d.png' % (temp_directory)
+			cmd = '"%s" -sDEVICE=png16m -dDownScaleFactor=%s -dNumRenderingThreads=4 -dSAFER -dBATCH -dNOPAUSE -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -r%s -o "%s" "%s"' % (ghostscriptPath, ghostscriptDSF, ghostscriptDpi, output_file, ''.join(args.get('artwork')))
 			log_message = 'Ghostscript command: %s' % cmd
 			log(log_message, False)
 			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
 			while proc_h.returncode is None:
-				xbmc.sleep(500)
+				xbmc.sleep(50)
 				proc_h.poll()
 			del proc_h
 			xbmc.executebuiltin('ActivateWindow(Pictures,"%s",return)' %  temp_directory)
@@ -539,11 +542,19 @@ elif mode[0] == 'artwork_display':
 			pdf.clean_temp()
 			log('Using plugin.image.pdfreader', False)
 			pdf.pdf_read(''.join(args.get('artwork')).encode(txt_encode), ''.join(args.get('artwork')).encode(txt_encode), 'true')
+		elif extPdfReaderUse == 'true' and os.path.isfile(extPdfReaderPath):
+			cmd = '"%s" "%s"' %  (extPdfReaderPath, ''.join(args.get('artwork')))
+			proc_h = subprocess.Popen(cmd.encode(txt_encode), shell=True, close_fds=False)
+			while proc_h.returncode is None:
+				xbmc.sleep(50)
+				proc_h.poll()
+			del proc_h
 		else:
 			log('Additional software required to view PDFs', language(50107))
-		xbmc.executebuiltin("Dialog.Close(busydialog)")
+		xbmc.executebuiltin( "Dialog.Close(busydialog)" ) 
 	elif ''.join(args.get('artwork_type')) == 'image':
 		xbmc.executebuiltin('ShowPicture("%s")' % (''.join(args.get('artwork'))))
+	xbmc.executebuiltin("Dialog.Close(busydialog)")
 		
 elif mode[0] == 'random_focus':
 	total_list_items = int(xbmc.getInfoLabel('Container(id).NumItems'))

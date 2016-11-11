@@ -11,11 +11,14 @@
 		<setting label="Ghostscript" type="lsep"/>
 		<setting id="GhostscriptUse" label="50011" type="bool" default="false"/>
 		<setting id="GhostscriptPath" label="50012" type="executable" default="c:\Program Files\gs\gs9.18\bin\gswin64c.exe" enable="eq(-1,true)"/>
-		<setting id="GhostscriptDpi" label="50013" type="number" default="150" enable="eq(-2,true)"/>
-		<setting id="DefaultImageView" label="50014" type="number" default="500" enable="eq(-3,true)"/>
+		<setting id="GhostscriptDpi" label="50013" type="number" default="200" enable="eq(-2,true)"/>
+		<setting id="GhostscriptDSF" label="50016" type="number" default="3" enable="eq(-3,true)"/>
+		<setting id="DefaultImageView" label="50014" type="number" default="500" enable="eq(-4,true)"/>
 	    <setting label="Plugin.pdf.reader" type="lsep"/>
 		<setting id="PluginPdfReaderUse" label="50015" type="bool" default="false"/>
-	</category>
+	    <setting label="External PDF Viewer" type="lsep"/>
+		<setting id="ExtPdfReaderUse" label="50017" type="bool" default="false"/>
+		<setting id="ExtPdfReaderPath" label="50018" type="executable" default="c:\Program Files\gs\gs9.18\bin\gswin64c.exe" enable="eq(-1,true)"/>	</category>
 	<category label="50020">
 		<setting id="SearchThreading" label="50022" type="bool" default="true"/>
 		<setting id="DefaultSearchView" label="50023" type="number" default="501"/>
