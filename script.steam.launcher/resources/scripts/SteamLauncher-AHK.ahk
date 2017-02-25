@@ -5,7 +5,7 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=009
+;steam.launcher.script.revision=010
 
 #NoEnv  
 #SingleInstance force
@@ -42,19 +42,19 @@ else
 }
 
 GroupAdd, SteamBPM, Steam ahk_class CUIEngineWin32
-GroupAdd, SteamBPM, Steam ahk_class Steam
+GroupAdd, SteamBPM, Steam ahk_class steam
 
 SteamLoop:
 
 WinWait, ahk_group SteamBPM
-if %3%
-{
-	WinMinimize, Kodi ahk_class Kodi
-}
-else
+IfEqual, 3, 0
 {
 	Run, %comspec% /c taskkill /im Kodi.exe,,Hide
-	Run, %comspec% /c timeout /t 1 && tasklist /nh /fi "imagename eq Kodi.exe" | find /i "Kodi.exe" >nul && (taskkill /f /im Kodi.exe),,Hide
+	Run, %comspec% /c timeout /t 5 && tasklist /nh /fi "imagename eq Kodi.exe" | find /i "Kodi.exe" >nul && (taskkill /f /im Kodi.exe),,Hide
+}
+IfEqual, 3, 1
+{
+	WinMinimize, Kodi ahk_class Kodi
 }
 WinWait, Steam ahk_class CUIEngineWin32
 WinActivate, Steam ahk_class CUIEngineWin32
@@ -73,26 +73,25 @@ loop
   }
 Sleep, 500
 }
-
 IfNotEqual, 6, false
 {
 	RunWait, %6%,,Hide
 }
 
-if %3%
-{
-	WinMaximize, Kodi ahk_class Kodi
-}
-else
+IfEqual, 3, 0
 {
 	IfEqual, 4, true
     {
-        run, %2% -p
+        run, %2% -p,,Hide
     }
     else
     {
-	    run, %2%
+	    run, %2%,,Hide
 	}
+}
+IfEqual, 3, 1
+{
+	WinMaximize, Kodi ahk_class Kodi
 }
 WinWait, Kodi ahk_class Kodi
 WinActivate, Kodi ahk_class Kodi

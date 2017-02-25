@@ -225,3 +225,12 @@ Updated Steam-Lanuch-AHK to work with BPM's new option 'Minimise'. Script will a
 
 3.1.4
 Fix line endings in steam-launch.sh
+
+3.2.0
+Option to use custom directory for scripts
+Clean up settings.xml + language files
+Option to not minimise kodi when not quitting kodi
+Fix ahk detection of steam verifying/updating window
+Added additional addon artwork
+Change timeout to force kill kodi from 1 second to 5 seconds in all scripts
+Move python code to a module

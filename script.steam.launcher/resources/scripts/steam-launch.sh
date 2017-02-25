@@ -4,7 +4,7 @@
 #Manual script usage: steam-launch.sh "/path/to/steam" "/path/to/kodi" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
 #$3 = 0 Quit Kodi, 1 Minimize Kodi. $4 = Kodi portable mode. $5 = pre script. $6 post script.
 #Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
-#steam.launcher.script.revision=014
+#steam.launcher.script.revision=015
 
 export DISPLAY=:0
 
@@ -27,7 +27,7 @@ for i in {1..6} ; do
     if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
       if [[ $3 = 0 ]] ; then
 	killall Kodi
-	(sleep 1 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
+	(sleep 5 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
       fi
     fi
   else
@@ -38,7 +38,7 @@ done
 if [[ $3 = 0 ]] ; then
   if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then
     killall Kodi
-    (sleep 1 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
+    (sleep 5 ; if [[ $(ps -A | grep Kodi.app | grep -v Helper | grep -v grep | awk '{print $1}') ]] ; then killall -9 Kodi ; fi)&
   fi
 fi
 
@@ -66,7 +66,7 @@ fi
 if [[ $(uname -a |grep "steamos") ]] ; then
   if [[ $3 = 0 ]] ; then
     kill $(pidof kodi.bin)
-    (sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
+    (sleep 5 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
   fi
   /usr/bin/returntosteam.sh
   exit
@@ -87,7 +87,7 @@ for i in {1..6} ; do
     if [[ $(pidof kodi.bin) ]] ; then
       if [[ $3 = 0 ]] ; then
 	kill $(pidof kodi.bin)
-	(sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
+	(sleep 5 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
       else
 	wmctrl -i -r $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}') -b remove,fullscreen
       fi
@@ -100,7 +100,7 @@ done
 if [[ $(pidof kodi.bin) ]] ; then
   if [[ $3 = 0 ]] ; then
     kill $(pidof kodi.bin)
-    (sleep 1 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
+    (sleep 5 ; if [[ $(pidof kodi.bin) ]] ; then kill -9 $(pidof kodi.bin) ; fi)&
   else
     wmctrl -i -r $(wmctrl -l | grep  "Kodi"$ | awk '{print $1}') -b remove,fullscreen
   fi

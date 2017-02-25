@@ -4,34 +4,33 @@
 
     <!-- Settings -->
     <string id="50050">General</string>
-    <string id="50060">Linux</string>
-    <string id="50061">Kodi location</string>
-    <string id="50062">Steam location</string>
-    <string id="50070">Windows</string>
-    <string id="50073">Quit Kodi?</string>
-    <string id="50075">Disable sound</string>
-    <string id="50080">OSX</string>
+    <string id="50051">Kodi location</string>
+    <string id="50052">Steam location</string>
+    <string id="50053">Quit Kodi?</string>
 
     <!-- Advanced Settings -->
     <string id="50100">Advanced</string>
     <string id="50110">Delete and update userdata scripts on next run</string>
+    <string id="50111">Custom path for scripts</string>
     <string id="50112">'Busy dialog' timeout</string>
     <string id="50113">Script update notification</string>
     <string id="50114">Program path check</string>
-    <string id="50115">Kodi portable mode</string>
+    <string id="50115">Run Kodi in portable mode</string>
     <string id="50116">Run a script before Steam?</string>
     <string id="50117">Pre Steam script location</string>
-    <string id="50119">Run a script after Steam?</string>
     <string id="50118">Post Steam script location</string>
+    <string id="50119">Run a script after Steam?</string>
     <string id="50120">Check for program 'wmctrl'</string>
-    <string id="50074">Suspend Kodi audio when running Steam</string>
+    <string id="50121">Suspend Kodi audio when running Steam</string>
+    <string id="50122">Scripts folder</string>
+    <string id="50123">Minimise Kodi</string>
     
     <!-- Error Messages -->
-    <string id="50122">File does not exist</string>
-    <string id="50121">Open addon settings?</string>
-    <string id="50123">ERROR!</string>
-    <string id="50124">New scripts available, update userdata scripts?</string>
-    <string id="50125">Select 'No' to disable the Script Update Check</string>
-    <string id="50126">Check kodi.log file for details</string>
+    <string id="50210">File does not exist</string>
+    <string id="50211">Open addon settings?</string>
+    <string id="50212">ERROR!</string>
+    <string id="50213">New scripts available, update userdata scripts?</string>
+    <string id="50214">Select 'No' to disable the Script Update Check</string>
+    <string id="50215">Check kodi.log file for details</string>
 
 </strings>
