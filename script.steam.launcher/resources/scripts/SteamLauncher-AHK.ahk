@@ -5,7 +5,7 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=010
+;steam.launcher.script.revision=011
 
 #NoEnv  
 #SingleInstance force
@@ -82,11 +82,11 @@ IfEqual, 3, 0
 {
 	IfEqual, 4, true
     {
-        run, %2% -p,,Hide
+        run, %2% -p
     }
     else
     {
-	    run, %2%,,Hide
+	    run, %2%
 	}
 }
 IfEqual, 3, 1

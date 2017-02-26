@@ -234,3 +234,6 @@ Fix ahk detection of steam verifying/updating window
 Added additional addon artwork
 Change timeout to force kill kodi from 1 second to 5 seconds in all scripts
 Move python code to a module
+
+3.2.1
+Fix launching of non store kodi
