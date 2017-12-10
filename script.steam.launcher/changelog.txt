@@ -237,3 +237,6 @@ Move python code to a module
 
 3.2.1
 Fix launching of non store kodi
+
+3.2.2
+Updated addon to properly reflect GPL v2 licensing

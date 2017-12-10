@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.0" provider-name="teeedubb">
+<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.1" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -20,7 +20,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.0" provider-name="teeedubb">
+<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.1" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -40,7 +40,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.5.2" provider-name="teeedubb">
+<addon id="plugin.hyper.launcher" name="Hyper Launcher" version="1.5.3" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -91,7 +91,7 @@
         </extension>
 </addon>
 
-<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.4" provider-name="teeedubb">
+<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.5" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -110,7 +110,7 @@
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.2.1" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="3.2.2" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
@@ -140,7 +140,7 @@
     </extension>
 </addon>
 
-<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.2.1" provider-name="teeedubb">
+<addon id="service.hyper.launcher" name="Hyper Launcher Service" version="1.2.2" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.hyper.launcher" version="0.0.1"/>

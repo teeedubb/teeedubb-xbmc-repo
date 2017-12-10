@@ -1,3 +1,6 @@
+1.5.3
+Updated addon to properly reflect GPL v2 licensing
+
 1.5.2
 Fix bug when 'create artwork folders' enabled
 Fix bug when no rom file type supplied.

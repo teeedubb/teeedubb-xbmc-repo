@@ -1,3 +1,6 @@
+1.2.2
+Updated addon to properly reflect GPL v2 licensing
+
 1.2.1
 Only attempt to play trailer if one is assigned to listitem
 
