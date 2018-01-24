@@ -104,10 +104,8 @@ def copyFile(oldPath, newPath):
 def makeScriptExec():
 	scriptPath = os.path.join(scripts_path, 'steam-launch.sh')
 	if os.path.isfile(scriptPath):
-		if "\r\n" in open(scriptPath,"rb").read():
+		if '\r\n' in open(scriptPath,'rb').read():
 			log('Windows line endings found in %s, converting to unix line endings.' % scriptPath)
-#			windows_line_ending = '\r\n'
-#			linux_line_ending = '\n'
 			with open(scriptPath, 'rb') as f:
 				content = f.read()
 				content = content.replace('\r\n', '\n')
@@ -123,9 +121,6 @@ def makeScriptExec():
 				dialog.notification(language(50212), language(50215), addonIcon, 5000)
 				sys.exit()
 			log('steam-launch.sh executable: %s' % scriptPath)
-
-
-
 
 def usrScriptDelete():
 	if delUserScriptSett == 'true':
