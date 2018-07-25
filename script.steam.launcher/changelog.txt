@@ -240,3 +240,6 @@ Fix launching of non store kodi
 
 3.2.2
 Updated addon to properly reflect GPL v2 licensing
+
+3.2.3
+On linux systems convert windows line endings to unix line endings
