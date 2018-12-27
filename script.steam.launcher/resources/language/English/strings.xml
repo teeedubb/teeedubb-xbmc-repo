@@ -23,7 +23,8 @@
     <string id="50120">Check for program 'wmctrl'</string>
     <string id="50121">Suspend Kodi audio when running Steam</string>
     <string id="50122">Scripts folder</string>
-    <string id="50123">Minimise Kodi</string>
+    <string id="50123">Minimise/Maximise Kodi</string>
+    <string id="50124">Parameters to pass to the Steam executable</string>
     
     <!-- Error Messages -->
     <string id="50210">File does not exist</string>

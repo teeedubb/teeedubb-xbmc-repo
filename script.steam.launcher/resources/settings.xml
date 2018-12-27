@@ -9,21 +9,23 @@
         <setting label="50052" id="SteamWin" type="executable" visible="system.platform.windows" default="C:\Program Files (x86)\Steam\steam.exe"/>
         <setting label="50051" id="KodiOsx" type="folder" visible="system.platform.osx" default="/Applications/Kodi.app/"/>
         <setting label="50052" id="SteamOsx" type="folder" visible="system.platform.osx" default="/Applications/Steam.app/"/>
-        <setting label="50116" id="PreScriptEnabled" type="bool" default="false"/>
-        <setting label="50117" id="PreScript" type="executable" enable="eq(-1,true)"/>
-        <setting label="50119" id="PostScriptEnabled" type="bool" default="false"/>
-        <setting label="50118" id="PostScript" type="executable" enable="eq(-1,true)"/>
+
     </category>
     <category label="50100">
         <setting label="50110" id="DelUserScript" type="bool" default="false"/>
         <setting label="50115" id="KodiPortable" type="bool" default="false"/>
-		<setting label="50121" id="SuspendAudio" type="bool" default="false"/>
-		<setting label="50112" id="BusyDialogTime" type="number" default="10"/>
+	<setting label="50121" id="SuspendAudio" type="bool" default="false"/>
+	<setting label="50112" id="BusyDialogTime" type="number" default="10"/>
         <setting label="50113" id="ScriptUpdateCheck" type="bool" default="true"/>
         <setting label="50114" id="FilePathCheck" type="bool" default="true"/>
         <setting label="50120" id="WmctrlCheck" type="bool" visible="System.Platform.Linux" default="true"/>
         <setting label="50111" id="CustomScript" type="bool" default="false"/>
         <setting label="50122" id="CustomScriptFolder" type="folder" enable="eq(-1,true)"/>
+        <setting label="50116" id="PreScriptEnabled" type="bool" default="false"/>
+        <setting label="50117" id="PreScript" type="executable" enable="eq(-1,true)"/>
+        <setting label="50119" id="PostScriptEnabled" type="bool" default="false"/>
+        <setting label="50118" id="PostScript" type="executable" enable="eq(-1,true)"/>
+	<setting label="50124" id="SteamParameters" type="text"/>	
     </category>
 </settings>
  

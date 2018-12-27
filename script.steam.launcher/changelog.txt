@@ -243,3 +243,10 @@ Updated addon to properly reflect GPL v2 licensing
 
 3.2.3
 On linux systems convert windows line endings to unix line endings
+
+3.3.0
+Add option to add parameters to steam launch command via advanced settings.
+Add compatability for kodi v18 linux builds.
+Add auto detect $DISPLAY variable in linux.
+Fix busy dialog.
+Shuffle settings around.

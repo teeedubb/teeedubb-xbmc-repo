@@ -1,19 +1,19 @@
 ;KODI steam launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
-;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false"
-;$3 = 0 Quit KODI, 1 Minimize KODI. $4 = KODI portable mode. $5 = pre script. $6 post script.
+;Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false" "steam parameters"
+;$3 = 0 Quit KODI, 1 Minimize KODI. $4 = KODI portable mode. $5 = pre script. $6 post script. $7 steam parameters.
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=011
+;steam.launcher.script.revision=012
 
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 
-if 0 != 6
+if 0 != 7
 {
-    MsgBox This script requires arguments but it only received %0%. See script file for details.
+    MsgBox This script requires 7 arguments but it only received %0%. See script file for details.
     ExitApp
 }
 
@@ -33,12 +33,12 @@ if ErrorLevel
 	}
 	else
 	{
-		Run, %1% steam://open/bigpicture
+		Run, %1% %7% steam://open/bigpicture
 	}
 }
 else
 {
-    Run, %1% -bigpicture
+    Run, %1% %7% -bigpicture
 }
 
 GroupAdd, SteamBPM, Steam ahk_class CUIEngineWin32

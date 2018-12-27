@@ -43,6 +43,7 @@ suspendAudio = addon.getSetting("SuspendAudio")
 customScriptFolder = addon.getSetting("CustomScriptFolder").decode("utf-8")
 customScriptFolderEnabled = addon.getSetting("CustomScript")
 minimiseKodi = addon.getSetting("MinimiseKodi")
+steamParameters = addon.getSetting("SteamParameters")
 
 def log(msg):
 	msg = msg.encode(txt_encode)
@@ -153,7 +154,7 @@ def fileChecker():
 				sys.exit()
 			else:
 				log('wmctrl present, checking if a window manager is running...')
-				if subprocess.call('DISPLAY=:0 wmctrl -l', shell=True) != 0:
+				if subprocess.call('DP=$(w -hs | awk \'{print $3}\') && DISPLAY=$DP wmctrl -l', shell=True) != 0:
 					log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
 					dialog.notification(language(50212), language(50215), addonIcon, 5000)
 					sys.exit()
@@ -279,10 +280,10 @@ def quitKodiDialog():
 
 def kodiBusyDialog():
 	if busyDialogTime != 0:
-		xbmc.executebuiltin("ActivateWindow(busydialog)")
+		xbmc.executebuiltin("ActivateWindow(busydialognocancel)")
 		log('busy dialog started')
 		time.sleep(busyDialogTime)
-		xbmc.executebuiltin("Dialog.Close(busydialog)")
+		xbmc.executebuiltin("Dialog.Close(busydialognocancel)")
 		log('busy dialog stopped after: %s seconds' % busyDialogTime)
 
 def steamPrePost():
@@ -318,13 +319,13 @@ def launchSteam():
 		sys.exit()
 	elif osWin:
 		steamlauncher = os.path.join(scripts_path, 'SteamLauncher-AHK.exe')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
 	elif osOsx:
 		steamlauncher = os.path.join(scripts_path, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
 	elif osLinux:
 		steamlauncher = os.path.join(scripts_path, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
 	try:
 		log('attempting to launch: %s' % cmd)
 		print cmd.encode('utf-8')
