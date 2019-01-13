@@ -44,6 +44,8 @@ customScriptFolder = addon.getSetting("CustomScriptFolder").decode("utf-8")
 customScriptFolderEnabled = addon.getSetting("CustomScript")
 minimiseKodi = addon.getSetting("MinimiseKodi")
 steamParameters = addon.getSetting("SteamParameters")
+forceKillKodi = addon.getSetting("ForceKillKodi")
+desktopMode = addon.getSetting("DesktopMode")
 
 def log(msg):
 	msg = msg.encode(txt_encode)
@@ -68,15 +70,15 @@ def getAddonDataPath():
 def copyLauncherScriptsToUserdata():
 	oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 	if osWin:
-		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.ahk')
-		newPath = os.path.join(scripts_path, 'SteamLauncher-AHK.ahk')
+		oldPath = os.path.join(oldBasePath, 'steam-launcher.ahk')
+		newPath = os.path.join(scripts_path, 'steam-launcher.ahk')
 		copyFile(oldPath, newPath)
-		oldPath = os.path.join(oldBasePath, 'SteamLauncher-AHK.exe')
-		newPath = os.path.join(scripts_path, 'SteamLauncher-AHK.exe')
+		oldPath = os.path.join(oldBasePath, 'steam-launcher.exe')
+		newPath = os.path.join(scripts_path, 'steam-launcher.exe')
 		copyFile(oldPath, newPath)
 	elif osLinux + osOsx:
-		oldPath = os.path.join(oldBasePath, 'steam-launch.sh')
-		newPath = os.path.join(scripts_path, 'steam-launch.sh')
+		oldPath = os.path.join(oldBasePath, 'steam-launcher.sh')
+		newPath = os.path.join(scripts_path, 'steam-launcher.sh')
 		copyFile(oldPath, newPath)
 
 def copyFile(oldPath, newPath):
@@ -103,7 +105,7 @@ def copyFile(oldPath, newPath):
 		log('script file already exists, skipping copy to userdata: %s' % newPath)
 
 def makeScriptExec():
-	scriptPath = os.path.join(scripts_path, 'steam-launch.sh')
+	scriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
 	if os.path.isfile(scriptPath):
 		if '\r\n' in open(scriptPath,'rb').read():
 			log('Windows line endings found in %s, converting to unix line endings.' % scriptPath)
@@ -113,24 +115,24 @@ def makeScriptExec():
 			with open(scriptPath, 'wb') as f:
 				f.write(content)
 		if not stat.S_IXUSR & os.stat(scriptPath)[stat.ST_MODE]:
-			log('steam-launch.sh not executable: %s' % scriptPath)
+			log('steam-launcher.sh not executable: %s' % scriptPath)
 			try:
 				os.chmod(scriptPath, stat.S_IRWXU)
-				log('steam-launch.sh now executable: %s' % scriptPath)
+				log('steam-launcher.sh now executable: %s' % scriptPath)
 			except:
-				log('ERROR: unable to make steam-launch.sh executable, exiting: %s' % scriptPath)
+				log('ERROR: unable to make steam-launcher.sh executable, exiting: %s' % scriptPath)
 				dialog.notification(language(50212), language(50215), addonIcon, 5000)
 				sys.exit()
-			log('steam-launch.sh executable: %s' % scriptPath)
+			log('steam-launcher.sh executable: %s' % scriptPath)
 
 def usrScriptDelete():
 	if delUserScriptSett == 'true':
 		log('deleting userdata scripts, option enabled: delUserScriptSett = %s' % delUserScriptSett)
-		scriptFile = os.path.join(scripts_path, 'SteamLauncher-AHK.ahk')
+		scriptFile = os.path.join(scripts_path, 'steam-launcher.ahk')
 		delUserScript(scriptFile)
-		scriptFile = os.path.join(scripts_path, 'SteamLauncher-AHK.exe')
+		scriptFile = os.path.join(scripts_path, 'steam-launcher.exe')
 		delUserScript(scriptFile)
-		scriptFile = os.path.join(scripts_path, 'steam-launch.sh')
+		scriptFile = os.path.join(scripts_path, 'steam-launcher.sh')
 		delUserScript(scriptFile)
 	elif delUserScriptSett == 'false':
 		log('skipping deleting userdata scripts, option disabled: delUserScriptSett = %s' % delUserScriptSett)
@@ -160,6 +162,13 @@ def fileChecker():
 					sys.exit()
 				else:
 					log('A window manager is running...')
+		if minimiseKodi == "true":
+			if subprocess.call(["which", "xdotool"]) != 0:
+				log('ERROR: Minimised Kodi enabled and system program "xdotool" not present, install it via you system package manager. Xdotool is required to minimise Kodi.')
+				dialog.notification(language(50212), language(50215), addonIcon, 5000)
+				sys.exit()
+			else:
+				log('xdotool present...')
 	if filePathCheck == 'true':
 		log('running program file check, option is enabled: filePathCheck = %s' % filePathCheck)
 		if osWin:
@@ -221,15 +230,15 @@ def scriptVersionCheck():
 			log('usr scripts are not set to be deleted, running version check')
 			sysScriptDir = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
 			if osWin:
-				sysScriptPath = os.path.join(sysScriptDir, 'SteamLauncher-AHK.ahk')
-				usrScriptPath = os.path.join(scripts_path, 'SteamLauncher-AHK.ahk')
+				sysScriptPath = os.path.join(sysScriptDir, 'steam-launcher.ahk')
+				usrScriptPath = os.path.join(scripts_path, 'steam-launcher.ahk')
 				if os.path.isfile(os.path.join(usrScriptPath)):
 					compareFile(sysScriptPath, usrScriptPath)
 				else:
 					log('usr script does not exist, skipping version check')
 			elif osLinux + osOsx:
-				sysScriptPath = os.path.join(sysScriptDir, 'steam-launch.sh')
-				usrScriptPath = os.path.join(scripts_path, 'steam-launch.sh')
+				sysScriptPath = os.path.join(sysScriptDir, 'steam-launcher.sh')
+				usrScriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
 				if os.path.isfile(os.path.join(usrScriptPath)):
 					compareFile(sysScriptPath, usrScriptPath)
 				else:
@@ -318,14 +327,14 @@ def launchSteam():
 		kodiBusyDialog()
 		sys.exit()
 	elif osWin:
-		steamlauncher = os.path.join(scripts_path, 'SteamLauncher-AHK.exe')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
+		steamlauncher = os.path.join(scripts_path, 'steam-launcher.exe')
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode)
 	elif osOsx:
-		steamlauncher = os.path.join(scripts_path, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
+		steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode)
 	elif osLinux:
-		steamlauncher = os.path.join(scripts_path, 'steam-launch.sh')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters)
+		steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode)
 	try:
 		log('attempting to launch: %s' % cmd)
 		print cmd.encode('utf-8')

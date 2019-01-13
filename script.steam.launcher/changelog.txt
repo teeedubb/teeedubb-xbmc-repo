@@ -248,5 +248,12 @@ On linux systems convert windows line endings to unix line endings
 Add option to add parameters to steam launch command via advanced settings.
 Add compatability for kodi v18 linux builds.
 Add auto detect $DISPLAY variable in linux.
-Fix busy dialog.
+Fix busy dialog for v18 kodi.
 Shuffle settings around.
+
+3.4.0
+Remove DISPLAY variable in linux.
+Added option to select wheter to force quit kodi and after how long.
+Added option to launch Steam in desktop mode. This relies on detection of the Steamn executable and will only reopen Kodi once Steam has exited completley.
+Improved detection in Linux of Kodi and Steam windows using additional info from wmctrl. This will prevent false positives.
+Fixed minimise kodi in linux, which now requires 'xdotool' to be installed for this option to work.
