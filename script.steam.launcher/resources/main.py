@@ -156,7 +156,7 @@ def fileChecker():
 				sys.exit()
 			else:
 				log('wmctrl present, checking if a window manager is running...')
-				if subprocess.call('DP=$(w -hs | awk \'{print $3}\') && DISPLAY=$DP wmctrl -l', shell=True) != 0:
+				if subprocess.call('DP=$(w -hs | awk \'{print $3}\') | grep \'^:\' | head -n1 && DISPLAY=$DP wmctrl -l', shell=True) != 0:
 					log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
 					dialog.notification(language(50212), language(50215), addonIcon, 5000)
 					sys.exit()
