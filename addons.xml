@@ -110,7 +110,7 @@
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.4.0" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="3.4.1" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
     </requires>
