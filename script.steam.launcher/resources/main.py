@@ -156,7 +156,12 @@ def fileChecker():
 				sys.exit()
 			else:
 				log('wmctrl present, checking if a window manager is running...')
-				if subprocess.call('DP=$(w -hs | awk \'{print $3}\') && DISPLAY=$DP wmctrl -l', shell=True) != 0:
+                                display = None
+                                if 'DISPLAY' in os.environ: display = os.environ['DISPLAY'] # We inherited DISPLAY from Kodi, pass it down
+                                else:
+                                    for var in open('/proc/%d/environ' % os.getppid()).read().split('\x00'):
+                                        if var.startswith('DISPLAY='): display = var[8:] # Read DISPLAY from parent process if present
+				if display is None or subprocess.call('DISPLAY=%s wmctrl -l' % display, shell=True) != 0:
 					log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
 					dialog.notification(language(50212), language(50215), addonIcon, 5000)
 					sys.exit()
