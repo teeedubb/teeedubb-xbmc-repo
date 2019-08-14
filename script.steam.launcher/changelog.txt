@@ -257,3 +257,7 @@ Added option to select wheter to force quit kodi and after how long.
 Added option to launch Steam in desktop mode. This relies on detection of the Steamn executable and will only reopen Kodi once Steam has exited completley.
 Improved detection in Linux of Kodi and Steam windows using additional info from wmctrl. This will prevent false positives.
 Fixed minimise kodi in linux, which now requires 'xdotool' to be installed for this option to work.
+
+3.4.1
+Retrieve DISPLAY from parent process instead of searching through sessions - by racer290 - thanks!
+Remove path from KODI_BIN so kodi is force closed correctly
