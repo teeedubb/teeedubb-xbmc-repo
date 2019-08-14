@@ -60,7 +60,8 @@ fi
         ;;
     Linux)
 #
-KODI_BIN=$(ps aux | grep -E 'kodi.bin|kodi-x11|kodi-wayland|kodi-gbm' | grep -v 'grep.*kodi' | head -n1 | awk '{print $11}')
+KODI_BIN=$(ps aux | grep -E 'kodi.bin|kodi-x11|kodi-wayland|kodi-gbm' | grep -v 'grep.*kodi' | head -n1 | awk '{print $11}' | sed 's:.*/::')
+echo $l kodi executable is $KODI_BIN
 #pre script
 if [[ $5 != false ]] ; then
   "$5"
