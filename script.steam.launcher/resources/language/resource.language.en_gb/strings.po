@@ -1,0 +1,139 @@
+# Kodi Media Center language file
+# Addon Name: Steam Launcher
+# Addon id: script.steam.launcher
+# Addon Provider: teeedubb
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#Catergories
+
+msgctxt "#50050"
+msgid "General"
+msgstr ""
+
+msgctxt "#50100"
+msgid "Advanced"
+msgstr ""
+
+#General settings
+
+msgctxt "#50051"
+msgid "Kodi location"
+msgstr ""
+
+msgctxt "#50052"
+msgid "Steam location"
+msgstr ""
+
+msgctxt "#50053"
+msgid "Quit Kodi"
+msgstr ""
+
+msgctxt "#50054"
+msgid "Force kill Kodi after X seconds? (zero to disable)"
+msgstr ""
+
+msgctxt "#50055"
+msgid "Launch Steam in desktop mode"
+msgstr ""
+
+msgctxt "#50056"
+msgid "Minimise/Maximise Kodi"
+msgstr ""
+
+#Advanced settings
+
+msgctxt "#50110"
+msgid "Delete and update userdata scripts on next run"
+msgstr ""
+
+
+msgctxt "#50111"
+msgid "Custom path for scripts"
+msgstr ""
+
+msgctxt "#50112"
+msgid "'Busy dialog' timeout"
+msgstr ""
+
+msgctxt "#50113"
+msgid "Script update notification"
+msgstr ""
+
+msgctxt "#50114"
+msgid "Program path check"
+msgstr ""
+
+msgctxt "#50115"
+msgid "Run Kodi in portable mode"
+msgstr ""
+
+msgctxt "#50116"
+msgid "Run a script before Steam"
+msgstr ""
+
+msgctxt "#50117"
+msgid "Pre Steam script location"
+msgstr ""
+
+msgctxt "#50118"
+msgid "Post Steam script location"
+msgstr ""
+
+msgctxt "#50119"
+msgid "Run a script after Steam"
+msgstr ""
+
+msgctxt "#50120"
+msgid "Check for program 'wmctrl'"
+msgstr ""
+
+msgctxt "#50121"
+msgid "Suspend Kodi audio when running Steam"
+msgstr ""
+
+msgctxt "#50122"
+msgid "Scripts folder"
+msgstr ""
+
+msgctxt "#50123"
+msgid "Parameters to pass to the Steam executable"
+msgstr ""
+
+#Error messages
+
+msgctxt "#50210"
+msgid "File does not exist"
+msgstr ""
+
+msgctxt "#50211"
+msgid "Open addon settings?"
+msgstr ""
+
+msgctxt "#50212"
+msgid "ERROR!"
+msgstr ""
+
+msgctxt "#50213"
+msgid "New scripts available, update userdata scripts?"
+msgstr ""
+
+msgctxt "#50124"
+msgid "Select 'No' to disable the Script Update Check"
+msgstr ""
+
+msgctxt "#50125"
+msgid "Check kodi.log file for details"
+msgstr ""
+
