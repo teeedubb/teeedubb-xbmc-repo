@@ -110,12 +110,12 @@
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.4.1" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="3.5.1" provider-name="teeedubb">
     <requires>
-        <import addon="xbmc.python" version="2.19.0"/>
+        <import addon="xbmc.python" version="3.0.0"/>
     </requires>
     <extension point="xbmc.python.script" library="default.py">
-        <provides>game executable</provides>
+        <provides>game</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Launches Steam in Big Picture mode from within Kodi.</summary>
