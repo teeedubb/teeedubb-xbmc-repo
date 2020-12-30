@@ -107,7 +107,7 @@ def copyFile(oldPath, newPath):
 def makeScriptExec():
 	scriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
 	if os.path.isfile(scriptPath):
-		if '\r\n' in open(scriptPath,'rb').read():
+		if '\r\n' in open(scriptPath,'r').read():
 			log('Windows line endings found in %s, converting to unix line endings.' % scriptPath)
 			with open(scriptPath, 'rb') as f:
 				content = f.read()

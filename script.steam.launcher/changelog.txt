@@ -267,3 +267,8 @@ Make addon compatible with python 3/kodi 19.
 Update settings + launguage files to be compatible with kodi 19
 Due to changes with layout tags Portugese and French translations have been removed until someone can update them inline with what is required with kodi 19
 Remove executable tag from addon - addon will now be displayed under 'games'
+
+3.5.1
+Fix for crashing by @ hedmo - Thanks!
+Updated a setting title
+

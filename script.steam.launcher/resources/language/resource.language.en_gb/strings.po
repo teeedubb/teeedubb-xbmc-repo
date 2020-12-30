@@ -96,7 +96,7 @@ msgid "Run a script after Steam"
 msgstr ""
 
 msgctxt "#50120"
-msgid "Check for program 'wmctrl'"
+msgid "Check for program 'wmctrl' and 'xdotool'"
 msgstr ""
 
 msgctxt "#50121"
