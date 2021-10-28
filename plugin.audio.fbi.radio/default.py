@@ -6,7 +6,7 @@ addonPath = addon.getAddonInfo('path')
 
 addon_handle = int(sys.argv[1])
 
-url = 'https://stream.fbiradio.com/stream.mp3'
+url = 'http://streamer.fbiradio.com:8000/stream'
 li = xbmcgui.ListItem('FBi', iconImage=os.path.join(addonPath, 'resources', 'icons', 'fbi.png'))
 li.setArt({ 'thumb': os.path.join(addonPath, 'resources', 'icons', 'fbi.png'), 'fanart': os.path.join(addonPath, 'fanart.jpg') })
 li.setInfo( 'music', { "Title": 'FBi'})
