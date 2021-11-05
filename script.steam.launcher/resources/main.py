@@ -49,7 +49,10 @@ minimiseKodi = addon.getSetting("MinimiseKodi")
 steamParameters = addon.getSetting("SteamParameters")
 forceKillKodi = addon.getSetting("ForceKillKodi")
 desktopMode = addon.getSetting("DesktopMode")
-
+windowsLauncherScriptFileName = "steam-launcher.ahk"
+windowsLauncherExecutableFileName = "steam-launcher.exe"
+steamLinkLauncherScriptFileName = "steam-link-launcher.sh"
+linuxLauncherScriptFileName = "steam-launcher.sh"
 
 def log(msg):
     msg = msg.encode(txt_encode)
@@ -77,19 +80,19 @@ def getAddonDataPath():
 def copyLauncherScriptsToUserdata():
     oldBasePath = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
     if osWin:
-        oldPath = os.path.join(oldBasePath, 'steam-launcher.ahk')
-        newPath = os.path.join(scripts_path, 'steam-launcher.ahk')
+        oldPath = os.path.join(oldBasePath, windowsLauncherScriptFileName)
+        newPath = os.path.join(scripts_path, windowsLauncherScriptFileName)
         copyFile(oldPath, newPath)
-        oldPath = os.path.join(oldBasePath, 'steam-launcher.exe')
-        newPath = os.path.join(scripts_path, 'steam-launcher.exe')
+        oldPath = os.path.join(oldBasePath, windowsLauncherExecutableFileName)
+        newPath = os.path.join(scripts_path, windowsLauncherExecutableFileName)
         copyFile(oldPath, newPath)
     elif osLinux + osOsx:
         if platformRaspberry:
-            oldPath = os.path.join(oldBasePath, 'steam-link-launcher.sh')
-            newPath = os.path.join(scripts_path, 'steam-link-launcher.sh')
+            oldPath = os.path.join(oldBasePath, steamLinkLauncherScriptFileName)
+            newPath = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
         else:
-            oldPath = os.path.join(oldBasePath, 'steam-launcher.sh')
-            newPath = os.path.join(scripts_path, 'steam-launcher.sh')
+            oldPath = os.path.join(oldBasePath, linuxLauncherScriptFileName)
+            newPath = os.path.join(scripts_path, linuxLauncherScriptFileName)
         copyFile(oldPath, newPath)
 
 
@@ -139,14 +142,10 @@ def makeScriptExec(fileName):
             log('Launcher script executable is located here: %s' % scriptPath)
 
 
-def usrScriptDelete():
+def usrScriptDelete(fileName):
     if delUserScriptSett == 'true':
         log('deleting userdata scripts, option enabled: delUserScriptSett = %s' % delUserScriptSett)
-        scriptFile = os.path.join(scripts_path, 'steam-launcher.ahk')
-        delUserScript(scriptFile)
-        scriptFile = os.path.join(scripts_path, 'steam-launcher.exe')
-        delUserScript(scriptFile)
-        scriptFile = os.path.join(scripts_path, 'steam-launcher.sh')
+        scriptFile = os.path.join(scripts_path, fileName)
         delUserScript(scriptFile)
     elif delUserScriptSett == 'false':
         log('skipping deleting userdata scripts, option disabled: delUserScriptSett = %s' % delUserScriptSett)
@@ -259,15 +258,19 @@ def scriptVersionCheck():
             log('usr scripts are not set to be deleted, running version check')
             sysScriptDir = os.path.join(getAddonInstallPath(), 'resources', 'scripts')
             if osWin:
-                sysScriptPath = os.path.join(sysScriptDir, 'steam-launcher.ahk')
-                usrScriptPath = os.path.join(scripts_path, 'steam-launcher.ahk')
+                sysScriptPath = os.path.join(sysScriptDir, windowsLauncherScriptFileName)
+                usrScriptPath = os.path.join(scripts_path, windowsLauncherScriptFileName)
                 if os.path.isfile(os.path.join(usrScriptPath)):
                     compareFile(sysScriptPath, usrScriptPath)
                 else:
                     log('usr script does not exist, skipping version check')
             elif osLinux + osOsx:
-                sysScriptPath = os.path.join(sysScriptDir, 'steam-launcher.sh')
-                usrScriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
+                if platformRaspberry:
+                    sysScriptPath = os.path.join(sysScriptDir, steamLinkLauncherScriptFileName)
+                    usrScriptPath = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
+                else:
+                    sysScriptPath = os.path.join(sysScriptDir, linuxLauncherScriptFileName)
+                    usrScriptPath = os.path.join(scripts_path, linuxLauncherScriptFileName)
                 if os.path.isfile(os.path.join(usrScriptPath)):
                     compareFile(sysScriptPath, usrScriptPath)
                 else:
@@ -361,24 +364,24 @@ def launchSteam():
         kodiBusyDialog()
         sys.exit()
     elif osWin:
-        steamlauncher = os.path.join(scripts_path, 'steam-launcher.exe')
+        steamlauncher = os.path.join(scripts_path, windowsLauncherExecutableFileName)
         cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
             steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters,
             forceKillKodi, desktopMode)
     elif osOsx:
-        steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
+        steamlauncher = os.path.join(scripts_path, linuxLauncherScriptFileName)
         cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
             steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters,
             forceKillKodi, desktopMode)
     elif osLinux:
         if platformRaspberry:
-            steamLinkLauncher = os.path.join(scripts_path, 'steam-link-launcher.sh')
+            steamLinkLauncher = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
             cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
                 steamLinkLauncher, steamLink, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript,
                 steamParameters,
                 forceKillKodi, desktopMode)
         else:
-            steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
+            steamlauncher = os.path.join(scripts_path, linuxLauncherScriptFileName)
             cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
                 steamlauncher, steamLinux, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript,
                 steamParameters,
@@ -429,13 +432,15 @@ if customScriptFolderEnabled == 'true':
 else:
     scripts_path = os.path.join(getAddonDataPath(), 'scripts')
 scriptVersionCheck()
-usrScriptDelete()
+userScripts = [windowsLauncherScriptFileName, windowsLauncherExecutableFileName, linuxLauncherScriptFileName, steamLinkLauncherScriptFileName]
+for script in userScripts:
+    usrScriptDelete(script)
 copyLauncherScriptsToUserdata()
 fileChecker()
 if platformRaspberry:
-    makeScriptExec('steam-link-launcher.sh')
+    makeScriptExec(steamLinkLauncherScriptFileName)
 else:
-    makeScriptExec('steam-launcher.sh')
+    makeScriptExec(linuxLauncherScriptFileName)
 steamPrePost()
 quitKodiDialog()
 launchSteam()
