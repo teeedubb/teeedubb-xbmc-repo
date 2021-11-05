@@ -261,3 +261,6 @@ Fixed minimise kodi in linux, which now requires 'xdotool' to be installed for t
 3.4.1
 Retrieve DISPLAY from parent process instead of searching through sessions - by racer290 - thanks!
 Remove path from KODI_BIN so kodi is force closed correctly
+
+3.4.2
+Added the SteamLink launcher for raspberry pi

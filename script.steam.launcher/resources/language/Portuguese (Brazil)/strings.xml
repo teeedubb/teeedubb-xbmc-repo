@@ -6,6 +6,7 @@
     <string id="50050">Geral</string>
     <string id="50051">Local do Kodi</string>
     <string id="50052">Local do Steam</string>
+    <string id="50127">Local do SteamLink</string>
     <string id="50053">Fechar Kodi?</string>
 
     <!-- Advanced Settings -->
@@ -20,7 +21,7 @@
     <string id="50117">Local do script pre Steam</string>
     <string id="50118">Local do script pós Steam</string>
     <string id="50119">Rodar um script após fechar o Steam?</string>
-    <string id="50120">Procurar o programa 'wmctrl'</string>
+    <string id="50120">Procurar o programa 'wmctrl' e 'xdotool'</string>
     <string id="50121">Suspender o áudio do Kodi ao rodar o Steam</string>
     <string id="50122">Pasta Scripts</string>
     <string id="50123">Minimizar Kodi</string>

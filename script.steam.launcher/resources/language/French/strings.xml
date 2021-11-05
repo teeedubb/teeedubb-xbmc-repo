@@ -6,6 +6,7 @@
     <string id="50050">Général</string>
     <string id="50051">Emplacement de Kodi</string>
     <string id="50052">Emplacement de Steam</string>
+    <string id="50127">Emplacement de SteamLink</string>
     <string id="50053">Quitter Kodi ?</string>
 
     <!-- Advanced Settings -->
@@ -20,7 +21,7 @@
     <string id="50117">Emplacement du script avant Steam</string>
     <string id="50118">Emplacement du script après Steam</string>
     <string id="50119">Lancer un script après Steam ?</string>
-    <string id="50120">Vérifiez programme 'wmctrl'</string>
+    <string id="50120">Vérifiez programme 'wmctrl' et 'xdotool'</string>
     <string id="50121">Suspendre Kodi audio lors de l'exécution Steam</string>
     <string id="50122">Dossier Scripts</string>
     <string id="50123">Minimiser Kodi ?</string>

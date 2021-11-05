@@ -5,6 +5,7 @@
         <setting label="50123" id="MinimiseKodi" type="bool" enable="!eq(-1,0)" default="true"/>
         <setting label="50051" id="KodiLinux" type="executable" visible="System.Platform.Linux" default="/usr/bin/kodi"/>
         <setting label="50052" id="SteamLinux" type="executable" visible="System.Platform.Linux" default="/usr/bin/steam"/>
+        <setting label="50127" id="SteamLink" type="executable" visible="System.Platform.Linux" default="/usr/bin/steamlink"/>
         <setting label="50051" id="KodiWin" type="executable" visible="system.platform.windows" default="C:\Program Files\Kodi\Kodi.exe"/>
         <setting label="50052" id="SteamWin" type="executable" visible="system.platform.windows" default="C:\Program Files (x86)\Steam\steam.exe"/>
         <setting label="50051" id="KodiOsx" type="folder" visible="system.platform.osx" default="/Applications/Kodi.app/"/>
