@@ -84,8 +84,12 @@ def copyLauncherScriptsToUserdata():
         newPath = os.path.join(scripts_path, 'steam-launcher.exe')
         copyFile(oldPath, newPath)
     elif osLinux + osOsx:
-        oldPath = os.path.join(oldBasePath, 'steam-launcher.sh')
-        newPath = os.path.join(scripts_path, 'steam-launcher.sh')
+        if platformRaspberry:
+            oldPath = os.path.join(oldBasePath, 'steam-link-launcher.sh')
+            newPath = os.path.join(scripts_path, 'steam-link-launcher.sh')
+        else:
+            oldPath = os.path.join(oldBasePath, 'steam-launcher.sh')
+            newPath = os.path.join(scripts_path, 'steam-launcher.sh')
         copyFile(oldPath, newPath)
 
 
@@ -113,8 +117,8 @@ def copyFile(oldPath, newPath):
         log('script file already exists, skipping copy to userdata: %s' % newPath)
 
 
-def makeScriptExec():
-    scriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
+def makeScriptExec(fileName):
+    scriptPath = os.path.join(scripts_path, fileName)
     if os.path.isfile(scriptPath):
         if '\r\n' in open(scriptPath, 'r').read():
             log('Windows line endings found in %s, converting to unix line endings.' % scriptPath)
@@ -124,15 +128,15 @@ def makeScriptExec():
             with open(scriptPath, 'wb') as f:
                 f.write(content)
         if not stat.S_IXUSR & os.stat(scriptPath)[stat.ST_MODE]:
-            log('steam-launcher.sh not executable: %s' % scriptPath)
+            log('Launcher script is not executable: %s' % scriptPath)
             try:
                 os.chmod(scriptPath, stat.S_IRWXU)
-                log('steam-launcher.sh now executable: %s' % scriptPath)
+                log('Launcher script is now executable: %s' % scriptPath)
             except:
-                log('ERROR: unable to make steam-launcher.sh executable, exiting: %s' % scriptPath)
+                log('ERROR: unable to make the launcher script executable, exiting: %s' % scriptPath)
                 dialog.notification(language(50212), language(50215), addonIcon, 5000)
                 sys.exit()
-            log('steam-launcher.sh executable: %s' % scriptPath)
+            log('Launcher script executable is located here: %s' % scriptPath)
 
 
 def usrScriptDelete():
@@ -161,25 +165,26 @@ def delUserScript(scriptFile):
 
 def fileChecker():
     if osLinux:
-        if wmctrlCheck == 'true':
-            if subprocess.call(["which", "wmctrl"]) != 0:
-                log('ERROR: System program "wmctrl" not present, install it via you system package manager or if you are running the SteamOS compositor disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
-                dialog.notification(language(50212), language(50215), addonIcon, 5000)
-                sys.exit()
-            else:
-                log('wmctrl present, checking if a window manager is running...')
-                display = None
-                if 'DISPLAY' in os.environ:
-                    display = os.environ['DISPLAY']  # We inherited DISPLAY from Kodi, pass it down
-                else:
-                    for var in open('/proc/%d/environ' % os.getppid()).read().split('\x00'):
-                        if var.startswith('DISPLAY='): display = var[8:]  # Read DISPLAY from parent process if present
-                if display is None or subprocess.call('DISPLAY=%s wmctrl -l' % display, shell=True) != 0:
-                    log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
+        if not platformRaspberry:
+            if wmctrlCheck == 'true':
+                if subprocess.call(["which", "wmctrl"]) != 0:
+                    log('ERROR: System program "wmctrl" not present, install it via you system package manager or if you are running the SteamOS compositor disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
                     dialog.notification(language(50212), language(50215), addonIcon, 5000)
                     sys.exit()
                 else:
-                    log('A window manager is running...')
+                    log('wmctrl present, checking if a window manager is running...')
+                    display = None
+                    if 'DISPLAY' in os.environ:
+                        display = os.environ['DISPLAY']  # We inherited DISPLAY from Kodi, pass it down
+                    else:
+                        for var in open('/proc/%d/environ' % os.getppid()).read().split('\x00'):
+                            if var.startswith('DISPLAY='): display = var[8:]  # Read DISPLAY from parent process if present
+                    if display is None or subprocess.call('DISPLAY=%s wmctrl -l' % display, shell=True) != 0:
+                        log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
+                        dialog.notification(language(50212), language(50215), addonIcon, 5000)
+                        sys.exit()
+                    else:
+                        log('A window manager is running...')
         if minimiseKodi == "true":
             if subprocess.call(["which", "xdotool"]) != 0:
                 log('ERROR: Minimised Kodi enabled and system program "xdotool" not present, install it via you system package manager. Xdotool is required to minimise Kodi.')
@@ -202,7 +207,10 @@ def fileChecker():
             xbmcExe = os.path.join(kodiOsx).decode("utf-8")
             programFileCheck(steamExe, xbmcExe)
         elif osLinux:
-            steamLinux = addon.getSetting("SteamLinux")
+            if platformRaspberry:
+                steamLinux = addon.getSetting("SteamLink")
+            else:
+                steamLinux = addon.getSetting("SteamLinux")
             kodiLinux = addon.getSetting("KodiLinux")
             steamExe = os.path.join(steamLinux).decode("utf-8")
             xbmcExe = os.path.join(kodiLinux).decode("utf-8")
@@ -364,9 +372,9 @@ def launchSteam():
             forceKillKodi, desktopMode)
     elif osLinux:
         if platformRaspberry:
-            steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
+            steamLinkLauncher = os.path.join(scripts_path, 'steam-link-launcher.sh')
             cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
-                steamlauncher, steamLink, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript,
+                steamLinkLauncher, steamLink, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript,
                 steamParameters,
                 forceKillKodi, desktopMode)
         else:
@@ -424,7 +432,10 @@ scriptVersionCheck()
 usrScriptDelete()
 copyLauncherScriptsToUserdata()
 fileChecker()
-makeScriptExec()
+if platformRaspberry:
+    makeScriptExec('steam-link-launcher.sh')
+else:
+    makeScriptExec('steam-launcher.sh')
 steamPrePost()
 quitKodiDialog()
 launchSteam()
