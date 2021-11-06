@@ -9,7 +9,7 @@ import stat
 import xbmc
 import xbmcaddon
 import xbmcgui
-from platform.raspberry import raspberry
+from detector.raspberrypiplatform import RaspberryPiPlatform
 
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
@@ -40,7 +40,7 @@ osWin = xbmc.getCondVisibility('system.platform.windows')
 osOsx = xbmc.getCondVisibility('system.platform.osx')
 osLinux = xbmc.getCondVisibility('system.platform.linux')
 osAndroid = xbmc.getCondVisibility('system.platform.android')
-platformRaspberry = raspberry().is_raspberry_pi()
+platformRaspberry = RaspberryPiPlatform().is_raspberry_pi()
 wmctrlCheck = addon.getSetting("WmctrlCheck")
 suspendAudio = addon.getSetting("SuspendAudio")
 customScriptFolder = addon.getSetting("CustomScriptFolder").decode("utf-8")

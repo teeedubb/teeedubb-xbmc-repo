@@ -2,7 +2,7 @@ import os.path
 import re
 
 
-class raspberry:
+class RaspberryPiPlatform:
 
     def __init__(self):
         self.model_path = '/proc/device-tree/model'
