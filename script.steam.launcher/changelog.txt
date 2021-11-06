@@ -263,4 +263,4 @@ Retrieve DISPLAY from parent process instead of searching through sessions - by 
 Remove path from KODI_BIN so kodi is force closed correctly
 
 3.4.2
-Added the SteamLink launcher for raspberry pi
+Added the Steam Link launcher for raspberry pi
