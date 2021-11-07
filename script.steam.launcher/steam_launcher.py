@@ -379,16 +379,10 @@ def launchSteam():
     elif osLinux:
         if platformRaspberry:
             steam_link_launcher = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
-            cmd = '{launcher_script} {steam_link_executable_path} {kodi_executable_path} {kodi_bin_name} \
-            {setting_quit_kodi} {pre_script} {post_script} {setting_force_kill}'.format(
+            cmd = '{launcher_script} {steam_link_executable_path} {kodi_executable_path}'.format(
                 launcher_script=steam_link_launcher,
                 steam_link_executable_path=steamLink,
-                kodi_executable_path=kodiLinux,
-                kodi_bin_name=Kodi().get_bin_name(),
-                setting_quit_kodi=quitKodiSetting,
-                pre_script=preScript,
-                post_script=postScript,
-                setting_force_kill=forceKillKodi
+                kodi_executable_path=kodiLinux
             )
         else:
             steamlauncher = os.path.join(scripts_path, linuxLauncherScriptFileName)
