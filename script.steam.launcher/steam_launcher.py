@@ -10,6 +10,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from detector.raspberrypiplatform import RaspberryPiPlatform
+from process_control.kodi import Kodi
 
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
@@ -376,10 +377,9 @@ def launchSteam():
     elif osLinux:
         if platformRaspberry:
             steamLinkLauncher = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
-            cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
-                steamLinkLauncher, steamLink, kodiLinux, quitKodiSetting, kodiPortable, preScript, postScript,
-                steamParameters,
-                forceKillKodi, desktopMode)
+            cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
+                steamLinkLauncher, steamLink, kodiLinux, quitKodiSetting, preScript, postScript,
+                forceKillKodi)
         else:
             steamlauncher = os.path.join(scripts_path, linuxLauncherScriptFileName)
             cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
@@ -427,6 +427,7 @@ if osAndroid:
 log('****Running Steam-Launcher v%s....' % addonVersion)
 log('running on osAndroid, osOsx, osLinux, osWin: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
 log('System text encoding in use: %s' % txt_encode)
+log('Kodi bin name = {}'.format(Kodi().get_bin_name()))
 if customScriptFolderEnabled == 'true':
     scripts_path = customScriptFolder
 else:
