@@ -55,6 +55,7 @@ windowsLauncherExecutableFileName = "steam-launcher.exe"
 steamLinkLauncherScriptFileName = "steam-link-launcher.sh"
 linuxLauncherScriptFileName = "steam-launcher.sh"
 
+
 def log(msg):
     msg = msg.encode(txt_encode)
     xbmc.log('%s: %s' % (scriptid, msg))
@@ -178,7 +179,8 @@ def fileChecker():
                         display = os.environ['DISPLAY']  # We inherited DISPLAY from Kodi, pass it down
                     else:
                         for var in open('/proc/%d/environ' % os.getppid()).read().split('\x00'):
-                            if var.startswith('DISPLAY='): display = var[8:]  # Read DISPLAY from parent process if present
+                            if var.startswith('DISPLAY='): display = var[
+                                                                     8:]  # Read DISPLAY from parent process if present
                     if display is None or subprocess.call('DISPLAY=%s wmctrl -l' % display, shell=True) != 0:
                         log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
                         dialog.notification(language(50212), language(50215), addonIcon, 5000)
@@ -376,10 +378,18 @@ def launchSteam():
             forceKillKodi, desktopMode)
     elif osLinux:
         if platformRaspberry:
-            steamLinkLauncher = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
-            cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
-                steamLinkLauncher, steamLink, kodiLinux, quitKodiSetting, preScript, postScript,
-                forceKillKodi)
+            steam_link_launcher = os.path.join(scripts_path, steamLinkLauncherScriptFileName)
+            cmd = '{launcher_script} {steam_link_executable_path} {kodi_executable_path} {kodi_bin_name} \
+            {setting_quit_kodi} {pre_script} {post_script} {setting_force_kill}'.format(
+                launcher_script=steam_link_launcher,
+                steam_link_executable_path=steamLink,
+                kodi_executable_path=kodiLinux,
+                kodi_bin_name=Kodi().get_bin_name(),
+                setting_quit_kodi=quitKodiSetting,
+                pre_script=preScript,
+                post_script=postScript,
+                setting_force_kill=forceKillKodi
+            )
         else:
             steamlauncher = os.path.join(scripts_path, linuxLauncherScriptFileName)
             cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (
@@ -427,13 +437,13 @@ if osAndroid:
 log('****Running Steam-Launcher v%s....' % addonVersion)
 log('running on osAndroid, osOsx, osLinux, osWin: %s %s %s %s ' % (osAndroid, osOsx, osLinux, osWin))
 log('System text encoding in use: %s' % txt_encode)
-log('Kodi bin name = {}'.format(Kodi().get_bin_name()))
 if customScriptFolderEnabled == 'true':
     scripts_path = customScriptFolder
 else:
     scripts_path = os.path.join(getAddonDataPath(), 'scripts')
 scriptVersionCheck()
-userScripts = [windowsLauncherScriptFileName, windowsLauncherExecutableFileName, linuxLauncherScriptFileName, steamLinkLauncherScriptFileName]
+userScripts = [windowsLauncherScriptFileName, windowsLauncherExecutableFileName, linuxLauncherScriptFileName,
+               steamLinkLauncherScriptFileName]
 for script in userScripts:
     usrScriptDelete(script)
 copyLauncherScriptsToUserdata()
