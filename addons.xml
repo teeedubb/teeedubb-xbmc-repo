@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.1" provider-name="teeedubb">
+<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.2" provider-name="teeedubb">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
      <provides>audio</provides>
@@ -17,6 +17,9 @@
     <website>http://forum.xbmc.org/showthread.php?tid=184488</website>
     <source>https://github.com/teeedubb</source>
     <email></email>
+    <assets>
+        <icon>icon.png</icon>
+    </assets>
   </extension>
 </addon>
 
