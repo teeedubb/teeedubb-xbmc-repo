@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.2" provider-name="teeedubb">
+<addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.3" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
