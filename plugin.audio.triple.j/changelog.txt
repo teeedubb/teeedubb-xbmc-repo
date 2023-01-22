@@ -7,3 +7,6 @@ Changed to a plugin and now includes Triple J, Double J and Triple J Unearthed s
 
 1.0.1
 Updated addon to properly reflect GPL v2 licensing
+
+1.0.2
+Update stream URLs
