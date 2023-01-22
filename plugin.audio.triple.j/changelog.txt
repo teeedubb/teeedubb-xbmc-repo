@@ -10,3 +10,6 @@ Updated addon to properly reflect GPL v2 licensing
 
 1.0.2
 Update stream URLs
+
+1.0.3
+Update for Kodi v19. Yes, I am really behind...
