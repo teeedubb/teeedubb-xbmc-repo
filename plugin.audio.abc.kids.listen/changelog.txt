@@ -1,0 +1,7 @@
+0.0.1 First version 
+
+1.0.0
+Changed from script to plugin. Also added FBi Click.
+
+1.0.1
+Updated addon to properly reflect GPL v2 licensing
