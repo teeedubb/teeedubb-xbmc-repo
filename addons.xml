@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
+<addon id="plugin.audio.abc.kids.listen" name="ABC KIDS Listen" version="1.0.1" provider-name="teeedubb">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">ABC KIDS Listen audio stream.</summary>
+    <description lang="en">ABC KIDS Listen audio stream. See: https://radio.abc.net.au/help/streams</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <source>https://github.com/teeedubb</source>
+    <email></email>
+    <assets>
+        <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>
+
 <addon id="plugin.audio.fbi.radio" name="FBi Radio" version="1.0.3" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
