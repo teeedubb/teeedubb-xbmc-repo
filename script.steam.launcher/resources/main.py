@@ -9,6 +9,7 @@ import stat
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcvfs
 
 addon = xbmcaddon.Addon(id='script.steam.launcher')
 addonPath = addon.getAddonInfo('path')
@@ -56,7 +57,7 @@ def getAddonInstallPath():
 	return path
 
 def getAddonDataPath():
-	path = xbmc.translatePath('special://profile/addon_data/%s' % scriptid)
+	path = xbmcvfs.translatePath('special://profile/addon_data/%s' % scriptid)
 	if not os.path.exists(path):
 		log('addon userdata folder does not exist, creating: %s' % path)
 		try:
