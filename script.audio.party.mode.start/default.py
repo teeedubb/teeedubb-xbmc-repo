@@ -1,10 +1,11 @@
-import xbmc, xbmcgui
+import xbmc
+import xbmcgui
 import xbmcaddon
 import time
 
-addon          = xbmcaddon.Addon(id='script.audio.party.mode.start')
-visTimeout     = int(addon.getSetting("visTimeout"))
-visInfoHide    = addon.getSetting("visInfoHide")
+addon = xbmcaddon.Addon(id='script.audio.party.mode.start')
+visTimeout = int(addon.getSetting("visTimeout"))
+visInfoHide = addon.getSetting("visInfoHide")
 visInfoTimeout = int(addon.getSetting("visInfoTimeout"))
 
 def startPartyMode():

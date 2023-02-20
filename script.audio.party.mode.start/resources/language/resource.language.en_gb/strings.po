@@ -1,0 +1,32 @@
+ 
+# Kodi Media Center language file
+# Addon Name: Music Party Mode
+# Addon id: script.audio.party.mode.start
+# Addon Provider: teeedubb
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-09-21 11:01+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#Catergories
+
+msgctxt "#50560"
+msgid "Seconds before switching to visualisation"
+msgstr ""
+
+msgctxt "#50561"
+msgid "Auto hide fullscreen info"
+msgstr ""
+
+msgctxt "#50562"
+msgid "Seconds before hiding fullscreen info"
+msgstr ""
