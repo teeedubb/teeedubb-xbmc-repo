@@ -13,3 +13,7 @@ Update stream URLs
 
 1.0.3
 Update for Kodi v19. Yes, I am really behind...
+
+1.0.4
+update url's and fix typo - thanks @mechtronsystems
+512x512 icons
