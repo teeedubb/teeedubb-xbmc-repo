@@ -19,6 +19,7 @@
     <email></email>
     <assets>
         <icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
     </assets>
   </extension>
 </addon>
@@ -42,11 +43,12 @@
     <email></email>
     <assets>
         <icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
     </assets>
   </extension>
 </addon>
 
-<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.3" provider-name="teeedubb">
+<addon id="plugin.audio.triple.j" name="Triple J" version="1.0.4" provider-name="teeedubb">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -65,6 +67,7 @@
     <email></email>
     <assets>
         <icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
     </assets>
   </extension>
 </addon>
@@ -108,9 +111,11 @@
 
 <addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.2" provider-name="teeedubb">
         <extension point="xbmc.addon.repository" name="teeedubb's addons">
+			<dir maxversion="30.0.0">
                 <info compressed="false">https://raw.github.com/teeedubb/teeedubb-xbmc-repo/master/addons.xml</info>
                 <checksum>https://raw.github.com/teeedubb/teeedubb-xbmc-repo/master/addons.xml.md5</checksum>
                 <datadir zip="true">https://raw.github.com/teeedubb/teeedubb-xbmc-repo/master</datadir>
+			</dir>
         </extension>
         <extension point="xbmc.addon.metadata">
                 <summary>teeedubb's repo</summary>
@@ -120,9 +125,9 @@
         </extension>
 </addon>
 
-<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.5" provider-name="teeedubb">
+<addon id="script.audio.party.mode.start" name="Music Party Mode" version="0.1.6" provider-name="teeedubb">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
   </requires>
   <extension point="xbmc.python.script" library="default.py">
      <provides>audio</provides>
@@ -136,10 +141,14 @@
     <website>http://forum.xbmc.org/showthread.php?tid=166842</website>
     <source>https://github.com/teeedubb</source>
     <email></email>
+	<assets>
+		<icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
+	</assets>
   </extension>
 </addon>
 
-<addon id="script.steam.launcher" name="Steam" version="3.5.1" provider-name="teeedubb">
+<addon id="script.steam.launcher" name="Steam" version="3.6.0" provider-name="teeedubb">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
