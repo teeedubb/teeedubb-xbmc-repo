@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.2" provider-name="teeedubb">
+<addon id="repository.teeedubb" name="teeedubb's repo" version="1.0.3" provider-name="teeedubb">
         <extension point="xbmc.addon.repository" name="teeedubb's addons">
 			<dir maxversion="30.0.0">
                 <info compressed="false">https://raw.github.com/teeedubb/teeedubb-xbmc-repo/master/addons.xml</info>
