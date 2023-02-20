@@ -11,3 +11,6 @@ Update for kodi 19 and update stream URL
 
 1.0.3
 Fix stream url
+
+1.0.4
+Add 512x512 icon
