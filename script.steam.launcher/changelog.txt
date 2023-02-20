@@ -272,3 +272,6 @@ Remove executable tag from addon - addon will now be displayed under 'games'
 Fix for crashing by @ hedmo - Thanks!
 Updated a setting title
 
+3.6.0
+Fix for Kodi 20 - Thanks Kalacione!
+
