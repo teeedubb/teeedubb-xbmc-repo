@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <settings version="1">
 	<section id="script.steam.launcher">
-		<category help="" id="Gener111al" label="50050">
+		<category help="" id="General" label="50050">
 			<group id="1">
 				<setting help="" id="QuitKodi" label="50053" type="integer">
 					<level>0</level>
