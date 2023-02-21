@@ -18,3 +18,6 @@ Updated addon to properly reflect GPL v2 licensing
 
 0.1.6
 Update for kodi 20
+
+1.0.0
+Fix builtin function call - thanks jbinkley60
