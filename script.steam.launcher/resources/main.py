@@ -47,6 +47,7 @@ minimiseKodi = addon.getSetting("MinimiseKodi")
 steamParameters = addon.getSetting("SteamParameters")
 forceKillKodi = addon.getSetting("ForceKillKodi")
 desktopMode = addon.getSetting("DesktopMode")
+androidApp = addon.getSetting("AndroidApp")
 
 def log(msg):
 	#msg = msg.encode(txt_encode)
@@ -310,7 +311,7 @@ def steamPrePost():
 		if not os.path.isfile(os.path.join(preScript)):
 			log('pre-steam script does not exist, disabling!: "%s"' % preScript)
 			preScript = 'false'
-			dialog.notification(language(50212), language(50215), addonIcon, 5000)
+			dialog.notification(language(50212), language(50214), addonIcon, 5000)
 	elif preScript == '':
 		preScript = 'false'
 	log('pre steam script: %s' % preScript)
@@ -327,9 +328,12 @@ def steamPrePost():
 
 def launchSteam():
 	if osAndroid:
-		cmd = "com.valvesoftware.android.steam.community"
+		if androidApp == '0':
+			cmd = "com.valvesoftware.android.steam.community"
+		elif androidApp == '1':
+			cmd = "com.valvesoftware.steamlink"
 		log('attempting to launch: "%s"' % cmd)
-		xbmc.executebuiltin('XBMC.StartAndroidActivity("%s")' % cmd)
+		xbmc.executebuiltin('StartAndroidActivity("%s")' % cmd)
 		kodiBusyDialog()
 		sys.exit()
 	elif osWin:

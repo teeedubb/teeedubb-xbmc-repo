@@ -4,7 +4,7 @@
 #Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false" "steam parameters" "true/false" 
 #$3 = 0 Quit KODI, 1 Minimize KODI. $4 = KODI portable mode. $5 = pre script. $6 post script. $7 steam parameters. $8 Force kill kodi after X seconds, 0 to disable. $9 start in desktop mode.
 #Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
-#steam.launcher.script.revision=017
+#steam.launcher.script.revision=018
 
 l=script.steam.launcher: 
 if [ -z "$*" ]; then
@@ -81,9 +81,9 @@ fi
 
 #check if steam is running and launch or focus steam
 if [[ $(pidof steam) ]] ; then
-    if [[ $(wmctrl -lpx | grep 'steam.steam.*Steam' | head -n1) ]] ; then
+    if [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode' | head -n1) ]] ; then
         echo $l steam bpm is already open - focusing
-        wmctrl -i -a $(wmctrl -lpx | grep 'steam.steam.*Steam' | head -n1 | awk '{print $1}') &
+        wmctrl -i -a $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode' | head -n1 | awk '{print $1}') &
     elif [[ $9 = true ]] ; then
         echo $l steam is already running - focusing desktop mode
         wmctrl -i -a $(wmctrl -lpx | grep '0 0.*Steam.Steam.*N/A N/A' | head -n1 | awk '{print $1}')
@@ -98,7 +98,7 @@ else
         "$1" "$7" &
     else
         echo $l $l steam not running - launching steam bpm
-        "$1" "$7" -bigpicture &
+        "$1" "$7" -gamepadui &
     fi
 fi
 
@@ -109,7 +109,7 @@ if [[ $9 = true ]] ; then
         sleep 0.5
     done
 else
-    until [[ $(wmctrl -lpx | grep 'steam.steam.*Steam') ]] ; do
+    until [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode') ]] ; do
         echo $l steam bpm window not deteced - looping
         sleep 0.5
     done
@@ -142,7 +142,7 @@ if [[ $9 = true ]] ; then
         sleep 0.5
     done
 else
-    while [[ $(wmctrl -lpx | grep 'steam.steam.*Steam') ]] ; do
+    while [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode') ]] ; do
         echo $l steam bpm windown detected - looping
         sleep 0.5
     done

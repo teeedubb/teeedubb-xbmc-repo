@@ -5,11 +5,13 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon.
 ;
-;steam.launcher.script.revision=013
+;steam.launcher.script.revision=014
 
 #NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
+;@Ahk2Exe-SetMainIcon steam-launcher.ico
+
 
 if 0 != 9
 {
@@ -27,11 +29,11 @@ IfNotEqual, 5, false
 Process, Exist, Steam.exe
 if ErrorLevel
 {
-    IfWinExist, Steam ahk_class CUIEngineWin32
+    IfWinExist, Steam Big Picture Mode ahk_class SDL_app
 	{
-		WinActivate, Steam ahk_class CUIEngineWin32
-		WinWait, Steam ahk_class CUIEngineWin32
-		Send {Esc}
+		WinActivate, Steam Big Picture Mode ahk_class SDL_app
+		WinWait, Steam Big Picture Mode ahk_class SDL_app
+;		Send {Esc}
 	}
 	IfEqual, 9, true
 	{
@@ -51,11 +53,11 @@ else
 	}
 	else
 	{
-		Run, %1% %7% -bigpicture
+		Run, %1% %7% -gamepadui
 	}
 }
 
-GroupAdd, SteamBPM, Steam ahk_class CUIEngineWin32
+GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
 GroupAdd, SteamBPM, Steam ahk_class steam
 
 SteamLoop:
@@ -103,16 +105,16 @@ IfEqual, 9, true
 }
 else
 {
-	WinWait, Steam ahk_class CUIEngineWin32
-	WinActivate, Steam ahk_class CUIEngineWin32
+	WinWait, Steam Big Picture Mode ahk_class SDL_app
+	WinActivate, Steam Big Picture Mode ahk_class SDL_app
 	loop
 	{
-	  IfWinNotExist, Steam ahk_class CUIEngineWin32
+	  IfWinNotExist, Steam Big Picture Mode ahk_class SDL_app
 	  {
 		BPMState = closed
 		break
 	  }
-	  WinGet, MinMax, MinMax, Steam ahk_class CUIEngineWin32
+	  WinGet, MinMax, MinMax, Steam Big Picture Mode ahk_class SDL_app
 	  IfEqual MinMax, -1
 	  {
 		break

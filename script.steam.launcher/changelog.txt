@@ -275,3 +275,8 @@ Updated a setting title
 3.6.0
 Fix for Kodi 20 - Thanks Kalacione!
 
+3.7.0
+Added support for the new BPM UI in windows + linux. Removed support for the old UI due to steam having no way to launch the old UI via the steam browser protocol plus the fact that its going to be removed at a later date.
+Fixed launching the steam app on android
+Added option to select launching either the Steam or Steam Link app in android
+Fixed some text strings

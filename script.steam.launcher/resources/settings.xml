@@ -252,6 +252,17 @@
 						<heading>50123</heading>
 					</control>
 				</setting>
+				<setting help="" id="AndroidApp" label="50126" type="integer">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="Steam">0</option>
+							<option label="Steam Link">1</option>
+						</options>
+					</constraints>
+					<control format="string" type="spinner"/>
+				</setting>
 			</group>
 		</category>
 	</section>
