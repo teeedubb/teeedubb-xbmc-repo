@@ -1,9 +1,21 @@
 #!/bin/bash
-#Script to launch Steam BPM from Kodi, by teeedubb
-#See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.kodi.tv/showthread.php?tid=157499
-#Manual script usage: SteamLauncher-AHK.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "scriptpath/false" "scriptpath/false" "steam parameters" "true/false" 
-#$3 = 0 Quit KODI, 1 Minimize KODI. $4 = KODI portable mode. $5 = pre script. $6 post script. $7 steam parameters. $8 Force kill kodi after X seconds, 0 to disable. $9 start in desktop mode.
-#Change the 'steam.launcher.script.revision =' number to 999 to preserve changes through addon updates, otherwise it shall be overwritten.
+#Kodi Steam Launcher bash script by teeedubb
+#See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
+#
+#Manual script usage: 
+#steam-launcher.exe "/path/to/steam.exe" "/path/to/kodi" "0/1" "true/false" "prescriptpath/false" "postscriptpath/false" "steam parameters" "0" "true/false"
+#$1 Full path to Steam
+#$2 Full path to Kodi
+#$3 Quit or minimise Kodi - 0 to quit, 1 to minimise
+#$4 Run Kodi in portable mode - true or false
+#$5 Pre Steam script - false for none or full path to script
+#$6 Post Steam script - false for none or full path to script
+#$7 Additional command line parameters to pass to Steam (see https://developer.valvesoftware.com/wiki/Command_Line_Options)
+#$8 Force kill Kodi and how long to wait for before terminating in seconds. 0 to disable
+#$9 Run Steam desktop mode - true or false
+#
+#Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
+#
 #steam.launcher.script.revision=018
 
 l=script.steam.launcher: 

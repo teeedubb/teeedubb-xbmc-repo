@@ -1,7 +1,7 @@
-;Kodi Steam Launcher AutoHotKey script by teeedubb
+;Kodi Steam Launcher autohotkey script by teeedubb
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
 ;
-;Manual script usage:
+;Manual script usage: 
 ;steam-launcher.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "prescriptpath/false" "postscriptpath/false" "steam parameters" "0" "true/false"
 ;%1 Full path to Steam
 ;%2 Full path to Kodi
@@ -10,7 +10,7 @@
 ;%5 Pre Steam script - false for none or full path to script
 ;%6 Post Steam script - false for none or full path to script
 ;%7 Additional command line parameters to pass to Steam (see https://developer.valvesoftware.com/wiki/Command_Line_Options)
-;%8 Force kill Kodi and how long to wait for before terminating in seconds. 0 to disable
+;%8 Force kill kodi and how long to wait for before terminating in seconds. 0 to disable
 ;%9 Run Steam desktop mode - true or false
 ;
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
@@ -18,7 +18,7 @@
 ;
 ;steam.launcher.script.revision=015
 
-#NoEnv
+#NoEnv  
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 ;@Ahk2Exe-SetMainIcon steam-launcher.ico
@@ -30,7 +30,6 @@ if 0 != 9
 }
 
 GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
-GroupAdd, SteamDM, Steam ahk_class vguiPopupWindow
 
 ;pre steam script
 IfNotEqual, 5, false
@@ -50,8 +49,8 @@ if ErrorLevel
 	}
 	IfEqual, 9, true
 	{
-		WinActivate, SteamDM
-		WinMaximize, SteamDM
+		WinActivate, Steam ahk_class vguiPopupWindow
+		WinMaximize, Steam ahk_class vguiPopupWindow
 	}
 	else
 	{
@@ -74,7 +73,7 @@ SteamLoop:
 ;wait for steam
 IfEqual, 9, true
 {
-	WinWait, SteamDM
+	WinWait, Steam ahk_class vguiPopupWindow
 }
 else
 {
@@ -98,8 +97,8 @@ IfEqual, 3, 1
 ;steam detection loop
 IfEqual, 9, true
 {
-	WinWait, SteamDM
-	WinActivate, SteamDM
+	WinWait, Steam ahk_class vguiPopupWindow
+	WinActivate, Steam ahk_class vguiPopupWindow
 	loop
 	{
 		Process, Exist, Steam.exe
@@ -163,7 +162,7 @@ WinActivate, Kodi ahk_class Kodi
 ;check if steam re-opened due to an update
 IfEqual, 9, true
 {
-	WinWait, SteamDM,,5
+	WinWait, Steam ahk_class vguiPopupWindow,,5
 	if ErrorLevel
 	{
 		return

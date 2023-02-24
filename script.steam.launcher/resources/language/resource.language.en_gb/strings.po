@@ -134,11 +134,11 @@ msgid "New scripts available, update userdata scripts?"
 msgstr ""
 
 msgctxt "#50214"
-msgid "Pre-Steam script does not exist, disabling!"
+msgid "Pre Steam script does not exist, disabling!"
 msgstr ""
 
 msgctxt "#50215"
-msgid "Post-Steam script does not exist, disabling!"
+msgid "Post Steam script does not exist, disabling!"
 msgstr ""
 
 msgctxt "#50124"

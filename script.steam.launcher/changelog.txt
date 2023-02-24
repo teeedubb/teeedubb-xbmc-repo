@@ -280,3 +280,10 @@ Added support for the new BPM UI in windows + linux. Removed support for the old
 Fixed launching the steam app on android
 Added option to select launching either the Steam or Steam Link app in android
 Fixed some text strings
+
+3.7.1 - 10th anniversary edition!
+Formatting of script files to make comments easier to read
+Use window groups in ahk script - Thanks the0neWhoKnocks!
+Update text strings
+Added info into readme.txt for debugging and compiling the ahk file on windows - Thanks the0neWhoKnocks!
+Added icon path to ahk script to ensure its always used when compiling the script
