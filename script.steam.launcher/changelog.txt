@@ -287,3 +287,6 @@ Use window groups in ahk script - Thanks the0neWhoKnocks!
 Update text strings
 Added info into readme.txt for debugging and compiling the ahk file on windows - Thanks the0neWhoKnocks!
 Added icon path to ahk script to ensure its always used when compiling the script
+
+3.7.2
+Didnt compile the ahk script befor packaging the addon - Doh!
