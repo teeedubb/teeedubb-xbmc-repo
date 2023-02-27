@@ -273,7 +273,7 @@ def compareFile(sysScriptPath, usrScriptPath):
 		log('usr "steam.launcher.script.revision=": %s' % scriptUsrVer)
 	if scriptSysVer > scriptUsrVer:
 		log('system scripts have been updated: sys:%s > usr:%s' % (scriptSysVer, scriptUsrVer))
-		if dialog.yesno(language(50113), language(50213), language(50214)):
+		if dialog.yesno(language(50113), language(50213)):
 			delUserScriptSett = 'true'
 			log('yes selected, option delUserScriptSett enabled: %s' % delUserScriptSett)
 		else:

@@ -293,3 +293,6 @@ Didnt compile the ahk script befor packaging the addon - Doh!
 
 3.7.3
 Fix window groups in ahk script
+
+3.7.4
+Fix text string in script update notification dialog
