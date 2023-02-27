@@ -290,3 +290,6 @@ Added icon path to ahk script to ensure its always used when compiling the scrip
 
 3.7.2
 Didnt compile the ahk script befor packaging the addon - Doh!
+
+3.7.3
+Fix window groups in ahk script

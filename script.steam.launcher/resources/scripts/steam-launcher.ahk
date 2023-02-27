@@ -16,7 +16,7 @@
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon - see readme for more info.
 ;
-;steam.launcher.script.revision=015
+;steam.launcher.script.revision=016
 
 #NoEnv
 #SingleInstance force
@@ -42,16 +42,16 @@ IfNotEqual, 5, false
 Process, Exist, Steam.exe
 if ErrorLevel
 {
-    IfWinExist, SteamBPM
+    IfWinExist, ahk_group SteamBPM
 	{
-		WinActivate, SteamBPM
-		WinWait, SteamBPM
+		WinActivate, ahk_group SteamBPM
+		WinWait, ahk_group SteamBPM
 ;		Send {Esc}
 	}
 	IfEqual, 9, true
 	{
-		WinActivate, SteamDM
-		WinMaximize, SteamDM
+		WinActivate, ahk_group SteamDM
+		WinMaximize, ahk_group SteamDM
 	}
 	else
 	{
@@ -74,7 +74,7 @@ SteamLoop:
 ;wait for steam
 IfEqual, 9, true
 {
-	WinWait, SteamDM
+	WinWait, ahk_group SteamDM
 }
 else
 {
@@ -98,8 +98,8 @@ IfEqual, 3, 1
 ;steam detection loop
 IfEqual, 9, true
 {
-	WinWait, SteamDM
-	WinActivate, SteamDM
+	WinWait, ahk_group SteamDM
+	WinActivate, ahk_group SteamDM
 	loop
 	{
 		Process, Exist, Steam.exe
@@ -115,16 +115,16 @@ IfEqual, 9, true
 }
 else
 {
-	WinWait, SteamBPM
-	WinActivate, SteamBPM
+	WinWait, ahk_group SteamBPM
+	WinActivate, ahk_group SteamBPM
 	loop
 	{
-	  IfWinNotExist, SteamBPM
+	  IfWinNotExist, ahk_group SteamBPM
 	  {
 		BPMState = closed
 		break
 	  }
-	  WinGet, MinMax, MinMax, SteamBPM
+	  WinGet, MinMax, MinMax, ahk_group SteamBPM
 	  IfEqual MinMax, -1
 	  {
 		break
@@ -163,7 +163,7 @@ WinActivate, Kodi ahk_class Kodi
 ;check if steam re-opened due to an update
 IfEqual, 9, true
 {
-	WinWait, SteamDM,,5
+	WinWait, ahk_group SteamDM,,5
 	if ErrorLevel
 	{
 		return
