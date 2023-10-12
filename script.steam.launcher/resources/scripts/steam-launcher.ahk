@@ -42,7 +42,7 @@ IfNotEqual, 5, false
 Process, Exist, Steam.exe
 if ErrorLevel
 {
-    IfWinExist, ahk_group SteamBPM
+    	IfWinExist, ahk_group SteamBPM
 	{
 		WinActivate, ahk_group SteamBPM
 		WinWait, ahk_group SteamBPM
@@ -143,14 +143,14 @@ IfNotEqual, 6, false
 ;launch/maximise kodi
 IfEqual, 3, 0
 {
-	IfEqual, 4, true
+    IfEqual, 4, true
     {
         Run, %2% -p
     }
     else
     {
-	    Run, %2%
-	}
+	Run, %2%
+    }
 }
 IfEqual, 3, 1
 {
