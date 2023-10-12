@@ -29,8 +29,8 @@ if 0 != 9
     ExitApp
 }
 
-GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
-GroupAdd, SteamDM, Steam ahk_class vguiPopupWindow
+GroupAdd, SteamBPM, ahk_class SDL_app
+GroupAdd, SteamDM, ahk_class vguiPopupWindow
 
 ;pre steam script
 IfNotEqual, 5, false
