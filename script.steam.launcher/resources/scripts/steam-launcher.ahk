@@ -25,12 +25,12 @@ SetWorkingDir %A_ScriptDir%
 
 if 0 != 9
 {
-    MsgBox This script requires 9 arguments but it only received %0%. See script file for details.
-    ExitApp
+	MsgBox This script requires 9 arguments but it only received %0%. See script file for details.
+	ExitApp
 }
 
 GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
-GroupAdd, SteamDM, Steam ahk_class vguiPopupWindow
+GroupAdd, SteamDM, Steam ahk_class SDL_app
 
 ;pre steam script
 IfNotEqual, 5, false
@@ -42,7 +42,7 @@ IfNotEqual, 5, false
 Process, Exist, Steam.exe
 if ErrorLevel
 {
-    IfWinExist, ahk_group SteamBPM
+	IfWinExist, ahk_group SteamBPM
 	{
 		WinActivate, ahk_group SteamBPM
 		WinWait, ahk_group SteamBPM
@@ -119,18 +119,18 @@ else
 	WinActivate, ahk_group SteamBPM
 	loop
 	{
-	  IfWinNotExist, ahk_group SteamBPM
-	  {
-		BPMState = closed
-		break
-	  }
-	  WinGet, MinMax, MinMax, ahk_group SteamBPM
-	  IfEqual MinMax, -1
-	  {
-		break
-		BPMState = minimised
-	  }
-	Sleep, 500
+		IfWinNotExist, ahk_group SteamBPM
+		{
+			BPMState = closed
+			break
+		}
+		WinGet, MinMax, MinMax, ahk_group SteamBPM
+		IfEqual MinMax, -1
+		{
+			break
+			BPMState = minimised
+		}
+		Sleep, 500
 	}
 }
 
@@ -144,12 +144,12 @@ IfNotEqual, 6, false
 IfEqual, 3, 0
 {
 	IfEqual, 4, true
-    {
-        Run, %2% -p
-    }
-    else
-    {
-	    Run, %2%
+	{
+		Run, %2% -p
+	}
+	else
+	{
+		Run, %2%
 	}
 }
 IfEqual, 3, 1
