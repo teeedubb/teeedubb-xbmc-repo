@@ -296,3 +296,7 @@ Fix window groups in ahk script
 
 3.7.4
 Fix text string in script update notification dialog
+
+3.7.5
+update steam DM windows class name and replace instances of space indentation with tab indents so the script is consistent
+window detection fix for linux - thanks @Juppstein
