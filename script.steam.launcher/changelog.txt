@@ -303,3 +303,7 @@ window detection fix for linux - thanks @Juppstein
 
 3.7.6
 Update AHK script revision number
+
+3.7.7
+update language strings
+update error messages in addon and fix a if statement error - thanks @factorion
