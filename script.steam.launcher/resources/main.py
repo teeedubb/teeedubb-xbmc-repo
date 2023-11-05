@@ -66,7 +66,7 @@ def getAddonDataPath():
 			log('created directory: %s' % path)
 		except:
 			log('ERROR: failed to create directory: %s' % path)
-			dialog.notification(language(50212), language(50215), addonIcon, 5000)
+			dialog.notification(language(50212), language(50125), addonIcon, 5000)
 	return path
 
 def copyLauncherScriptsToUserdata():
@@ -92,7 +92,7 @@ def copyFile(oldPath, newPath):
 			log('sucsessfully created userdata scripts folder: %s' % newDir)
 		except:
 			log('ERROR: failed to create userdata scripts folder: %s' % newDir)
-			dialog.notification(language(50212), language(50215), addonIcon, 5000)
+			dialog.notification(language(50212), language(50125), addonIcon, 5000)
 			sys.exit()
 	if not os.path.isfile(newPath):
 		log('script file does not exist, copying to userdata: %s' % newPath)
@@ -101,7 +101,7 @@ def copyFile(oldPath, newPath):
 			log('sucsessfully copied userdata script: %s' % newPath)
 		except:
 			log('ERROR: failed to copy script file to userdata: %s' % newPath)
-			dialog.notification(language(50212), language(50215), addonIcon, 5000)
+			dialog.notification(language(50212), language(50125), addonIcon, 5000)
 			sys.exit()
 	else:
 		log('script file already exists, skipping copy to userdata: %s' % newPath)
@@ -123,7 +123,7 @@ def makeScriptExec():
 				log('steam-launcher.sh now executable: %s' % scriptPath)
 			except:
 				log('ERROR: unable to make steam-launcher.sh executable, exiting: %s' % scriptPath)
-				dialog.notification(language(50212), language(50215), addonIcon, 5000)
+				dialog.notification(language(50212), language(50125), addonIcon, 5000)
 				sys.exit()
 			log('steam-launcher.sh executable: %s' % scriptPath)
 
@@ -146,7 +146,7 @@ def delUserScript(scriptFile):
 			log('found and deleting: %s' % scriptFile)
 		except:
 			log('ERROR: deleting failed: %s' % scriptFile)
-			dialog.notification(language(50212), language(50215), addonIcon, 5000)
+			dialog.notification(language(50212), language(50125), addonIcon, 5000)
 		addon.setSetting(id="DelUserScript", value="false")
 
 def fileChecker():
@@ -154,7 +154,7 @@ def fileChecker():
 		if wmctrlCheck == 'true':
 			if subprocess.call(["which", "wmctrl"]) != 0:
 				log('ERROR: System program "wmctrl" not present, install it via you system package manager or if you are running the SteamOS compositor disable the addon option "Check for program wmctrl" (ONLY FOR CERTAIN USE CASES!!)')
-				dialog.notification(language(50212), language(50215), addonIcon, 5000)
+				dialog.notification(language(50212), language(50125), addonIcon, 5000)
 				sys.exit()
 			else:
 				log('wmctrl present, checking if a window manager is running...')
@@ -165,14 +165,14 @@ def fileChecker():
 						if var.startswith('DISPLAY='): display = var[8:] # Read DISPLAY from parent process if present
 				if display is None or subprocess.call('DISPLAY=%s wmctrl -l' % display, shell=True) != 0:
 					log('ERROR: A window manager is NOT running - unless you are using the SteamOS compositor Steam BPM needs a windows manager. If you are using the SteamOS compositor disable the addon option "Check for program wmctrl"')
-					dialog.notification(language(50212), language(50215), addonIcon, 5000)
+					dialog.notification(language(50212), language(50125), addonIcon, 5000)
 					sys.exit()
 				else:
 					log('A window manager is running...')
 		if minimiseKodi == "true":
 			if subprocess.call(["which", "xdotool"]) != 0:
 				log('ERROR: Minimised Kodi enabled and system program "xdotool" not present, install it via you system package manager. Xdotool is required to minimise Kodi.')
-				dialog.notification(language(50212), language(50215), addonIcon, 5000)
+				dialog.notification(language(50212), language(50125), addonIcon, 5000)
 				sys.exit()
 			else:
 				log('xdotool present...')
@@ -309,7 +309,7 @@ def steamPrePost():
 		preScript = 'false'
 	elif preScriptEnabled == 'true':
 		if not os.path.isfile(os.path.join(preScript)):
-			log('pre-steam script does not exist, disabling!: "%s"' % preScript)
+			log('pre-steam script does not exist, disabling: "%s"' % preScript)
 			preScript = 'false'
 			dialog.notification(language(50212), language(50214), addonIcon, 5000)
 	elif preScript == '':
@@ -317,9 +317,9 @@ def steamPrePost():
 	log('pre steam script: %s' % preScript)
 	if postScriptEnabled == 'false':
 		postScript = 'false'
-	elif preScriptEnabled == 'true':
+	elif postScriptEnabled == 'true':
 		if not os.path.isfile(os.path.join(postScript)):
-			log('post-steam script does not exist, disabling!: "%s"' % postScript)
+			log('post-steam script does not exist, disabling: "%s"' % postScript)
 			postScript = 'false'
 			dialog.notification(language(50212), language(50215), addonIcon, 5000)
 	elif postScript == '':
@@ -368,7 +368,7 @@ def launchSteam():
 	except:
 		log('ERROR: failed to launch: %s' % cmd)
 #		print cmd.encode(txt_encode)
-		dialog.notification(language(50212), language(50215), addonIcon, 5000)
+		dialog.notification(language(50212), language(50125), addonIcon, 5000)
 
 #HACK: sys.getfilesystemencoding() is not supported on all systems (e.g. Android)
 txt_encode = 'utf-8'
