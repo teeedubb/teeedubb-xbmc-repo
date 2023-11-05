@@ -93,9 +93,9 @@ fi
 
 #check if steam is running and launch or focus steam
 if [[ $(pidof steam) ]] ; then
-    if [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode' | head -n1) ]] ; then
+    if [[ $(wmctrl -lpx | grep 'steamwebhelper.*Steam Big Picture Mode' | head -n1) ]] ; then
         echo $l steam bpm is already open - focusing
-        wmctrl -i -a $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode' | head -n1 | awk '{print $1}') &
+        wmctrl -i -a $(wmctrl -lpx | grep 'steamwebhelper.*Steam Big Picture Mode' | head -n1 | awk '{print $1}') &
     elif [[ $9 = true ]] ; then
         echo $l steam is already running - focusing desktop mode
         wmctrl -i -a $(wmctrl -lpx | grep '0 0.*Steam.Steam.*N/A N/A' | head -n1 | awk '{print $1}')
@@ -121,7 +121,7 @@ if [[ $9 = true ]] ; then
         sleep 0.5
     done
 else
-    until [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode') ]] ; do
+    until [[ $(wmctrl -lpx | grep 'steamwebhelper.*Steam Big Picture Mode') ]] ; do
         echo $l steam bpm window not deteced - looping
         sleep 0.5
     done
@@ -154,7 +154,7 @@ if [[ $9 = true ]] ; then
         sleep 0.5
     done
 else
-    while [[ $(wmctrl -lpx | grep 'steamwebhelper.steamwebhelper.*Steam Big Picture Mode') ]] ; do
+    while [[ $(wmctrl -lpx | grep 'steamwebhelper.*Steam Big Picture Mode') ]] ; do
         echo $l steam bpm windown detected - looping
         sleep 0.5
     done
