@@ -16,7 +16,7 @@
 #
 #Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
 #
-#steam.launcher.script.revision=018
+#steam.launcher.script.revision=019
 
 l=script.steam.launcher: 
 if [ -z "$*" ]; then
