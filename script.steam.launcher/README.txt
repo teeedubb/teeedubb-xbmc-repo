@@ -15,7 +15,7 @@ http://kodi.tv/
 
 - Enable Debug Logging in Kodi to see if there are any issues with the add-on. (https://kodi.wiki/view/Log_file/Easy)
 
-### Windows - Compiling the AHK script to an .exe file for use with the addon after modifications
+### Windows - Compiling the AHK script to an .exe file for use with the addon after user modifications (not required for normal usage)
 
 1. Download v1 of AutoHotkey(https://www.autohotkey.com/download/)
 2. Use a text editor such as Notepad++ or SciTE4AutoHotkey to make your changes to the steam-launcher.ahk script file(https://notepad-plus-plus.org/ or https://www.autohotkey.com/scite4ahk/)
