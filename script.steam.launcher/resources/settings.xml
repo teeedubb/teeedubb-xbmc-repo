@@ -261,6 +261,11 @@
 							<option label="Steam Link">1</option>
 						</options>
 					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">System.Platform.Android</condition>
+						</dependency>
+					</dependencies>
 					<control format="string" type="spinner"/>
 				</setting>
 			</group>
