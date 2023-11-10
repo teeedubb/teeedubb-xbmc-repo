@@ -13,7 +13,7 @@
 ;%8 Force kill Kodi and how long to wait for before terminating in seconds. 0 to disable
 ;%9 Run Steam desktop mode - true or false
 ;%10 Custom BPM window title - false or string
-;%11 Custom DM title - false or string
+;%11 Custom DM window title - false or string
 ;
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon - see readme for more info.
