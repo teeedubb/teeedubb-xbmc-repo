@@ -252,6 +252,36 @@
 						<heading>50123</heading>
 					</control>
 				</setting>
+				<setting help="" id="CustomBpmTitle" label="50127" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">System.Platform.Windows</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>50127</heading>
+					</control>
+				</setting>
+				<setting help="" id="CustomDmTitle" label="50128" type="string">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition name="InfoBool" on="property">System.Platform.Windows</condition>
+						</dependency>
+					</dependencies>
+					<control format="string" type="edit">
+						<heading>50128</heading>
+					</control>
+				</setting>
 				<setting help="" id="AndroidApp" label="50126" type="integer">
 					<level>0</level>
 					<default>0</default>

@@ -310,3 +310,8 @@ update error messages in addon and fix a if statement error - thanks @factorion
 
 3.7.8
 Update bash script revision number
+
+3.7.9
+Add ability to set custom window titles in windows as steam uses locale dependant window title naming
+Clarify when compiling the ahk script is required in readme.txt
+Only show to option to select between the steam and steamlink apps on android

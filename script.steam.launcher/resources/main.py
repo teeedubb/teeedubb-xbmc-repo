@@ -48,6 +48,9 @@ steamParameters = addon.getSetting("SteamParameters")
 forceKillKodi = addon.getSetting("ForceKillKodi")
 desktopMode = addon.getSetting("DesktopMode")
 androidApp = addon.getSetting("AndroidApp")
+customBpmTitle = addon.getSetting("CustomBpmTitle")
+customDmTitle = addon.getSetting("CustomDmTitle")
+
 
 def log(msg):
 	#msg = msg.encode(txt_encode)
@@ -338,7 +341,7 @@ def launchSteam():
 		sys.exit()
 	elif osWin:
 		steamlauncher = os.path.join(scripts_path, 'steam-launcher.exe')
-		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode)
+		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamWin, kodiWin, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode, customBpmTitle, customDmTitle)
 	elif osOsx:
 		steamlauncher = os.path.join(scripts_path, 'steam-launcher.sh')
 		cmd = '"%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s" "%s"' % (steamlauncher, steamOsx, kodiOsx, quitKodiSetting, kodiPortable, preScript, postScript, steamParameters, forceKillKodi, desktopMode)
@@ -387,6 +390,10 @@ if customScriptFolderEnabled == 'true':
 	scripts_path = customScriptFolder
 else:
 	scripts_path = os.path.join(getAddonDataPath(), 'scripts')
+if not customBpmTitle:
+    customBpmTitle = 'false'
+if not customDmTitle:
+    customDmTitle = 'false'
 scriptVersionCheck()
 usrScriptDelete()
 copyLauncherScriptsToUserdata()

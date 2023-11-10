@@ -115,6 +115,14 @@ msgctxt "#50126"
 msgid "App to launch"
 msgstr ""
 
+msgctxt "#50127"
+msgid "Custom BPM window title"
+msgstr ""
+
+msgctxt "#50128"
+msgid "Custom DM window title"
+msgstr ""
+
 #Error messages
 
 msgctxt "#50210"

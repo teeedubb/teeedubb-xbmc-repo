@@ -2,7 +2,7 @@
 ;See: https://github.com/teeedubb/teeedubb-xbmc-repo http://forum.xbmc.org/showthread.php?tid=157499
 ;
 ;Manual script usage:
-;steam-launcher.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "prescriptpath/false" "postscriptpath/false" "steam parameters" "0" "true/false"
+;steam-launcher.exe "e:\path\to\steam.exe" "d:\path\to\kodi.exe" "0/1" "true/false" "prescriptpath/false" "postscriptpath/false" "steam parameters" "0/seconds" "true/false" "false/string" "false/string"
 ;%1 Full path to Steam
 ;%2 Full path to Kodi
 ;%3 Quit or minimise Kodi - 0 to quit, 1 to minimise
@@ -12,25 +12,42 @@
 ;%7 Additional command line parameters to pass to Steam (see https://developer.valvesoftware.com/wiki/Command_Line_Options)
 ;%8 Force kill Kodi and how long to wait for before terminating in seconds. 0 to disable
 ;%9 Run Steam desktop mode - true or false
+;%10 Custom BPM window title - false or string
+;%11 Custom DM title - false or string
 ;
 ;Change the 'steam.launcher.script.revision =' number below to 999 to preserve changes through addon updates, otherwise it will be overwritten if the script is updated.
 ;You will need to have AutoHotKey installed to recompile this .ahk file into a .exe to work with the addon - see readme for more info.
 ;
-;steam.launcher.script.revision=017
+;steam.launcher.script.revision=018
 
 #NoEnv
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 ;@Ahk2Exe-SetMainIcon steam-launcher.ico
 
-if 0 != 9
+if 0 != 11
 {
-	MsgBox This script requires 9 arguments but it only received %0%. See script file for details.
+	MsgBox This script requires 11 arguments but it only received %0%. See script file for details.
 	ExitApp
 }
 
-GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
-GroupAdd, SteamDM, Steam ahk_class SDL_app
+IfEqual, 10, false
+{
+	GroupAdd, SteamBPM, Steam Big Picture Mode ahk_class SDL_app
+}
+Else
+{
+	GroupAdd, SteamBPM, %10%
+}
+
+IfEqual, 11, false
+{
+	GroupAdd, SteamDM, Steam ahk_class SDL_app
+}
+Else
+{
+	GroupAdd, SteamBPM, %11%
+}
 
 ;pre steam script
 IfNotEqual, 5, false
@@ -53,18 +70,18 @@ if ErrorLevel
 		WinActivate, ahk_group SteamDM
 		WinMaximize, ahk_group SteamDM
 	}
-	else
+	Else
 	{
 		Run, %1% %7% steam://open/bigpicture
 	}
 }
-else
+Else
 {
 	IfEqual, 9, true
 	{
 		Run, %1% %7%
 	}
-	else
+	Else
 	{
 		Run, %1% %7% -gamepadui
 	}
@@ -76,7 +93,7 @@ IfEqual, 9, true
 {
 	WinWait, ahk_group SteamDM
 }
-else
+Else
 {
 	WinWait, ahk_group SteamBPM
 }
@@ -107,13 +124,13 @@ IfEqual, 9, true
 		{
 			sleep, 500
 		}
-		else
+		Else
 		{
 			break
 		}
 	}
 }
-else
+Else
 {
 	WinWait, ahk_group SteamBPM
 	WinActivate, ahk_group SteamBPM
@@ -147,7 +164,7 @@ IfEqual, 3, 0
 	{
 		Run, %2% -p
 	}
-	else
+	Else
 	{
 		Run, %2%
 	}
@@ -168,7 +185,7 @@ IfEqual, 9, true
 	{
 		return
 	}
-	else
+	Else
 	{
 		IfNotEqual, 5, false
 		{
@@ -177,7 +194,7 @@ IfEqual, 9, true
 		Goto, SteamLoop
 	}
 }
-else
+Else
 {
 	if BPMState = closed
 	{
@@ -186,7 +203,7 @@ else
 		{
 			return
 		}
-		else
+		Else
 		{
 			IfNotEqual, 5, false
 			{
