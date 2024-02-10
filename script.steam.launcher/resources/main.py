@@ -112,13 +112,11 @@ def copyFile(oldPath, newPath):
 def makeScriptExec():
 	scriptPath = os.path.join(scripts_path, 'steam-launcher.sh')
 	if os.path.isfile(scriptPath):
-		if '\r\n' in open(scriptPath,'r').read():
-			log('Windows line endings found in %s, converting to unix line endings.' % scriptPath)
-			with open(scriptPath, 'rb') as f:
-				content = f.read()
-				content = content.replace('\r\n', '\n')
-			with open(scriptPath, 'wb') as f:
-				f.write(content)
+		log('Converting line endings in %s to Unix style.' % scriptPath)
+		with open(scriptPath, newline=None) as f:
+			content = f.read()
+		with open(scriptPath, 'w') as f:
+			f.write(content)
 		if not stat.S_IXUSR & os.stat(scriptPath)[stat.ST_MODE]:
 			log('steam-launcher.sh not executable: %s' % scriptPath)
 			try:
