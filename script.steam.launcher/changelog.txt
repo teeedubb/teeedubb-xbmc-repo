@@ -315,3 +315,6 @@ Update bash script revision number
 Add ability to set custom window titles in windows as steam uses locale dependant window title naming
 Clarify when compiling the ahk script is required in readme.txt
 Only show to option to select between the steam and steamlink apps on android
+
+3.7.11
+Foce conversion of line endings to unix style in steam-launcher.sh
